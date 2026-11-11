@@ -9,7 +9,7 @@ export interface ServiceOptions {
   now?: () => Date;
   failpoint?: (point: 'completion-after-claim' | 'mutation-before-commit') => void;
 }
-const rewardDefinitions = { easy: { ammo: 3, xp: 50 }, normal: { ammo: 6, xp: 100 }, hard: { ammo: 12, xp: 200 } } as const;
+export const rewardDefinitions = { easy: { ammo: 3, xp: 50 }, normal: { ammo: 6, xp: 100 }, hard: { ammo: 12, xp: 200 } } as const;
 export const dialogueIds = ['first-call', 'second-call', 'first-death', 'death-streak', 'no-kills', 'empty-magazine', 'near-victory', 'silent-victory', 'productive', 'first-victory'] as const;
 export type DialogueId = typeof dialogueIds[number];
 
@@ -53,7 +53,7 @@ export function createService(store: Store, options: ServiceOptions = {}) {
     return sqlite.transaction(() => {
       const previous = db.select().from(s.operations).where(eq(s.operations.key, key)).get();
       if (previous) {
-        if (previous.fingerprint !== fingerprint) conflict('IDEMPOTENCY_CONFLICT', 'This request key was already used for a different operation.');
+        if (previous.fingerprint !== fingerprint) conflict('IDEMPOTENCY_CONFLICT', 'Этот ключ запроса уже использован для другой операции.');
         return JSON.parse(previous.response) as MutationResult;
       }
       const reward = operation();
@@ -67,7 +67,7 @@ export function createService(store: Store, options: ServiceOptions = {}) {
   function task(id: string) { return db.select().from(s.tasks).where(eq(s.tasks.id, id)).get() ?? missing('Task'); }
   function activeAttempt(id: string) {
     const attempt = db.select().from(s.attempts).where(eq(s.attempts.id, id)).get() ?? missing('Mission attempt');
-    if (attempt.status !== 'active') conflict('ATTEMPT_FINISHED', 'This mission attempt is already settled.');
+    if (attempt.status !== 'active') conflict('ATTEMPT_FINISHED', 'Эта попытка прохождения уже завершена.');
     return attempt;
   }
   function recordResource(kind: string, referenceId: string, ammo: number, xp = 0) {
@@ -100,10 +100,10 @@ export function createService(store: Store, options: ServiceOptions = {}) {
   }
   function deleteTask(id: string) { task(id); db.delete(s.tasks).where(eq(s.tasks.id, id)).run(); }
   function startMission(input: { ammo: number; missionId: string }) {
-    if (!required(db.select().from(s.progress).where(eq(s.progress.missionId, input.missionId)).get()).unlocked) conflict('MISSION_LOCKED', 'Finish or skip FIRST CALL before starting this mission.');
-    if (db.select().from(s.attempts).where(eq(s.attempts.status, 'active')).get()) conflict('ACTIVE_ATTEMPT', 'Settle the active mission before starting another.');
+    if (!required(db.select().from(s.progress).where(eq(s.progress.missionId, input.missionId)).get()).unlocked) conflict('MISSION_LOCKED', 'Пройдите или пропустите обучение «ПЕРВЫЙ ЗВОНОК», чтобы открыть миссию.');
+    if (db.select().from(s.attempts).where(eq(s.attempts.status, 'active')).get()) conflict('ACTIVE_ATTEMPT', 'Завершите текущую миссию, прежде чем начать новую.');
     const debit = db.update(s.player).set({ ammo: sql`${s.player.ammo} - ${input.ammo}` }).where(and(eq(s.player.id, 1), gte(s.player.ammo, input.ammo))).run();
-    if (debit.changes !== 1) conflict('INSUFFICIENT_AMMO', 'Not enough ammunition for this loadout.');
+    if (debit.changes !== 1) conflict('INSUFFICIENT_AMMO', 'Недостаточно патронов для выбранного снаряжения.');
     const id = randomUUID();
     db.insert(s.attempts).values({ id, missionId: input.missionId, status: 'active', reserved: input.ammo, spent: 0, startedAt: now(), finishedAt: null, stats: null }).run();
     recordResource('mission-reserve', id, -input.ammo);
@@ -111,14 +111,14 @@ export function createService(store: Store, options: ServiceOptions = {}) {
   function shoot(id: string) {
     activeAttempt(id);
     const debit = db.update(s.attempts).set({ spent: sql`${s.attempts.spent} + 1` }).where(and(eq(s.attempts.id, id), eq(s.attempts.status, 'active'), sql`${s.attempts.spent} < ${s.attempts.reserved}`)).run();
-    if (debit.changes !== 1) conflict('NO_AMMO', 'No reserved ammunition remains.');
+    if (debit.changes !== 1) conflict('NO_AMMO', 'Взятые на миссию патроны закончились.');
     recordResource('mission-shot', id, 0);
   }
   function finishMission(id: string, input: { outcome: 'dead' | 'cleared' | 'abandoned'; stats: MissionStats }) {
     const attempt = activeAttempt(id);
     const { stats, outcome } = input;
     if (stats.shotsFired !== attempt.spent || stats.meleeKills > stats.kills || stats.hits > stats.shotsFired || stats.kills > stats.hits + stats.meleeKills || (outcome === 'cleared' && stats.kills !== 6)) {
-      conflict('INVALID_MISSION_STATS', 'Mission statistics do not match this attempt.');
+      conflict('INVALID_MISSION_STATS', 'Статистика не соответствует данным этой попытки.');
     }
     const unused = attempt.reserved - attempt.spent;
     db.update(s.attempts).set({ status: outcome, stats, finishedAt: now() }).where(eq(s.attempts.id, id)).run();
@@ -139,7 +139,7 @@ export function createService(store: Store, options: ServiceOptions = {}) {
   function patchTutorial(input: Partial<TutorialProgress>) {
     const current = required(db.select().from(s.tutorial).get());
     if ((current.completed && input.completed === false) || (current.skipped && input.skipped === false)) {
-      conflict('TUTORIAL_RESET_REQUIRED', 'Use gameplay reset to replay FIRST CALL.');
+      conflict('TUTORIAL_RESET_REQUIRED', 'Чтобы повторить обучение «ПЕРВЫЙ ЗВОНОК», начните новую игру.');
     }
     const next = { step: input.step ?? current.step, completed: input.completed ?? current.completed, skipped: input.skipped ?? current.skipped };
     if (next.completed || next.skipped || next.step === 'complete') {
@@ -149,7 +149,7 @@ export function createService(store: Store, options: ServiceOptions = {}) {
     db.update(s.tutorial).set(next).where(eq(s.tutorial.id, 1)).run();
   }
   function resetGame() {
-    if (db.select().from(s.attempts).where(eq(s.attempts.status, 'active')).get()) conflict('ACTIVE_ATTEMPT', 'Settle the active mission before resetting gameplay.');
+    if (db.select().from(s.attempts).where(eq(s.attempts.status, 'active')).get()) conflict('ACTIVE_ATTEMPT', 'Завершите текущую миссию, прежде чем начать новую игру.');
     db.update(s.tutorial).set({ step: 'wake', completed: false, skipped: false }).where(eq(s.tutorial.id, 1)).run();
     db.update(s.progress).set({ unlocked: false, completions: 0, bestTimeMs: null }).where(eq(s.progress.missionId, 'first-shift')).run();
     db.update(s.player).set({ deaths: 0, consecutiveDeaths: 0 }).where(eq(s.player.id, 1)).run();
@@ -182,7 +182,7 @@ export function createService(store: Store, options: ServiceOptions = {}) {
   function acknowledge(id: DialogueId, ignored: boolean) {
     const existing = db.select().from(s.dialogue).where(eq(s.dialogue.id, id)).get();
     if (existing) return;
-    if (nextDialogue().next !== id) conflict('DIALOGUE_UNAVAILABLE', 'This call is not currently available.');
+    if (nextDialogue().next !== id) conflict('DIALOGUE_UNAVAILABLE', 'Этот звонок сейчас недоступен.');
     db.insert(s.dialogue).values({ id, ignored, acknowledgedAt: now() }).run();
   }
   return { snapshot, mutate, createTask, patchTask, completeTask, reopenTask, deleteTask, startMission, shoot, finishMission, patchSettings, patchTutorial, resetGame,

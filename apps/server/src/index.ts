@@ -9,10 +9,6 @@ async function start() {
   const webRoot = fileURLToPath(new URL('../../web/dist/', import.meta.url));
   if (existsSync(webRoot)) {
     await app.register(fastifyStatic, { root: webRoot });
-    app.setNotFoundHandler((request, reply) => {
-      if (request.url.startsWith('/api/')) return reply.code(404).send({ error: { code: 'NOT_FOUND', message: 'Route not found.', requestId: request.id } });
-      return reply.sendFile('index.html');
-    });
   }
   for (const signal of ['SIGINT', 'SIGTERM'] as const) {
     process.once(signal, () => { void app.close().then(() => process.exit(0)); });
