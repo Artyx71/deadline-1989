@@ -14,8 +14,12 @@ export class WeaponState {
     this.magazine = Math.min(BALANCE.magazine, ammunition);
     this.reserve = ammunition - this.magazine;
   }
-  get reloading() { return this.reloadAt > 0; }
-  get shotPending() { return this.pending; }
+  get reloading() {
+    return this.reloadAt > 0;
+  }
+  get shotPending() {
+    return this.pending;
+  }
   requestShot(now: number): boolean {
     if (this.pending || this.reloading || this.magazine <= 0 || now < this.fireAt) return false;
     this.pending = true;
@@ -31,7 +35,8 @@ export class WeaponState {
     return true;
   }
   reload(now: number): boolean {
-    if (this.pending || this.reloading || this.magazine >= BALANCE.magazine || this.reserve <= 0) return false;
+    if (this.pending || this.reloading || this.magazine >= BALANCE.magazine || this.reserve <= 0)
+      return false;
     this.reloadAt = now + BALANCE.reloadDuration;
     return true;
   }
@@ -54,8 +59,12 @@ export class WeaponState {
 /** Consumed by unpaused frame deltas, independently of frozen simulation time. */
 export class HitStop {
   private remaining = 0;
-  get active() { return this.remaining > 0; }
-  request(duration: number) { this.remaining = Math.max(this.remaining, duration); }
+  get active() {
+    return this.remaining > 0;
+  }
+  request(duration: number) {
+    this.remaining = Math.max(this.remaining, duration);
+  }
   advance(delta: number, externallyPaused = false) {
     if (externallyPaused) return this.active;
     this.remaining = Math.max(0, this.remaining - Math.max(0, delta));

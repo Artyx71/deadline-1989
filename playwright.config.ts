@@ -15,7 +15,11 @@ export default defineConfig({
     viewport: { width: 1440, height: 1000 },
     headless: true,
     launchOptions: {
-      ...(process.env.PLAYWRIGHT_USE_BUNDLED === '1' ? {} : { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? '/usr/bin/chromium' }),
+      ...(process.env.PLAYWRIGHT_USE_BUNDLED === '1'
+        ? {}
+        : {
+            executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? '/usr/bin/chromium',
+          }),
       args: ['--no-sandbox'],
     },
     trace: 'retain-on-failure',

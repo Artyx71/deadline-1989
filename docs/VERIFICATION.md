@@ -4,17 +4,17 @@ Acceptance run: 2026-11-11. Scope: the complete FINAL MASTER IMPLEMENTATION PROM
 
 ## Original acceptance checks (before the follow-up changes)
 
-| Check | Actual result |
-| --- | --- |
-| `pnpm test` | PASS — 43 tests in four files: 16 real SQLite API cases, 20 gameplay cases, seven narrative cases |
-| `pnpm typecheck` | PASS — shared, server and browser strict TypeScript |
-| `pnpm lint` | PASS |
-| `pnpm build` | PASS — Fastify and Vite production artifacts |
-| `pnpm test:e2e` | PASS — seven Chromium scenarios, 47.0 seconds |
-| `node scripts/production-smoke.mjs` | PASS — compiled static client, API errors, real process stop/restart, task/reward/settings/tutorial persistence, durable shot replay and unused-round recovery |
-| `python3 scripts/validate_bootstrap.py` | PASS — seven TOMLs, six unique agent definitions, four skills, instructions, links and directories |
-| Input-only combat smoke | PASS — all six enemies defeated, actual enemy-caused death, pause, return, repeated scene entry and refresh persistence |
-| Visual review | PASS — actual screenshots inspected by root and Pixel Art Director; corrected apartment, character silhouette, terminal clipping, combat density and final Cyrillic layouts |
+| Check                                   | Actual result                                                                                                                                                               |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm test`                             | PASS — 43 tests in four files: 16 real SQLite API cases, 20 gameplay cases, seven narrative cases                                                                           |
+| `pnpm typecheck`                        | PASS — shared, server and browser strict TypeScript                                                                                                                         |
+| `pnpm lint`                             | PASS                                                                                                                                                                        |
+| `pnpm build`                            | PASS — Fastify and Vite production artifacts                                                                                                                                |
+| `pnpm test:e2e`                         | PASS — seven Chromium scenarios, 47.0 seconds                                                                                                                               |
+| `node scripts/production-smoke.mjs`     | PASS — compiled static client, API errors, real process stop/restart, task/reward/settings/tutorial persistence, durable shot replay and unused-round recovery              |
+| `python3 scripts/validate_bootstrap.py` | PASS — seven TOMLs, six unique agent definitions, four skills, instructions, links and directories                                                                          |
+| Input-only combat smoke                 | PASS — all six enemies defeated, actual enemy-caused death, pause, return, repeated scene entry and refresh persistence                                                     |
+| Visual review                           | PASS — actual screenshots inspected by root and Pixel Art Director; corrected apartment, character silhouette, terminal clipping, combat density and final Cyrillic layouts |
 
 Environment: Node 26.7.0, pnpm 12.18.0, Chromium 152.0.7977.82; Linux desktop. Playwright viewport 1440×1000; final apartment/menu also captured at 1536×960. Tests use temporary profiles and never open the normal user's SQLite database.
 
@@ -46,17 +46,17 @@ The standalone combat script expects the separate visual test instance on port 5
 
 ## Visual acceptance and corrections
 
-| Area | Actual inspected output / correction |
-| --- | --- |
-| Menu | [Russian menu](evidence/menu-russian.png): original skyline/logo, readable Cyrillic keyboard/mouse options |
-| Apartment | [Initial](evidence/apartment-initial.png) → [silhouette/scale correction](evidence/apartment-revised.png) → [requested dark cluttered arrangement](evidence/apartment-cluttered-russian.png) |
-| Terminal | [Initial clipped layout](evidence/terminal-initial.png) → [width correction](evidence/terminal-revised.png) → [stable Russian long-description layout](evidence/terminal-stable-russian.png) |
-| Combat | [Initial sparse scene](evidence/combat-initial.png) → [revised printworks](evidence/combat-revised.png), actual six-actor mission |
-| Training | [Practice](evidence/training-practice.png), temporary ammunition label and original matching sprites |
-| Calls | [Russian first call](evidence/first-call-dialogue.png), original portrait, progressive text and keyboard controls |
-| Outcomes | [Actual victory](evidence/victory-initial.png), [actual death](evidence/death-initial.png), Cyrillic statistics and return controls |
-| Settings/recovery | [Settings](evidence/settings-accessibility.png), [interrupted mission](evidence/mission-refresh-recovery.png) |
-| Product independence | [Working terminal with game unavailable](evidence/terminal-game-unavailable.png) |
+| Area                 | Actual inspected output / correction                                                                                                                                                         |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Menu                 | [Russian menu](evidence/menu-russian.png): original skyline/logo, readable Cyrillic keyboard/mouse options                                                                                   |
+| Apartment            | [Initial](evidence/apartment-initial.png) → [silhouette/scale correction](evidence/apartment-revised.png) → [requested dark cluttered arrangement](evidence/apartment-cluttered-russian.png) |
+| Terminal             | [Initial clipped layout](evidence/terminal-initial.png) → [width correction](evidence/terminal-revised.png) → [stable Russian long-description layout](evidence/terminal-stable-russian.png) |
+| Combat               | [Initial sparse scene](evidence/combat-initial.png) → [revised printworks](evidence/combat-revised.png), actual six-actor mission                                                            |
+| Training             | [Practice](evidence/training-practice.png), temporary ammunition label and original matching sprites                                                                                         |
+| Calls                | [Russian first call](evidence/first-call-dialogue.png), original portrait, progressive text and keyboard controls                                                                            |
+| Outcomes             | [Actual victory](evidence/victory-initial.png), [actual death](evidence/death-initial.png), Cyrillic statistics and return controls                                                          |
+| Settings/recovery    | [Settings](evidence/settings-accessibility.png), [interrupted mission](evidence/mission-refresh-recovery.png)                                                                                |
+| Product independence | [Working terminal with game unavailable](evidence/terminal-game-unavailable.png)                                                                                                             |
 
 Earlier images such as the offline initial menu and interaction-before-fix captures document found defects; they are not passing acceptance evidence. The Pixel Art Director accepted the final cluttered apartment, revised combat and Russian layouts. All six interaction positions are preserved and collision-aware reachable.
 
@@ -74,21 +74,20 @@ Originally private, now public repository: `Artyx71/deadline-1989`; branch `feat
 
 This is one local profile on loopback. Public multi-user hosting requires authentication/profile isolation. Offline mutations are not claimed. Browser acceptance is desktop Chromium; other browsers, touch devices and long-duration stress sessions are not certified. Original programmatic art and synthesized music are coherent MVP production assets, without claiming the illustrative detail or mastered recordings of the references. Bootstrap's historical custom-agent loader limitations remain recorded in BOOTSTRAP.md; actual development used the available delegation tools with explicit role instructions and file ownership.
 
-
 ## Follow-up acceptance — studio and free Pages edition
 
 2026-11-11, Chromium 152, Linux, isolated temporary native databases and fresh browser contexts. These results supersede the original counts for the current changes.
 
-| Check | Actual result |
-| --- | --- |
-| `pnpm test` | PASS — 55 tests: 21 native SQLite API, 20 gameplay, seven narrative, seven SQL.js persistence tests |
-| `pnpm typecheck`, `pnpm lint` | PASS |
-| `pnpm build`, `pnpm build:pages` | PASS — separate native and static bundles, bundled Worker/WASM and `/deadline-1989/` asset base |
-| `pnpm test:e2e` | PASS — 10 native Chromium scenarios, 1.6 minutes, including confirmed clean New Game and story-only preservation |
-| `pnpm test:pages` | PASS — three production-static Chromium scenarios, 14.9 seconds, with no Fastify server |
-| Studio input smoke | PASS — actual E interactions at computer, phone, TV, cabinet, training door and exit; separate training return; tasks/resources preserved |
-| Studio sound signal | PASS — actual gunshot/melee/reload/impact source starts and effect-bus RMS peak 0.560142, no audio error |
-| Art review | PASS for the captured studio and separate training; minor paper-note overlap with exit caption, central prompt readable |
+| Check                            | Actual result                                                                                                                             |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm test`                      | PASS — 55 tests: 21 native SQLite API, 20 gameplay, seven narrative, seven SQL.js persistence tests                                       |
+| `pnpm typecheck`, `pnpm lint`    | PASS                                                                                                                                      |
+| `pnpm build`, `pnpm build:pages` | PASS — separate native and static bundles, bundled Worker/WASM and `/deadline-1989/` asset base                                           |
+| `pnpm test:e2e`                  | PASS — 10 native Chromium scenarios, 1.6 minutes, including confirmed clean New Game and story-only preservation                          |
+| `pnpm test:pages`                | PASS — three production-static Chromium scenarios, 14.9 seconds, with no Fastify server                                                   |
+| Studio input smoke               | PASS — actual E interactions at computer, phone, TV, cabinet, training door and exit; separate training return; tasks/resources preserved |
+| Studio sound signal              | PASS — actual gunshot/melee/reload/impact source starts and effect-bus RMS peak 0.560142, no audio error                                  |
+| Art review                       | PASS for the captured studio and separate training; minor paper-note overlap with exit caption, central prompt readable                   |
 
 Static-browser scenarios prove UI create/edit/complete/reopen/delete/reload, once-only rewards, concurrent tabs and duplicate request keys, confirmed clean reset observed across tabs and reload, real Phaser asset loading, separate training, dispatch, actual committed gunshot and sound signal, refresh recovery with spent ammunition retained. They use the shipped Worker protocol and normal validated routes, without resource edits or hidden test endpoints. IndexedDB writes complete before successful mutation responses. Adapter tests additionally force failed writes and rollback before safe retry.
 

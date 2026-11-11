@@ -9,6 +9,6 @@ export function createService(store: Store, options: ServiceOptions = {}) {
   return createDomainService(store, {
     ...options,
     // Existing native profiles retain their persisted SHA-256 fingerprints.
-    fingerprint: canonical => createHash('sha256').update(canonical).digest('hex'),
+    fingerprint: (canonical) => createHash('sha256').update(canonical).digest('hex'),
   });
 }

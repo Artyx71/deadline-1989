@@ -1,24 +1,199 @@
-.television-panel.modal { width: min(1040px, 100%); border-color: #69425c; background: linear-gradient(145deg, #1e1520, #0b0b13 75%); }
-.television-body { padding: 24px; }
-.television-channel { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 0 2px 15px; color: #c19eae; font-size: 10px; letter-spacing: .1em; }
-.television-muted { flex-shrink: 0; padding: 5px 9px; color: #80d5c9; border: 1px solid #3e625d; background: #182a29; }
-.television-cabinet { display: grid; grid-template-columns: minmax(0, 1fr) 56px; gap: 18px; padding: 20px; border: 2px solid #514047; background: linear-gradient(125deg, #514048, #29232e 45%, #3a3038); box-shadow: inset 0 2px #8d68747a, inset 0 -8px 0 #15101be0, 0 12px 30px #0008; }
-.television-screen { position: relative; aspect-ratio: 16 / 9; min-width: 0; min-height: 216px; overflow: hidden; border: 8px solid #15131d; border-radius: 22px; background: radial-gradient(ellipse at center, #171b26, #050509); box-shadow: 0 0 0 2px #67515a, inset 0 0 35px #000; }
-.television-screen iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
-.television-screen[data-signal="blocked"] iframe { visibility: hidden; }
-.television-scanlines { pointer-events: none; position: absolute; inset: 0; z-index: 2; background: repeating-linear-gradient(0deg, transparent 0 2px, #0b061a55 2px 3px); box-shadow: inset 0 0 45px 12px #03020785; opacity: .55; }
-.television-hardware { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 14px; }
-.television-hardware > span { width: 36px; height: 36px; border-radius: 50%; border: 5px solid #25212b; background: linear-gradient(110deg, #71616b 43%, #b5a0a1 44% 52%, #574652 53%); box-shadow: 2px 3px 0 #130e1c; margin-bottom: 16px; }
-.television-hardware > i { width: 30px; height: 3px; background: #14101c; box-shadow: 0 1px #6c535c; }
-.television-hardware > i:last-child { margin-top: auto; margin-bottom: 8px; width: 7px; height: 7px; background: #a9d3b0; border-radius: 50%; box-shadow: 0 0 6px #66f19466; }
-.television-no-signal { position: absolute; inset: 0; display: grid; place-content: center; gap: 18px; padding: 28px; text-align: center; background: repeating-linear-gradient(115deg, #171421 0 2px, #12131d 2px 4px); }
-.television-no-signal > span { color: #5b7681; font-size: 12px; letter-spacing: .3em; }
-.television-no-signal h3 { color: #b8d1d0; font-size: clamp(16px, 3vw, 27px); letter-spacing: .1em; }
-.television-no-signal p { max-width: 390px; font-size: 11px; line-height: 1.8; color: #b6a9bd; }
-.television-reception { display: flex; justify-content: space-between; gap: 12px; padding: 18px 2px 10px; font-size: 9px; line-height: 1.6; color: #7f8c99; }
-.television-reception p { color: #76b5ae; }
-.television-credit { color: #8c8196; font-size: 10px; line-height: 1.8; }
-.television-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding-top: 20px; }
-.television-actions a { color: #88c2be; font-size: 10px; line-height: 1.8; text-underline-offset: 4px; }
-.television-actions > .button-primary { margin-left: auto; }
-@media (max-width: 720px) { .television-body { padding: 16px; } .television-channel { align-items: flex-start; font-size: 8px; line-height: 1.7; gap: 8px; } .television-cabinet { grid-template-columns: minmax(0, 1fr); padding: 12px; } .television-hardware { display: none; } .television-screen { border-width: 5px; border-radius: 14px; } .television-reception { flex-direction: column; gap: 4px; } .television-actions { gap: 12px; } .television-actions > .button-primary { margin-left: 0; } .television-no-signal { gap: 8px; padding: 12px; } .television-no-signal p { font-size: 9px; } }
+.television-panel.modal {
+  width: min(1040px, 100%);
+  border-color: #69425c;
+  background: linear-gradient(145deg, #1e1520, #0b0b13 75%);
+}
+.television-body {
+  padding: 24px;
+}
+.television-channel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 0 2px 15px;
+  color: #c19eae;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.television-muted {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  color: #80d5c9;
+  border: 1px solid #3e625d;
+  background: #182a29;
+}
+.television-cabinet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 56px;
+  gap: 18px;
+  padding: 20px;
+  border: 2px solid #514047;
+  background: linear-gradient(125deg, #514048, #29232e 45%, #3a3038);
+  box-shadow:
+    inset 0 2px #8d68747a,
+    inset 0 -8px 0 #15101be0,
+    0 12px 30px #0008;
+}
+.television-screen {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  min-width: 0;
+  min-height: 216px;
+  overflow: hidden;
+  border: 8px solid #15131d;
+  border-radius: 22px;
+  background: radial-gradient(ellipse at center, #171b26, #050509);
+  box-shadow:
+    0 0 0 2px #67515a,
+    inset 0 0 35px #000;
+}
+.television-screen iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+.television-screen[data-signal='blocked'] iframe {
+  visibility: hidden;
+}
+.television-scanlines {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: repeating-linear-gradient(0deg, transparent 0 2px, #0b061a55 2px 3px);
+  box-shadow: inset 0 0 45px 12px #03020785;
+  opacity: 0.55;
+}
+.television-hardware {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 14px;
+}
+.television-hardware > span {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 5px solid #25212b;
+  background: linear-gradient(110deg, #71616b 43%, #b5a0a1 44% 52%, #574652 53%);
+  box-shadow: 2px 3px 0 #130e1c;
+  margin-bottom: 16px;
+}
+.television-hardware > i {
+  width: 30px;
+  height: 3px;
+  background: #14101c;
+  box-shadow: 0 1px #6c535c;
+}
+.television-hardware > i:last-child {
+  margin-top: auto;
+  margin-bottom: 8px;
+  width: 7px;
+  height: 7px;
+  background: #a9d3b0;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #66f19466;
+}
+.television-no-signal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 18px;
+  padding: 28px;
+  text-align: center;
+  background: repeating-linear-gradient(115deg, #171421 0 2px, #12131d 2px 4px);
+}
+.television-no-signal > span {
+  color: #5b7681;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+}
+.television-no-signal h3 {
+  color: #b8d1d0;
+  font-size: clamp(16px, 3vw, 27px);
+  letter-spacing: 0.1em;
+}
+.television-no-signal p {
+  max-width: 390px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #b6a9bd;
+}
+.television-reception {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 2px 10px;
+  font-size: 9px;
+  line-height: 1.6;
+  color: #7f8c99;
+}
+.television-reception p {
+  color: #76b5ae;
+}
+.television-credit {
+  color: #8c8196;
+  font-size: 10px;
+  line-height: 1.8;
+}
+.television-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  padding-top: 20px;
+}
+.television-actions a {
+  color: #88c2be;
+  font-size: 10px;
+  line-height: 1.8;
+  text-underline-offset: 4px;
+}
+.television-actions > .button-primary {
+  margin-left: auto;
+}
+@media (max-width: 720px) {
+  .television-body {
+    padding: 16px;
+  }
+  .television-channel {
+    align-items: flex-start;
+    font-size: 8px;
+    line-height: 1.7;
+    gap: 8px;
+  }
+  .television-cabinet {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 12px;
+  }
+  .television-hardware {
+    display: none;
+  }
+  .television-screen {
+    border-width: 5px;
+    border-radius: 14px;
+  }
+  .television-reception {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .television-actions {
+    gap: 12px;
+  }
+  .television-actions > .button-primary {
+    margin-left: 0;
+  }
+  .television-no-signal {
+    gap: 8px;
+    padding: 12px;
+  }
+  .television-no-signal p {
+    font-size: 9px;
+  }
+}

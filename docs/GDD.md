@@ -37,11 +37,11 @@ Deleting never issues a reward or removes a previously earned receipt. Reopening
 
 ## Reward system
 
-| Difficulty | Ammunition | XP |
-| --- | ---: | ---: |
-| Easy | 3 | 50 |
-| Normal | 6 | 100 |
-| Hard | 12 | 200 |
+| Difficulty | Ammunition |  XP |
+| ---------- | ---------: | --: |
+| Easy       |          3 |  50 |
+| Normal     |          6 | 100 |
+| Hard       |         12 | 200 |
 
 The backend owns these definitions and exposes them for display through `/api/rules`. A new local profile starts with zero ammunition and zero XP. Completion, a unique reward claim, resource credits, and the retry receipt commit atomically. The client cannot supply reward amounts.
 
@@ -49,30 +49,30 @@ XP is accumulated progress, with no XP threshold restricting task management. Mi
 
 ## Combat and controls
 
-| Input | Action |
-| --- | --- |
-| WASD | Move, with normalized diagonals |
-| Mouse | Aim |
-| Left click | Attack; pistol when loaded, melee fallback when empty |
-| F / right click | Melee |
-| E | Interact |
-| R | Reload |
-| Shift | Dash |
-| Tab | Task terminal |
-| Escape | Pause / close an overlay |
+| Input           | Action                                                |
+| --------------- | ----------------------------------------------------- |
+| WASD            | Move, with normalized diagonals                       |
+| Mouse           | Aim                                                   |
+| Left click      | Attack; pistol when loaded, melee fallback when empty |
+| F / right click | Melee                                                 |
+| E               | Interact                                              |
+| R               | Reload                                                |
+| Shift           | Dash                                                  |
+| Tab             | Task terminal                                         |
+| Escape          | Pause / close an overlay                              |
 
-| Parameter | Current value |
-| --- | ---: |
-| Player health | 1 HP |
-| Movement | 220 px/s |
-| Dash | 400 px/s for 150 ms |
-| Dash cooldown | 850 ms |
-| Pistol magazine | 6 rounds |
-| Fire interval | 250 ms |
-| Reload | 900 ms |
-| Melee cooldown | 400 ms |
-| Melee reach | 44 px |
-| Bullet speed | 760 px/s |
+| Parameter       |       Current value |
+| --------------- | ------------------: |
+| Player health   |                1 HP |
+| Movement        |            220 px/s |
+| Dash            | 400 px/s for 150 ms |
+| Dash cooldown   |              850 ms |
+| Pistol magazine |            6 rounds |
+| Fire interval   |              250 ms |
+| Reload          |              900 ms |
+| Melee cooldown  |              400 ms |
+| Melee reach     |               44 px |
+| Bullet speed    |            760 px/s |
 
 Phaser owns aiming, physics, obstacles, projectile collision, hit stop, and animation. React owns focus and overlays. Menus, forms, dialogue, browser blur, and pause suppress gameplay input. Reduced motion reduces visual effects; CRT treatment and audio have persisted settings.
 

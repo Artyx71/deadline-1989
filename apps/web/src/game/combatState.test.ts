@@ -21,7 +21,11 @@ describe('discrete input latching', () => {
     const input = new InputLatch();
     input.press('reload', true);
     expect(input.consume('reload')).toBe(false);
-    input.press('reload'); input.press('melee'); input.press('dash'); input.press('fire'); input.clear();
+    input.press('reload');
+    input.press('melee');
+    input.press('dash');
+    input.press('fire');
+    input.clear();
     expect(input.consume('reload')).toBe(false);
     expect(input.consume('melee')).toBe(false);
     expect(input.consume('dash')).toBe(false);
@@ -44,14 +48,16 @@ describe('authorized weapon timing and conservation', () => {
   });
   it('never consumes local ammunition on denied or failed authorization', () => {
     const weapon = new WeaponState(3);
-    weapon.requestShot(0); weapon.resolveShot(100, false);
+    weapon.requestShot(0);
+    weapon.resolveShot(100, false);
     expect(weapon.magazine).toBe(3);
     expect(weapon.reserve).toBe(0);
     expect(weapon.requestShot(250)).toBe(true);
   });
   it('transfers only existing reserve after 900 ms of active simulation', () => {
     const weapon = new WeaponState(8);
-    weapon.requestShot(0); weapon.resolveShot(0, true);
+    weapon.requestShot(0);
+    weapon.resolveShot(0, true);
     expect(weapon.reload(250)).toBe(true);
     expect(weapon.requestShot(5000)).toBe(false);
     expect(weapon.advance(1149)).toBe(false);
@@ -76,7 +82,8 @@ describe('authorized weapon timing and conservation', () => {
     expect(stop.advance(16)).toBe(true);
     expect(stop.advance(16)).toBe(true);
     expect(stop.advance(3)).toBe(false);
-    stop.request(35); stop.request(10);
+    stop.request(35);
+    stop.request(10);
     expect(stop.advance(34)).toBe(true);
     expect(stop.advance(1)).toBe(false);
   });
@@ -91,7 +98,15 @@ describe('authorized weapon timing and conservation', () => {
 });
 
 describe('enemy perception and telegraph states', () => {
-  const baseline: Perception = { state: 'PATROL', since: 0, lastSeenAt: 0, now: 1000, visible: true, distance: 20, attackRange: 29 };
+  const baseline: Perception = {
+    state: 'PATROL',
+    since: 0,
+    lastSeenAt: 0,
+    now: 1000,
+    visible: true,
+    distance: 20,
+    attackRange: 29,
+  };
   it('gives a newly detected target a 430 ms reaction window before chasing', () => {
     expect(nextEnemyState(baseline)).toBe('ALERT');
     expect(nextEnemyState({ ...baseline, state: 'ALERT', since: 1000, now: 1429 })).toBe('ALERT');
@@ -99,21 +114,45 @@ describe('enemy perception and telegraph states', () => {
     expect(nextEnemyState({ ...baseline, state: 'CHASE' })).toBe('ATTACK');
   });
   it('searches using last sight time instead of an unrelated attack start time', () => {
-    expect(nextEnemyState({ ...baseline, state: 'ATTACK', since: 0, lastSeenAt: 999, now: 1000, visible: false })).toBe('CHASE');
-    expect(nextEnemyState({ ...baseline, state: 'CHASE', lastSeenAt: 1000, now: 1699, visible: false })).toBe('CHASE');
-    expect(nextEnemyState({ ...baseline, state: 'CHASE', lastSeenAt: 1000, now: 1700, visible: false })).toBe('SEARCH');
-    expect(nextEnemyState({ ...baseline, state: 'SEARCH', since: 1700, now: 5100, visible: false })).toBe('PATROL');
+    expect(
+      nextEnemyState({
+        ...baseline,
+        state: 'ATTACK',
+        since: 0,
+        lastSeenAt: 999,
+        now: 1000,
+        visible: false,
+      }),
+    ).toBe('CHASE');
+    expect(
+      nextEnemyState({ ...baseline, state: 'CHASE', lastSeenAt: 1000, now: 1699, visible: false }),
+    ).toBe('CHASE');
+    expect(
+      nextEnemyState({ ...baseline, state: 'CHASE', lastSeenAt: 1000, now: 1700, visible: false }),
+    ).toBe('SEARCH');
+    expect(
+      nextEnemyState({ ...baseline, state: 'SEARCH', since: 1700, now: 5100, visible: false }),
+    ).toBe('PATROL');
   });
   it('never attacks without visibility and never revives dead enemies', () => {
-    expect(nextEnemyState({ ...baseline, state: 'CHASE', visible: false, lastSeenAt: 999 })).toBe('CHASE');
+    expect(nextEnemyState({ ...baseline, state: 'CHASE', visible: false, lastSeenAt: 999 })).toBe(
+      'CHASE',
+    );
     expect(nextEnemyState({ ...baseline, state: 'DEAD' })).toBe('DEAD');
-    expect(nextEnemyState({ ...baseline, state: 'CHASE', distance: 250, attackRange: 220 })).toBe('CHASE');
+    expect(nextEnemyState({ ...baseline, state: 'CHASE', distance: 250, attackRange: 220 })).toBe(
+      'CHASE',
+    );
   });
 });
 
 describe('projectile and body clearance', () => {
   it('hits a wall immediately in front of the muzzle instead of spawning past it', () => {
-    const hit = firstImpact({ x: 0, y: 0 }, { x: 30, y: 0 }, [{ x: 6, y: -5, width: 1, height: 10 }], [{ rect: { x: 20, y: -4, width: 8, height: 8 }, value: 'enemy' }]);
+    const hit = firstImpact(
+      { x: 0, y: 0 },
+      { x: 30, y: 0 },
+      [{ x: 6, y: -5, width: 1, height: 10 }],
+      [{ rect: { x: 20, y: -4, width: 8, height: 8 }, value: 'enemy' }],
+    );
     expect(hit?.target).toBeNull();
     expect(hit?.fraction).toBeCloseTo(5 / 30);
   });
@@ -132,11 +171,20 @@ describe('projectile and body clearance', () => {
 });
 
 describe('map data boundary', () => {
-  const map = { width: 100, height: 100, tileSize: 16, spawn: { x: 10, y: 10 }, colliders: [{ x: 0, y: 0, width: 4, height: 100 }], interactions: [] };
+  const map = {
+    width: 100,
+    height: 100,
+    tileSize: 16,
+    spawn: { x: 10, y: 10 },
+    colliders: [{ x: 0, y: 0, width: 4, height: 100 }],
+    interactions: [],
+  };
   it('rejects invalid geometry and copies cached data before scene overrides', () => {
     const parsed = readWorldMap(map);
     parsed.colliders[0]!.width = 10;
     expect(map.colliders[0]!.width).toBe(4);
-    expect(() => readWorldMap({ ...map, colliders: [{ x: 0, y: 0, width: -1, height: 5 }] })).toThrow();
+    expect(() =>
+      readWorldMap({ ...map, colliders: [{ x: 0, y: 0, width: -1, height: 5 }] }),
+    ).toThrow();
   });
 });

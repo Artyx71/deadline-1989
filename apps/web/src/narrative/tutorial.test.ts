@@ -1,11 +1,30 @@
 import { describe, expect, it } from 'vitest';
 import { tutorialSteps, type TutorialStep } from '@deadline/shared';
 import { DIALOGUES } from './dialogue';
-import { nextTutorialStep, reduceTutorialStep, skipTutorial, TUTORIAL_HINTS, type TutorialAction } from './tutorial';
+import {
+  nextTutorialStep,
+  reduceTutorialStep,
+  skipTutorial,
+  TUTORIAL_HINTS,
+  type TutorialAction,
+} from './tutorial';
 
 describe('FIRST CALL guided progression', () => {
   it('advances through every step only after its required action', () => {
-    const events: TutorialAction[] = ['moved', 'moved', 'first-call', 'computer', 'task-created', 'training', 'training', 'aimed', 'shot', 'reloaded', 'melee', 'second-call'];
+    const events: TutorialAction[] = [
+      'moved',
+      'moved',
+      'first-call',
+      'computer',
+      'task-created',
+      'training',
+      'training',
+      'aimed',
+      'shot',
+      'reloaded',
+      'melee',
+      'second-call',
+    ];
     let current: TutorialStep = 'wake';
     const visited: TutorialStep[] = [current];
     for (const event of events) {
@@ -17,9 +36,16 @@ describe('FIRST CALL guided progression', () => {
   });
   it('does not bypass the phone, real task creation, or ordered training', () => {
     const cases: [TutorialStep, TutorialAction][] = [
-      ['movement', 'first-call'], ['first-call', 'computer'], ['computer', 'task-created'],
-      ['create-task', 'shot'], ['rewards', 'reloaded'], ['training', 'shot'],
-      ['aim', 'shot'], ['shoot', 'reloaded'], ['reload', 'melee'], ['melee', 'second-call'],
+      ['movement', 'first-call'],
+      ['first-call', 'computer'],
+      ['computer', 'task-created'],
+      ['create-task', 'shot'],
+      ['rewards', 'reloaded'],
+      ['training', 'shot'],
+      ['aim', 'shot'],
+      ['shoot', 'reloaded'],
+      ['reload', 'melee'],
+      ['melee', 'second-call'],
     ];
     for (const [step, event] of cases) expect(reduceTutorialStep(step, event)).toBe(step);
   });
@@ -49,21 +75,33 @@ describe('FIRST CALL guided progression', () => {
 
 describe('original caller content contracts', () => {
   it('covers every server trigger with readable caller lines and a valid portrait', () => {
-    expect(Object.keys(DIALOGUES).sort()).toEqual([
-      'first-call', 'second-call', 'first-death', 'death-streak', 'no-kills', 'empty-magazine',
-      'near-victory', 'silent-victory', 'productive', 'first-victory',
-    ].sort());
+    expect(Object.keys(DIALOGUES).sort()).toEqual(
+      [
+        'first-call',
+        'second-call',
+        'first-death',
+        'death-streak',
+        'no-kills',
+        'empty-magazine',
+        'near-victory',
+        'silent-victory',
+        'productive',
+        'first-victory',
+      ].sort(),
+    );
     for (const dialogue of Object.values(DIALOGUES)) {
       expect(dialogue.speaker).toBe('№ 9');
       expect(dialogue.portrait).toBe(1);
       expect(dialogue.lines.length).toBeGreaterThanOrEqual(3);
-      expect(dialogue.lines.every(line => line.trim().length > 0 && line.length <= 240)).toBe(true);
+      expect(dialogue.lines.every((line) => line.trim().length > 0 && line.length <= 240)).toBe(
+        true,
+      );
     }
   });
   it('explains product invariants and optional training without reading private task text', () => {
     expect(DIALOGUES['first-call']?.lines).toHaveLength(4);
     expect(DIALOGUES['first-call']?.lines[0]).toBe('У тебя осталось одно незавершённое дело.');
-    expect(DIALOGUES['first-call']?.lines.every(line => line.length < 200)).toBe(true);
+    expect(DIALOGUES['first-call']?.lines.every((line) => line.length < 200)).toBe(true);
     const briefing = DIALOGUES['first-call']?.lines.join(' ') ?? '';
     expect(briefing).toContain('список реальных дел');
     expect(briefing).toContain('Открой компьютер и запиши настоящее дело из своей жизни');

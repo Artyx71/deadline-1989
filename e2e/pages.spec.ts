@@ -4,19 +4,32 @@ import type { MutationResult, StateSnapshot } from '../packages/shared/src/index
 
 // Exercise the actual production Worker protocol with normal validated routes.
 // No application test bridge, resource injection or database editing is used.
-const workerFile = readdirSync('apps/web/dist-pages/assets').find(name => /^profile\.worker-.*\.js$/.test(name));
+const workerFile = readdirSync('apps/web/dist-pages/assets').find((name) =>
+  /^profile\.worker-.*\.js$/.test(name),
+);
 if (!workerFile) throw new Error('Build Pages before running its browser tests');
 async function request(page: Page, path: string, method = 'GET', body?: unknown, key?: string) {
-  return page.evaluate(async ({ workerFile, path, method, body, key }) => {
-    const worker = new Worker(new URL(`assets/${workerFile}`, location.href), { type: 'module' });
-    try {
-      return await new Promise<{ status: number; body: unknown }>((resolve, reject) => {
-        worker.onmessage = event => resolve(event.data);
-        worker.onerror = event => reject(new Error(event.message));
-        worker.postMessage({ id: crypto.randomUUID(), path, method, body, key: key ?? crypto.randomUUID() });
-      });
-    } finally { worker.terminate(); }
-  }, { workerFile, path, method, body, key });
+  return page.evaluate(
+    async ({ workerFile, path, method, body, key }) => {
+      const worker = new Worker(new URL(`assets/${workerFile}`, location.href), { type: 'module' });
+      try {
+        return await new Promise<{ status: number; body: unknown }>((resolve, reject) => {
+          worker.onmessage = (event) => resolve(event.data);
+          worker.onerror = (event) => reject(new Error(event.message));
+          worker.postMessage({
+            id: crypto.randomUUID(),
+            path,
+            method,
+            body,
+            key: key ?? crypto.randomUUID(),
+          });
+        });
+      } finally {
+        worker.terminate();
+      }
+    },
+    { workerFile, path, method, body, key },
+  );
 }
 async function state(page: Page): Promise<StateSnapshot> {
   const response = await request(page, '/state');
@@ -30,27 +43,35 @@ async function terminal(page: Page) {
 async function call(page: Page) {
   const dialogue = page.getByRole('dialog', { name: 'ВХОДЯЩИЙ ВЫЗОВ' });
   await expect(dialogue).toBeVisible();
-  for (let i = 0; i < 20 && await dialogue.isVisible(); i++) {
+  for (let i = 0; i < 20 && (await dialogue.isVisible()); i++) {
     await page.getByTestId('dialogue-advance').click();
     await page.waitForTimeout(60);
   }
   await expect(dialogue).toBeHidden();
 }
 
-test('Pages subpath: real task UI persists in IndexedDB without an API server', async ({ page }) => {
+test('Pages subpath: real task UI persists in IndexedDB without an API server', async ({
+  page,
+}) => {
   const errors: string[] = [];
   const apiRequests: string[] = [];
-  page.on('pageerror', error => errors.push(error.message));
-  page.on('request', request => { if (new URL(request.url()).pathname.startsWith('/api/')) apiRequests.push(request.url()); });
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('request', (request) => {
+    if (new URL(request.url()).pathname.startsWith('/api/')) apiRequests.push(request.url());
+  });
   await page.goto('./');
   await terminal(page);
   await page.getByTestId('task-new').click();
   await page.getByTestId('task-title').fill('Pages / написать настоящий план');
   await page.getByTestId('task-save').click();
-  await expect(page.getByRole('heading', { name: 'Pages / написать настоящий план', exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Pages / написать настоящий план', exact: true }),
+  ).toBeVisible();
   await page.reload();
   await terminal(page);
-  await expect(page.getByRole('heading', { name: 'Pages / написать настоящий план', exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Pages / написать настоящий план', exact: true }),
+  ).toBeVisible();
   await page.getByTestId('task-edit').click();
   await page.getByTestId('task-title').fill('Pages / отправить настоящий план');
   await page.getByTestId('task-save').click();
@@ -76,9 +97,15 @@ test('Pages subpath: real task UI persists in IndexedDB without an API server', 
   expect(errors).toEqual([]);
 });
 
-test('Pages SQLite serializes tabs, deduplicates rewards, and persists confirmed new-game reset', async ({ page, context }) => {
+test('Pages SQLite serializes tabs, deduplicates rewards, and persists confirmed new-game reset', async ({
+  page,
+  context,
+}) => {
   await page.goto('./');
-  const created = await request(page, '/tasks', 'POST', { title: 'Pages / concurrency', difficulty: 'hard' });
+  const created = await request(page, '/tasks', 'POST', {
+    title: 'Pages / concurrency',
+    difficulty: 'hard',
+  });
   const task = (created.body as MutationResult).state.tasks[0];
   if (!task) throw new Error('Missing created task');
   const second = await context.newPage();
@@ -89,7 +116,7 @@ test('Pages SQLite serializes tabs, deduplicates rewards, and persists confirmed
     request(second, `/tasks/${task.id}/complete`, 'POST', {}, key),
     request(second, `/tasks/${task.id}/complete`, 'POST', {}, crypto.randomUUID()),
   ]);
-  expect(responses.map(response => response.status)).toEqual([200, 200, 200]);
+  expect(responses.map((response) => response.status)).toEqual([200, 200, 200]);
   expect((await state(second)).player).toMatchObject({ ammo: 12, xp: 200 });
   expect((await state(page)).rewards).toHaveLength(1);
   await page.reload();
@@ -106,13 +133,21 @@ test('Pages SQLite serializes tabs, deduplicates rewards, and persists confirmed
   expect((await state(page)).rewards).toHaveLength(0);
 });
 
-test('Pages gameplay loads assets, separate training, dispatch, real shot and durable refresh recovery', async ({ page }, info) => {
+test('Pages gameplay loads assets, separate training, dispatch, real shot and durable refresh recovery', async ({
+  page,
+}, info) => {
   const errors: string[] = [];
   const failedAssets: string[] = [];
-  page.on('pageerror', error => errors.push(error.message));
-  page.on('response', response => { if (response.status() >= 400 && response.url().includes('/assets/')) failedAssets.push(response.url()); });
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('response', (response) => {
+    if (response.status() >= 400 && response.url().includes('/assets/'))
+      failedAssets.push(response.url());
+  });
   await page.goto('./');
-  const created = await request(page, '/tasks', 'POST', { title: 'Pages / mission fixture', difficulty: 'normal' });
+  const created = await request(page, '/tasks', 'POST', {
+    title: 'Pages / mission fixture',
+    difficulty: 'normal',
+  });
   const task = (created.body as MutationResult).state.tasks[0];
   if (!task) throw new Error('Missing fixture');
   await request(page, `/tasks/${task.id}/complete`, 'POST', {});
@@ -127,7 +162,10 @@ test('Pages gameplay loads assets, separate training, dispatch, real shot and du
   await page.getByTestId('task-new').click();
   await page.getByTestId('task-title').fill('Pages / practice later');
   await page.getByTestId('task-save').click();
-  await page.getByRole('dialog', { name: 'КОНТРАКТНЫЙ ТЕРМИНАЛ v1.3' }).locator('.close-button').click();
+  await page
+    .getByRole('dialog', { name: 'КОНТРАКТНЫЙ ТЕРМИНАЛ v1.3' })
+    .locator('.close-button')
+    .click();
   await page.getByTestId('tutorial-training').click();
   await expect(page.locator('canvas')).toHaveAttribute('data-scene', 'training');
   await page.screenshot({ path: info.outputPath('pages-training.png') });
@@ -143,7 +181,9 @@ test('Pages gameplay loads assets, separate training, dispatch, real shot and du
   await expect.poll(async () => (await state(page)).attempt?.spent).toBe(1);
   await page.keyboard.press('Tab');
   await expect(page.getByTestId('task-new')).toBeEnabled();
-  await expect.poll(async () => Number(await page.locator('html').getAttribute('data-effect-rms-peak'))).toBeGreaterThan(0);
+  await expect
+    .poll(async () => Number(await page.locator('html').getAttribute('data-effect-rms-peak')))
+    .toBeGreaterThan(0);
   await page.reload();
   await expect(page.getByTestId('recover-mission')).toBeVisible();
   await page.getByTestId('recover-mission').click();

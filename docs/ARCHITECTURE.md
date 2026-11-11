@@ -8,21 +8,21 @@ Task creation, completion, deletion, and reload persistence are P0. React expose
 
 ## Workspace and tooling
 
-| Path | Responsibility |
-| --- | --- |
-| `apps/web/src/components/`, `features/` | React shell, task terminal, forms, menus, HUD, dialogue, settings |
-| `apps/web/src/game/` | Phaser scene, input, Arcade Physics, weapons, enemies, paths, simulation |
-| `apps/web/src/narrative/` | Original dialogue and pure tutorial progression |
-| `apps/web/src/audio/` | Web Audio graph and state-driven playback |
-| `apps/web/public/assets/` | Original/registered images, Tiled-compatible map data, audio |
-| `apps/server/src/` | Fastify routes, native SQLite connection, thin shared-domain wrappers |
-| `apps/server/migrations/` | Versioned SQL migrations |
-| `apps/server/tests/` | Real SQLite API integration tests |
-| `packages/shared/src/` | Zod transport schemas, DTOs, game/UI bridge contracts |
-| `packages/domain/src/` | Sole task/reward/mission business rules, schema, errors, initial migration |
-| `apps/web/src/persistence/` | Worker transport, SQL.js/Drizzle adapter, IndexedDB durability and locking |
-| `e2e/`, `playwright.config.ts` | Browser scenarios and isolated server startup |
-| `.agents/`, `.codex/`, `docs/` | Agent infrastructure, project rules, design, evidence |
+| Path                                    | Responsibility                                                             |
+| --------------------------------------- | -------------------------------------------------------------------------- |
+| `apps/web/src/components/`, `features/` | React shell, task terminal, forms, menus, HUD, dialogue, settings          |
+| `apps/web/src/game/`                    | Phaser scene, input, Arcade Physics, weapons, enemies, paths, simulation   |
+| `apps/web/src/narrative/`               | Original dialogue and pure tutorial progression                            |
+| `apps/web/src/audio/`                   | Web Audio graph and state-driven playback                                  |
+| `apps/web/public/assets/`               | Original/registered images, Tiled-compatible map data, audio               |
+| `apps/server/src/`                      | Fastify routes, native SQLite connection, thin shared-domain wrappers      |
+| `apps/server/migrations/`               | Versioned SQL migrations                                                   |
+| `apps/server/tests/`                    | Real SQLite API integration tests                                          |
+| `packages/shared/src/`                  | Zod transport schemas, DTOs, game/UI bridge contracts                      |
+| `packages/domain/src/`                  | Sole task/reward/mission business rules, schema, errors, initial migration |
+| `apps/web/src/persistence/`             | Worker transport, SQL.js/Drizzle adapter, IndexedDB durability and locking |
+| `e2e/`, `playwright.config.ts`          | Browser scenarios and isolated server startup                              |
+| `.agents/`, `.codex/`, `docs/`          | Agent infrastructure, project rules, design, evidence                      |
 
 This existing directory is the monorepo root. pnpm is installed; `package.json` pins pnpm 12.18.0 and Node >=24, with dependency versions recorded in manifests and the lockfile. React/TypeScript/Vite/Tailwind/Zustand/TanStack Query serve the client; Phaser 3 uses Arcade Physics and Tiled-compatible exports. Native persistence uses Fastify/better-sqlite3/Drizzle/Zod. Pages uses SQL.js/Drizzle in a Web Worker with IndexedDB and Web Locks; both call the same domain package. Vitest and Playwright provide verification.
 
@@ -68,27 +68,27 @@ Maps combine original raster art with Tiled collision objects and typed world/in
 
 Native mode exposes the HTTP routes below; Pages maps equivalent operations through the typed worker transport without a remote API. Native HTTP mutations require an `Idempotency-Key` header; browser worker requests carry the equivalent required key in their typed message. Successful mutations return `MutationResult = { state: StateSnapshot, reward?: RewardClaim }`. Reads return the indicated DTO. Routes validate strict inputs and never accept client reward amounts.
 
-| Method and route | Contract |
-| --- | --- |
-| `GET /api/health` | Health response |
-| `GET /api/rules` | Shared domain reward definitions for display |
-| `GET /api/state` | Revisioned tasks, receipts, player, active attempt, progression, tutorial, dialogue history, settings |
-| `GET /api/tasks` | Task list |
-| `POST /api/tasks` | Create title/description/difficulty/optional deadline |
-| `PATCH /api/tasks/:id` | Edit supplied task fields without applying creation defaults |
-| `POST /api/tasks/:id/complete` | Complete and issue the first eligible reward atomically |
-| `POST /api/tasks/:id/reopen` | Reopen without resetting reward history |
-| `DELETE /api/tasks/:id` | Delete task; retain earned resources and receipt |
-| `GET /api/player` | Authoritative ammunition, XP, deaths, consecutive deaths |
-| `POST /api/missions/start` | `{ missionId: 'first-shift', ammo }`; reserve inventory and create attempt |
-| `POST /api/missions/:id/shots` | `{ count: 1 }`; commit one reserved round |
-| `POST /api/missions/:id/finish` | `{ outcome: 'dead' | 'cleared' | 'abandoned', stats }`; settle/refund once |
-| `GET /api/dialogue/next` | `{ next, history }` after eligibility/priority/cooldown checks |
-| `POST /api/dialogue/:id/acknowledge` | Persist answered/ignored history |
-| `GET /api/settings`, `PATCH /api/settings` | Read/patch audio and accessibility/effect preferences |
-| `PATCH /api/tutorial` | Persist valid cursor/completed/skipped fields; completion/skip unlocks mission |
-| `POST /api/game/reset` | Replay gameplay/tutorial, preserving tasks/resources/receipts/settings |
-| `POST /api/profile/reset` | Strict `{ confirmation: 'УДАЛИТЬ' }`; clear profile only after explicit UI consent |
+| Method and route                           | Contract                                                                                              |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `GET /api/health`                          | Health response                                                                                       |
+| `GET /api/rules`                           | Shared domain reward definitions for display                                                          |
+| `GET /api/state`                           | Revisioned tasks, receipts, player, active attempt, progression, tutorial, dialogue history, settings |
+| `GET /api/tasks`                           | Task list                                                                                             |
+| `POST /api/tasks`                          | Create title/description/difficulty/optional deadline                                                 |
+| `PATCH /api/tasks/:id`                     | Edit supplied task fields without applying creation defaults                                          |
+| `POST /api/tasks/:id/complete`             | Complete and issue the first eligible reward atomically                                               |
+| `POST /api/tasks/:id/reopen`               | Reopen without resetting reward history                                                               |
+| `DELETE /api/tasks/:id`                    | Delete task; retain earned resources and receipt                                                      |
+| `GET /api/player`                          | Authoritative ammunition, XP, deaths, consecutive deaths                                              |
+| `POST /api/missions/start`                 | `{ missionId: 'first-shift', ammo }`; reserve inventory and create attempt                            |
+| `POST /api/missions/:id/shots`             | `{ count: 1 }`; commit one reserved round                                                             |
+| `POST /api/missions/:id/finish`            | `{ outcome: 'dead'                                                                                    | 'cleared' | 'abandoned', stats }`; settle/refund once |
+| `GET /api/dialogue/next`                   | `{ next, history }` after eligibility/priority/cooldown checks                                        |
+| `POST /api/dialogue/:id/acknowledge`       | Persist answered/ignored history                                                                      |
+| `GET /api/settings`, `PATCH /api/settings` | Read/patch audio and accessibility/effect preferences                                                 |
+| `PATCH /api/tutorial`                      | Persist valid cursor/completed/skipped fields; completion/skip unlocks mission                        |
+| `POST /api/game/reset`                     | Replay gameplay/tutorial, preserving tasks/resources/receipts/settings                                |
+| `POST /api/profile/reset`                  | Strict `{ confirmation: 'УДАЛИТЬ' }`; clear profile only after explicit UI consent                    |
 
 Errors use `{ error: { code, message, requestId? } }`; native HTTP adds the request ID and the worker correlates its response envelope. Invalid input is 400, absent entities 404, and resource/state/idempotency conflicts 409. Unexpected failures return a safe 500 with a retry instruction and internal request-correlated logging. Unknown API paths never return the SPA HTML.
 

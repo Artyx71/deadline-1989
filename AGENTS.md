@@ -50,15 +50,15 @@ Read the relevant rules before modifying that area. Read [GDD](docs/GDD.md), [ar
 
 The main agent owns integration. Before delegation, give a narrow task, dependencies, exclusive file ownership, acceptance criteria, and verification requirements. Run independent assignments in parallel only; never edit the same files concurrently. Cap active subagents at four, or fewer when the host allows fewer total agents. Subagents must not spawn further agents without an explicit allocation from the orchestrator. Ownership is a coordination rule, not a filesystem sandbox.
 
-| Agent | Default ownership |
-| --- | --- |
-| game-engineer | `apps/web/src/game/` |
-| frontend-engineer | `apps/web/src/components/`, `apps/web/src/features/` |
-| backend-engineer | `apps/server/` |
-| pixel-art-director | `apps/web/public/assets/`, `docs/ART_BIBLE.md`, `docs/ASSET_CREDITS.md` |
-| narrative-designer | `apps/web/src/narrative/`, assigned narrative sections of `docs/GDD.md` |
-| qa-engineer | `tests/`, `e2e/`, explicitly assigned test configuration |
-| orchestrator | `packages/shared/`, `packages/domain/`, persistence adapter integration, root configuration, dependency integration, architectural decisions |
+| Agent              | Default ownership                                                                                                                            |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| game-engineer      | `apps/web/src/game/`                                                                                                                         |
+| frontend-engineer  | `apps/web/src/components/`, `apps/web/src/features/`                                                                                         |
+| backend-engineer   | `apps/server/`                                                                                                                               |
+| pixel-art-director | `apps/web/public/assets/`, `docs/ART_BIBLE.md`, `docs/ASSET_CREDITS.md`                                                                      |
+| narrative-designer | `apps/web/src/narrative/`, assigned narrative sections of `docs/GDD.md`                                                                      |
+| qa-engineer        | `tests/`, `e2e/`, explicitly assigned test configuration                                                                                     |
+| orchestrator       | `packages/shared/`, `packages/domain/`, persistence adapter integration, root configuration, dependency integration, architectural decisions |
 
 Adapt paths through an explicit assignment. Whole-file ownership is preferred; serialize any shared document changes. Request a contract change from the orchestrator rather than changing another agent's files. Review every report and diff before integration, then run verification appropriate to the integrated change. An incomplete report is not success.
 

@@ -1,20 +1,102 @@
-.boot-screen { position: relative; overflow: hidden; isolation: isolate; background: #06050b; }
-.boot-static, .boot-tracking { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
-.boot-static { opacity: .15; background: repeating-linear-gradient(3deg,#a9a0be0d 0 1px,transparent 1px 3px), repeating-linear-gradient(103deg,#e189b217 0 1px,transparent 1px 6px); animation: boot-noise .2s steps(3) infinite; }
-.boot-tracking { height: 8%; top: -20%; background: linear-gradient(transparent,#b8a4cc12,transparent); animation: boot-tracking 2.7s linear infinite; }
-.boot-emblem { text-align: center; }
-.boot-emblem h1 { letter-spacing: -.07em; transform: skew(-8deg); line-height: 1; }
-.boot-emblem h1 span { display: block; font-size: .7em; margin-left: 36%; letter-spacing: -.04em; }
-.boot-edition { display: block; margin-top: 25px; color: #8c657f; font-size: 10px; letter-spacing: .23em; }
-.boot-label { color: #85768e; font-size: 10px; letter-spacing: .14em; }
-.boot-timecode { position: absolute; bottom: 28px; left: 28px; font-size: 11px; color: #6b5b75; }
-.boot-phase-0 > :not(.boot-static):not(.boot-tracking) { opacity: 0; }
-.boot-phase-0 .boot-static { opacity: 0; }
-.boot-screen.boot-phase-0 { background: #030206; }
-.boot-phase-1 .boot-emblem { opacity: 0; }
-.boot-phase-1 .boot-static { opacity: .5; }
-.boot-phase-2 .boot-emblem { animation: boot-glitch .5s steps(2) 1; }
-.boot-phase-3 { background: radial-gradient(ellipse, #261028, #06050b 65%); }
-@keyframes boot-noise { 50% { transform: translateY(2px); } }
-@keyframes boot-tracking { to { top: 115%; } }
-@keyframes boot-glitch { 20% { transform: translateX(5px); filter: hue-rotate(15deg); } 40% { transform: translateX(-3px) skew(3deg); } 70% { transform: translateX(2px); } }
+.boot-screen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: #06050b;
+}
+.boot-static,
+.boot-tracking {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+.boot-static {
+  opacity: 0.15;
+  background:
+    repeating-linear-gradient(3deg, #a9a0be0d 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(103deg, #e189b217 0 1px, transparent 1px 6px);
+  animation: boot-noise 0.2s steps(3) infinite;
+}
+.boot-tracking {
+  height: 8%;
+  top: -20%;
+  background: linear-gradient(transparent, #b8a4cc12, transparent);
+  animation: boot-tracking 2.7s linear infinite;
+}
+.boot-emblem {
+  text-align: center;
+}
+.boot-emblem h1 {
+  letter-spacing: -0.07em;
+  transform: skew(-8deg);
+  line-height: 1;
+}
+.boot-emblem h1 span {
+  display: block;
+  font-size: 0.7em;
+  margin-left: 36%;
+  letter-spacing: -0.04em;
+}
+.boot-edition {
+  display: block;
+  margin-top: 25px;
+  color: #8c657f;
+  font-size: 10px;
+  letter-spacing: 0.23em;
+}
+.boot-label {
+  color: #85768e;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+.boot-timecode {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  font-size: 11px;
+  color: #6b5b75;
+}
+.boot-phase-0 > :not(.boot-static):not(.boot-tracking) {
+  opacity: 0;
+}
+.boot-phase-0 .boot-static {
+  opacity: 0;
+}
+.boot-screen.boot-phase-0 {
+  background: #030206;
+}
+.boot-phase-1 .boot-emblem {
+  opacity: 0;
+}
+.boot-phase-1 .boot-static {
+  opacity: 0.5;
+}
+.boot-phase-2 .boot-emblem {
+  animation: boot-glitch 0.5s steps(2) 1;
+}
+.boot-phase-3 {
+  background: radial-gradient(ellipse, #261028, #06050b 65%);
+}
+@keyframes boot-noise {
+  50% {
+    transform: translateY(2px);
+  }
+}
+@keyframes boot-tracking {
+  to {
+    top: 115%;
+  }
+}
+@keyframes boot-glitch {
+  20% {
+    transform: translateX(5px);
+    filter: hue-rotate(15deg);
+  }
+  40% {
+    transform: translateX(-3px) skew(3deg);
+  }
+  70% {
+    transform: translateX(2px);
+  }
+}

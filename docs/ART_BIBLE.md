@@ -12,15 +12,15 @@ Build an original 1989 identity around quiet apartment interiors, hard fluoresce
 
 Both supplied reference images were inspected directly. Image 1 groups dense overhead interiors, a crowded neon club, a cinematic dialogue panel, and a large arcade title/menu. Image 2 shows a complete proposed screen family: a sunset skyline menu, overhead apartment, cyan terminal, readable combat HUD, telephone dialogue, and death/victory screens. These are visual targets, not source assets.
 
-| Reference trait | Original implementation | Verification state |
-| --- | --- | --- |
-| Orthogonal overhead rooms and small people | 768 × 480 apartment with 16 px floors/walls; 32 px overhead characters | PNG inspected; scene scale pending browser review |
-| Dense identifiable domestic objects | Bedroom, living area, tiled kitchen, desk, cabinets, books, papers, slippers, records, plants, phone, TV and doors | Original apartment/prop PNGs inspected |
-| Warm worn surfaces under colored light | Wood grain, woven rug, fabric folds, metal/plastic highlights; discrete magenta, cyan, and red light spill | Source image inspected; motion/contrast pending browser |
-| Strong silhouettes with limited effects | Outlined characters, separate enemy/gunner palette, bounded bright muzzle effects | Sprite strip inspected; combat readability pending |
-| Atmospheric skyline/menu | Original layered city, striped sunset, exchange tower, rooftop antennae, palms, wet reflections | `skyline.png` inspected; final title composition owned by UI |
-| Portrait dialogue and cyan terminal | Two original 64 px portraits plus an original terminal palette | Portraits inspected; actual overlays pending integration |
-| Expressive action and environmental motion | Ten-row character action sheets; phone, screen, TV, neon, doors and effects strips | Frame metadata checked; browser motion pending |
+| Reference trait                            | Original implementation                                                                                            | Verification state                                           |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| Orthogonal overhead rooms and small people | 768 × 480 apartment with 16 px floors/walls; 32 px overhead characters                                             | PNG inspected; scene scale pending browser review            |
+| Dense identifiable domestic objects        | Bedroom, living area, tiled kitchen, desk, cabinets, books, papers, slippers, records, plants, phone, TV and doors | Original apartment/prop PNGs inspected                       |
+| Warm worn surfaces under colored light     | Wood grain, woven rug, fabric folds, metal/plastic highlights; discrete magenta, cyan, and red light spill         | Source image inspected; motion/contrast pending browser      |
+| Strong silhouettes with limited effects    | Outlined characters, separate enemy/gunner palette, bounded bright muzzle effects                                  | Sprite strip inspected; combat readability pending           |
+| Atmospheric skyline/menu                   | Original layered city, striped sunset, exchange tower, rooftop antennae, palms, wet reflections                    | `skyline.png` inspected; final title composition owned by UI |
+| Portrait dialogue and cyan terminal        | Two original 64 px portraits plus an original terminal palette                                                     | Portraits inspected; actual overlays pending integration     |
+| Expressive action and environmental motion | Ten-row character action sheets; phone, screen, TV, neon, doors and effects strips                                 | Frame metadata checked; browser motion pending               |
 
 The reference uses more illustrative detail and richer scene-specific composition than a generic tile kit. Keep correcting the integrated scene against these traits. File existence alone does not establish the visual release gate.
 
@@ -30,31 +30,31 @@ Visual quality is an acceptance requirement. A coherent limited set of compatibl
 
 Use this initial palette for art tests. Values are proposals; any revision must update the palette and the representative scene together.
 
-| Role | Hex | Use |
-| --- | --- | --- |
-| Ink | `#10101D` | Deep outlines and voids |
-| Midnight | `#201A34` | Floor shadows and unlit rooms |
-| Aubergine | `#3D274C` | Wall shadows and secondary surfaces |
-| Concrete | `#666179` | Neutral objects and structural midtones |
-| Paper | `#D8D0B8` | Readable text and worn paper |
-| Hot pink | `#F04B98` | Select accents and signage |
-| Violet | `#9055D8` | Secondary neon and atmosphere |
-| Cyan | `#50D5D7` | Terminal focus and interaction accents |
-| Alarm red | `#E75156` | Damage and threat accents |
-| Amber | `#EAAF60` | Lamps, muzzle flashes, and warm highlights |
+| Role      | Hex       | Use                                        |
+| --------- | --------- | ------------------------------------------ |
+| Ink       | `#10101D` | Deep outlines and voids                    |
+| Midnight  | `#201A34` | Floor shadows and unlit rooms              |
+| Aubergine | `#3D274C` | Wall shadows and secondary surfaces        |
+| Concrete  | `#666179` | Neutral objects and structural midtones    |
+| Paper     | `#D8D0B8` | Readable text and worn paper               |
+| Hot pink  | `#F04B98` | Select accents and signage                 |
+| Violet    | `#9055D8` | Secondary neon and atmosphere              |
+| Cyan      | `#50D5D7` | Terminal focus and interaction accents     |
+| Alarm red | `#E75156` | Damage and threat accents                  |
+| Amber     | `#EAAF60` | Lamps, muzzle flashes, and warm highlights |
 
 Reserve strong saturation for focal information. Separate walkable floor, solid walls, characters, interactables, and threats through value and silhouette as well as hue. Do not rely on red versus green alone to communicate state. Palette compatibility means deliberate remapping and retouching, not an automatic filter applied to a mismatched pack.
 
 ## Production grid, tiles, and sprite dimensions
 
-| Item | Proposed source dimensions | Rule |
-| --- | --- | --- |
-| World tile | 16 × 16 px | Production: one shared base grid; reusable floor and wall tiles |
-| Player/enemy frame | 32 × 32 px | Shared canvas, consistent foot/body anchor, readable body footprint around 12–16 px |
-| Large character pose | 32 × 32 px first | Expand only with an approved canvas/pivot contract for the animation set |
-| Portrait | 64 × 64 px | Common framing and palette across speakers |
-| Small HUD icon | 16 × 16 px | Same stroke weight and optical alignment |
-| Door/prop | Multiples of 16 px | Visual bounds may exceed collision bounds; document both |
+| Item                 | Proposed source dimensions | Rule                                                                                |
+| -------------------- | -------------------------- | ----------------------------------------------------------------------------------- |
+| World tile           | 16 × 16 px                 | Production: one shared base grid; reusable floor and wall tiles                     |
+| Player/enemy frame   | 32 × 32 px                 | Shared canvas, consistent foot/body anchor, readable body footprint around 12–16 px |
+| Large character pose | 32 × 32 px first           | Expand only with an approved canvas/pivot contract for the animation set            |
+| Portrait             | 64 × 64 px                 | Common framing and palette across speakers                                          |
+| Small HUD icon       | 16 × 16 px                 | Same stroke weight and optical alignment                                            |
+| Door/prop            | Multiples of 16 px         | Visual bounds may exceed collision bounds; document both                            |
 
 Do not resize one character to compensate for a mismatched pack. Judge all sprites beside the same door, desk, and player reference. Define pivots, collision shapes, frame dimensions, naming, direction count, and animation metadata before integration. Collision bounds reflect gameplay geometry and must be reviewed separately from decorative pixels.
 
@@ -72,48 +72,48 @@ The following counts and rates are **proposed starting ranges**, not promises ab
 
 `art-manifest.json` supplies frame lists, fps, looping, muzzle origin/frame, melee active frames, character anchors and solid bounds. Death progresses from upright to collapse; wake reverses into movement. The sheets include held exposure frames for idle/aim and must not be described as eighty distinct poses. `enemy-gunner.png` uses a controlled cool palette separate from the red enemy.
 
-| Player animation | Proposed frames / rate | Review requirement |
-| --- | --- | --- |
-| Idle | 2–4 / 4–6 fps | Stable aim and readable silhouette |
-| Walk | 6–8 / 8–10 fps | Consistent stride and ground contact |
-| Run | 6–8 / 10–14 fps | Clear distinction from walking |
-| Aim | 1–2 per direction | Weapon muzzle/pivot alignment |
-| Shoot | 2–3 / 12–18 fps | Flash, recoil, and projectile origin agree |
-| Reload | 5–8 / 8–12 fps | Readable phases; gameplay duration supplied explicitly |
-| Melee | 4–6 / 12–16 fps | Windup, active contact, recovery |
-| Death | 5–8 / 8–12 fps | Final pose remains readable |
-| Wake up | 6–10 / 6–10 fps | Consistent apartment placement and transition |
+| Player animation | Proposed frames / rate | Review requirement                                     |
+| ---------------- | ---------------------- | ------------------------------------------------------ |
+| Idle             | 2–4 / 4–6 fps          | Stable aim and readable silhouette                     |
+| Walk             | 6–8 / 8–10 fps         | Consistent stride and ground contact                   |
+| Run              | 6–8 / 10–14 fps        | Clear distinction from walking                         |
+| Aim              | 1–2 per direction      | Weapon muzzle/pivot alignment                          |
+| Shoot            | 2–3 / 12–18 fps        | Flash, recoil, and projectile origin agree             |
+| Reload           | 5–8 / 8–12 fps         | Readable phases; gameplay duration supplied explicitly |
+| Melee            | 4–6 / 12–16 fps        | Windup, active contact, recovery                       |
+| Death            | 5–8 / 8–12 fps         | Final pose remains readable                            |
+| Wake up          | 6–10 / 6–10 fps        | Consistent apartment placement and transition          |
 
-| Enemy animation | Proposed frames / rate | Review requirement |
-| --- | --- | --- |
-| Idle | 2–4 / 4–6 fps | Distinct from dead bodies |
-| Patrol | 6–8 / 8–10 fps | Match source scale and foot placement |
-| Chase | 6–8 / 10–14 fps | Readable urgency |
-| Attack | 3–6 / 10–16 fps | Telegraph and contact timing are explicit |
-| Death | 5–8 / 8–12 fps | Consistent with player scale and environment |
+| Enemy animation | Proposed frames / rate | Review requirement                           |
+| --------------- | ---------------------- | -------------------------------------------- |
+| Idle            | 2–4 / 4–6 fps          | Distinct from dead bodies                    |
+| Patrol          | 6–8 / 8–10 fps         | Match source scale and foot placement        |
+| Chase           | 6–8 / 10–14 fps        | Readable urgency                             |
+| Attack          | 3–6 / 10–16 fps        | Telegraph and contact timing are explicit    |
+| Death           | 5–8 / 8–12 fps         | Consistent with player scale and environment |
 
-| Environment animation | Proposed frames / rate | Review requirement |
-| --- | --- | --- |
-| Telephone ringing | 2–4 / 6–8 fps | Visible cue plus optional audio; no forced interaction |
-| Computer screen | 2–4 / 2–4 fps | Task text stays legible |
-| Neon flicker | 3–5 / event timing | Irregular controlled pulses with reduced-effect setting |
-| Television static | 3–6 / 8–12 fps | Low visual priority and optional animation |
-| Doors | 4–6 / 8–12 fps | Visual opening matches collision changes |
-| Environmental particles | 3–6 or pooled procedural particles | Bounded counts and consistent pixel size |
+| Environment animation   | Proposed frames / rate             | Review requirement                                      |
+| ----------------------- | ---------------------------------- | ------------------------------------------------------- |
+| Telephone ringing       | 2–4 / 6–8 fps                      | Visible cue plus optional audio; no forced interaction  |
+| Computer screen         | 2–4 / 2–4 fps                      | Task text stays legible                                 |
+| Neon flicker            | 3–5 / event timing                 | Irregular controlled pulses with reduced-effect setting |
+| Television static       | 3–6 / 8–12 fps                     | Low visual priority and optional animation              |
+| Doors                   | 4–6 / 8–12 fps                     | Visual opening matches collision changes                |
+| Environmental particles | 3–6 or pooled procedural particles | Bounded counts and consistent pixel size                |
 
 ## Lighting and effects
 
 Use baked pixel shading and restrained colored light overlays. Neon cannot obscure enemy silhouettes, task controls, floor boundaries, or collision cues. Keep interior detail subordinate to movement and aim readability. Document light source direction so characters and props belong in the same room.
 
-| Effect | Proposed standard | Constraints |
-| --- | --- | --- |
-| Muzzle flash | 2–3 frames, 1–3 display ticks | Anchor to muzzle; cap brightness |
-| Impact | 3–5 frames, 12–18 fps | Distinguish wall, floor, and actor contact |
-| Smoke | 4–6 frames, 6–10 fps | Low opacity and bounded lifetime |
-| Shell casing | 2–4 orientations | Pool where justified; cap retained casings |
-| Camera shake | 1–3 logical px, 40–100 ms | Proposed tuning; user can disable |
-| Hit stop | 30–60 ms | Proposed tuning; never stalls task UI/network state |
-| Glitch transition | 100–250 ms | Skip/reduce option and readable transition state |
+| Effect            | Proposed standard             | Constraints                                         |
+| ----------------- | ----------------------------- | --------------------------------------------------- |
+| Muzzle flash      | 2–3 frames, 1–3 display ticks | Anchor to muzzle; cap brightness                    |
+| Impact            | 3–5 frames, 12–18 fps         | Distinguish wall, floor, and actor contact          |
+| Smoke             | 4–6 frames, 6–10 fps          | Low opacity and bounded lifetime                    |
+| Shell casing      | 2–4 orientations              | Pool where justified; cap retained casings          |
+| Camera shake      | 1–3 logical px, 40–100 ms     | Proposed tuning; user can disable                   |
+| Hit stop          | 30–60 ms                      | Proposed tuning; never stalls task UI/network state |
+| Glitch transition | 100–250 ms                    | Skip/reduce option and readable transition state    |
 
 CRT scanlines, VHS noise, chromatic effects, flashes, and shake are optional treatments. They must be adjustable or removable and must not reduce the task interface's contrast or introduce disruptive flashing. Measure effects in a representative scene before increasing complexity.
 
@@ -155,13 +155,13 @@ The orchestrator reports actual WASD movement/collision and no page errors for t
 
 ### Integrated screen-family review
 
-| Actual screenshot inspected | Findings | Disposition |
-| --- | --- | --- |
-| `docs/evidence/menu-revised.png` | Strong magenta title, original skyline/palms, disciplined screen hierarchy and consistent CRT treatment. The first two menu entries appear subdued; check whether disabled presentation matches actual readiness. | Visual identity accepted; enabled/disabled clarity belongs to UI behavior review. |
-| `docs/evidence/apartment-revised.png` | Detailed domestic zones, readable revised player, consistent prop scale, fitting shadows and exact scene proportions. | Apartment checkpoint accepted; later localized light polish preserves detail. |
-| `docs/evidence/terminal-populated.png` | Populated task rows, selection, description, difficulty, rewards and CRUD controls fit the three-column terminal. Cyan focus/selection belongs to the same screen family as the references. | No blocking visual defect observed at the captured desktop viewport. Functional/persistence behavior is separate evidence. |
-| `docs/evidence/combat-terminal-paused.png` | Terminal remains legible above dimmed combat; task controls remain reachable in the composition. | No blocking composition defect. A still image does not verify simulation pause or persisted resources. |
-| `docs/evidence/combat-initial.png` | Actual printworks, six enemy silhouettes and combat HUD render at a consistent pixel scale. Corridor and room floors lack enough environmental detail compared with supplied references; idle gunners lack a visible weapon. | Corrective source-art pass delivered; runtime should select armed aim poses for gunners/combat player when appropriate. Revised capture required. |
+| Actual screenshot inspected                | Findings                                                                                                                                                                                                                     | Disposition                                                                                                                                       |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/evidence/menu-revised.png`           | Strong magenta title, original skyline/palms, disciplined screen hierarchy and consistent CRT treatment. The first two menu entries appear subdued; check whether disabled presentation matches actual readiness.            | Visual identity accepted; enabled/disabled clarity belongs to UI behavior review.                                                                 |
+| `docs/evidence/apartment-revised.png`      | Detailed domestic zones, readable revised player, consistent prop scale, fitting shadows and exact scene proportions.                                                                                                        | Apartment checkpoint accepted; later localized light polish preserves detail.                                                                     |
+| `docs/evidence/terminal-populated.png`     | Populated task rows, selection, description, difficulty, rewards and CRUD controls fit the three-column terminal. Cyan focus/selection belongs to the same screen family as the references.                                  | No blocking visual defect observed at the captured desktop viewport. Functional/persistence behavior is separate evidence.                        |
+| `docs/evidence/combat-terminal-paused.png` | Terminal remains legible above dimmed combat; task controls remain reachable in the composition.                                                                                                                             | No blocking composition defect. A still image does not verify simulation pause or persisted resources.                                            |
+| `docs/evidence/combat-initial.png`         | Actual printworks, six enemy silhouettes and combat HUD render at a consistent pixel scale. Corridor and room floors lack enough environmental detail compared with supplied references; idle gunners lack a visible weapon. | Corrective source-art pass delivered; runtime should select armed aim poses for gunners/combat player when appropriate. Revised capture required. |
 
 The corrective combat pass adds selective discarded proof pages, paper shreds, ink puddles/drops, routed service cables, room and safety stencils, machine serials, pasted work notices and pressure gauges. Tiny utility lettering is original source-defined geometry, with no external font asset. Clear travel lanes remain visually distinct; all additions are decorative and the 31 collider rectangles, spawn, six enemy starts and door apertures remain unchanged. A stronger metal barrel highlight improves armed pose readability, and a subtle cyan coat edge separates the player from red enemies. These corrections are PNG-inspected, with actual `combat-revised.png` review still pending.
 
@@ -171,18 +171,18 @@ Dialogue, death and victory browser compositions are not yet reviewed in this re
 
 This review supersedes the pending screenshot items above; earlier entries preserve the correction history. Art/code were frozen for this review. Only this documentation section was changed. Both supplied reference sheets were compared with the actual captured screen family. The result preserves overhead rooms, outlined textured props, consistent small character scale, magenta/cyan/violet atmosphere, portrait dialogue and terminal/HUD framing through original assets and compositions.
 
-| Actual image inspected | Final finding |
-| --- | --- |
-| [Menu](evidence/menu-revised.png) | Original sunset city and strong magenta title establish the requested neon crime identity. No clipped composition. Subdued Start/Continue readiness styling remains a UI state question rather than an asset issue. |
-| [Apartment](evidence/apartment-revised.png) | Detailed original domestic zones, consistent pixel scale and readable corrected character. Apartment checkpoint accepted; later local lighting polish does not obscure geometry. |
-| [Combat, corrected](evidence/combat-revised.png) | **Combat art checkpoint accepted.** Paper proofs, shreds, stencils, notices, ink marks, machine details and service cables address the initial empty-room/corridor finding. Six enemies, open door apertures, cover and travel lanes remain readable. Armed player/gunners now show a visible metal barrel. |
-| [Death](evidence/death-initial.png) | Magenta death title, statistics, retry and apartment actions fit the screen family and remain fully visible. Cinematic timing cannot be established from the still image. |
-| [Victory](evidence/victory-initial.png) | Cyan FLOOR CLEARED title, six-enemy result, statistics and apartment action are complete and legible. Original skyline texture supplies continuity with the menu. |
-| [Training](../test-results/application-FIRST-CALL-is--e9cfb-oad-and-unlocks-the-mission/training-practice.png) | Practice target and simulated-ammunition labeling distinguish training. It deliberately reuses the apartment world rather than a bespoke shooting-range asset. The bottom-right tutorial overlays part of a small training instruction strip; main bottom-left controls and the tutorial's current melee instruction remain visible. Nonblocking at this captured viewport, but reposition before expanding training text. |
-| [First call](../test-results/application-FIRST-CALL-is--e9cfb-oad-and-unlocks-the-mission/first-call-dialogue.png) | Original portrait, caller name, magenta framing, dimmed apartment and reveal/ignore controls render coherently. Capture occurs early in typewriter text, so long-line wrapping is not established by this frame. Portrait detail is deliberately limited at its 64 px source size. |
-| [Settings](../test-results/application-audio-state-tr-edcb5-ttings-follow-the-interface/settings-accessibility.png) | Volume tracks, checked preference states and visible cyan keyboard focus fit the terminal styling without clipping. This verifies appearance, not persisted preference behavior or measured accessibility contrast. |
-| [Completed task](../test-results/application-task-CRUD-edit-517ae--browser-reload-persistence/task-terminal-completed.png) | Completed row, description, deadline, status, reward history and reopen/edit/delete actions are visible. Cyan hierarchy and three-column layout remain readable with real content. Persistence and idempotency require separate functional evidence. |
-| [Terminal during combat](evidence/combat-terminal-paused.png) | Fully usable terminal composition remains separate from the dimmed game. A screenshot alone does not prove that simulation clocks are paused. |
+| Actual image inspected                                                                                                     | Final finding                                                                                                                                                                                                                                                                                                                                                                                                              |
+| -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Menu](evidence/menu-revised.png)                                                                                          | Original sunset city and strong magenta title establish the requested neon crime identity. No clipped composition. Subdued Start/Continue readiness styling remains a UI state question rather than an asset issue.                                                                                                                                                                                                        |
+| [Apartment](evidence/apartment-revised.png)                                                                                | Detailed original domestic zones, consistent pixel scale and readable corrected character. Apartment checkpoint accepted; later local lighting polish does not obscure geometry.                                                                                                                                                                                                                                           |
+| [Combat, corrected](evidence/combat-revised.png)                                                                           | **Combat art checkpoint accepted.** Paper proofs, shreds, stencils, notices, ink marks, machine details and service cables address the initial empty-room/corridor finding. Six enemies, open door apertures, cover and travel lanes remain readable. Armed player/gunners now show a visible metal barrel.                                                                                                                |
+| [Death](evidence/death-initial.png)                                                                                        | Magenta death title, statistics, retry and apartment actions fit the screen family and remain fully visible. Cinematic timing cannot be established from the still image.                                                                                                                                                                                                                                                  |
+| [Victory](evidence/victory-initial.png)                                                                                    | Cyan FLOOR CLEARED title, six-enemy result, statistics and apartment action are complete and legible. Original skyline texture supplies continuity with the menu.                                                                                                                                                                                                                                                          |
+| [Training](../test-results/application-FIRST-CALL-is--e9cfb-oad-and-unlocks-the-mission/training-practice.png)             | Practice target and simulated-ammunition labeling distinguish training. It deliberately reuses the apartment world rather than a bespoke shooting-range asset. The bottom-right tutorial overlays part of a small training instruction strip; main bottom-left controls and the tutorial's current melee instruction remain visible. Nonblocking at this captured viewport, but reposition before expanding training text. |
+| [First call](../test-results/application-FIRST-CALL-is--e9cfb-oad-and-unlocks-the-mission/first-call-dialogue.png)         | Original portrait, caller name, magenta framing, dimmed apartment and reveal/ignore controls render coherently. Capture occurs early in typewriter text, so long-line wrapping is not established by this frame. Portrait detail is deliberately limited at its 64 px source size.                                                                                                                                         |
+| [Settings](../test-results/application-audio-state-tr-edcb5-ttings-follow-the-interface/settings-accessibility.png)        | Volume tracks, checked preference states and visible cyan keyboard focus fit the terminal styling without clipping. This verifies appearance, not persisted preference behavior or measured accessibility contrast.                                                                                                                                                                                                        |
+| [Completed task](../test-results/application-task-CRUD-edit-517ae--browser-reload-persistence/task-terminal-completed.png) | Completed row, description, deadline, status, reward history and reopen/edit/delete actions are visible. Cyan hierarchy and three-column layout remain readable with real content. Persistence and idempotency require separate functional evidence.                                                                                                                                                                       |
+| [Terminal during combat](evidence/combat-terminal-paused.png)                                                              | Fully usable terminal composition remains separate from the dimmed game. A screenshot alone does not prove that simulation clocks are paused.                                                                                                                                                                                                                                                                              |
 
 ### Source animation coverage and runtime limits
 

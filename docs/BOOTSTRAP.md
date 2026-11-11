@@ -37,19 +37,19 @@ The existing workspace is the project root. Git is not initialized: the protecte
 
 ## Verified capabilities
 
-| Capability | Evidence and result |
-| --- | --- |
-| Installed Codex | `codex --version`: `codex-cli 0.163.0`; reviewed CLI help and existing user configuration before writing project files |
-| Requested model | Existing user config, bundled catalog (`codex debug models --bundled`), and cached catalog all identify `gpt-6.1-sol`; configured that exact identifier |
-| Reasoning | Local Sol catalog advertises `low`, `medium`, `high`, `xhigh`, `max`, `ultra`; project and all six roles select `high` |
-| Other visible local models | `gpt-6-astra`, `gpt-6.1-terra`, `gpt-6-sol`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, alongside Sol; availability is a catalog observation, not a new inference test |
-| Multi-agent tools | Current session exposes spawn, message, follow-up, interrupt, list, and wait; independent documentation workers and a read-only reviewer completed structured reports |
-| Concurrency | Project sets `agents.max_concurrent_threads_per_session = 4`, excluding the primary; host limits still apply. Current host allows four total agents, so at most three children can be active here |
-| Instructions and skills | Fresh `codex debug prompt-input` output contains root AGENTS.md and all four local skills in the skills instruction block; this renders prompt input without a model turn |
-| TOML and skill metadata | Seven TOMLs parsed with Python `tomllib`; six names are unique. Four skills passed the installed skill-creator `quick_validate.py` validator |
-| Browser tooling | Node `v26.7.0`, Playwright CLI `1.65.0`, and `/usr/bin/chromium` are installed; no dedicated browser automation MCP tool is exposed in this session |
-| Image generation | Built-in `image_gen.imagegen` tool and the imagegen skill are available. Neither was invoked; no assets were generated or downloaded |
-| Package manager | pnpm was not found. No installation was attempted |
+| Capability                 | Evidence and result                                                                                                                                                                               |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Installed Codex            | `codex --version`: `codex-cli 0.163.0`; reviewed CLI help and existing user configuration before writing project files                                                                            |
+| Requested model            | Existing user config, bundled catalog (`codex debug models --bundled`), and cached catalog all identify `gpt-6.1-sol`; configured that exact identifier                                           |
+| Reasoning                  | Local Sol catalog advertises `low`, `medium`, `high`, `xhigh`, `max`, `ultra`; project and all six roles select `high`                                                                            |
+| Other visible local models | `gpt-6-astra`, `gpt-6.1-terra`, `gpt-6-sol`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, alongside Sol; availability is a catalog observation, not a new inference test                         |
+| Multi-agent tools          | Current session exposes spawn, message, follow-up, interrupt, list, and wait; independent documentation workers and a read-only reviewer completed structured reports                             |
+| Concurrency                | Project sets `agents.max_concurrent_threads_per_session = 4`, excluding the primary; host limits still apply. Current host allows four total agents, so at most three children can be active here |
+| Instructions and skills    | Fresh `codex debug prompt-input` output contains root AGENTS.md and all four local skills in the skills instruction block; this renders prompt input without a model turn                         |
+| TOML and skill metadata    | Seven TOMLs parsed with Python `tomllib`; six names are unique. Four skills passed the installed skill-creator `quick_validate.py` validator                                                      |
+| Browser tooling            | Node `v26.7.0`, Playwright CLI `1.65.0`, and `/usr/bin/chromium` are installed; no dedicated browser automation MCP tool is exposed in this session                                               |
+| Image generation           | Built-in `image_gen.imagegen` tool and the imagegen skill are available. Neither was invoked; no assets were generated or downloaded                                                              |
+| Package manager            | pnpm was not found. No installation was attempted                                                                                                                                                 |
 
 Project-local skills are `asset-research`, `phaser-gameplay`, `pixel-art`, and `browser-qa`. The session also exposes the installed OpenAI Docs, skill-creator, imagegen, desktop/system, and connected-app skill catalog. Availability of a connected skill does not imply it is required for this repository.
 
