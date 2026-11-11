@@ -1,0 +1,575 @@
+{
+  "type": "map",
+  "version": "1.10",
+  "tiledversion": "1.11.2",
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "width": 48,
+  "height": 30,
+  "tilewidth": 16,
+  "tileheight": 16,
+  "infinite": false,
+  "nextlayerid": 4,
+  "nextobjectid": 41,
+  "tilesets": [],
+  "layers": [
+    {
+      "id": 1,
+      "name": "Apartment artwork",
+      "type": "imagelayer",
+      "image": "apartment.png",
+      "x": 0,
+      "y": 0,
+      "opacity": 1,
+      "visible": true
+    },
+    {
+      "id": 2,
+      "name": "Collisions",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": false,
+      "objects": [
+        {
+          "id": 1,
+          "name": "solid-0",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 24,
+          "y": 24,
+          "width": 720,
+          "height": 16
+        },
+        {
+          "id": 2,
+          "name": "solid-1",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 24,
+          "y": 40,
+          "width": 16,
+          "height": 408
+        },
+        {
+          "id": 3,
+          "name": "solid-2",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 728,
+          "y": 40,
+          "width": 16,
+          "height": 408
+        },
+        {
+          "id": 4,
+          "name": "solid-3",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 40,
+          "y": 432,
+          "width": 316,
+          "height": 16
+        },
+        {
+          "id": 5,
+          "name": "solid-4",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 412,
+          "y": 432,
+          "width": 316,
+          "height": 16
+        },
+        {
+          "id": 6,
+          "name": "solid-5",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 240,
+          "y": 40,
+          "width": 16,
+          "height": 160
+        },
+        {
+          "id": 7,
+          "name": "solid-6",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 240,
+          "y": 240,
+          "width": 16,
+          "height": 40
+        },
+        {
+          "id": 8,
+          "name": "solid-7",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 480,
+          "y": 40,
+          "width": 16,
+          "height": 168
+        },
+        {
+          "id": 9,
+          "name": "solid-8",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 40,
+          "y": 256,
+          "width": 128,
+          "height": 16
+        },
+        {
+          "id": 10,
+          "name": "solid-9",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 216,
+          "y": 256,
+          "width": 24,
+          "height": 16
+        },
+        {
+          "id": 11,
+          "name": "solid-10",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 496,
+          "y": 248,
+          "width": 16,
+          "height": 16
+        },
+        {
+          "id": 12,
+          "name": "solid-11",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 576,
+          "y": 248,
+          "width": 152,
+          "height": 16
+        },
+        {
+          "id": 13,
+          "name": "solid-12",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 66,
+          "y": 93,
+          "width": 74,
+          "height": 106
+        },
+        {
+          "id": 14,
+          "name": "solid-13",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 179,
+          "y": 96,
+          "width": 42,
+          "height": 74
+        },
+        {
+          "id": 15,
+          "name": "solid-14",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 52,
+          "y": 195,
+          "width": 42,
+          "height": 58
+        },
+        {
+          "id": 16,
+          "name": "solid-15",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 288,
+          "y": 76,
+          "width": 74,
+          "height": 58
+        },
+        {
+          "id": 17,
+          "name": "solid-16",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 400,
+          "y": 90,
+          "width": 58,
+          "height": 58
+        },
+        {
+          "id": 18,
+          "name": "solid-17",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 303,
+          "y": 210,
+          "width": 106,
+          "height": 38
+        },
+        {
+          "id": 19,
+          "name": "solid-18",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 353,
+          "y": 155,
+          "width": 58,
+          "height": 42
+        },
+        {
+          "id": 20,
+          "name": "solid-19",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 523,
+          "y": 80,
+          "width": 122,
+          "height": 42
+        },
+        {
+          "id": 21,
+          "name": "solid-20",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 669,
+          "y": 77,
+          "width": 42,
+          "height": 66
+        },
+        {
+          "id": 22,
+          "name": "solid-21",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 615,
+          "y": 183,
+          "width": 26,
+          "height": 26
+        },
+        {
+          "id": 23,
+          "name": "solid-22",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 569,
+          "y": 343,
+          "width": 90,
+          "height": 58
+        },
+        {
+          "id": 24,
+          "name": "solid-23",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 672,
+          "y": 295,
+          "width": 34,
+          "height": 38
+        },
+        {
+          "id": 25,
+          "name": "solid-24",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 48,
+          "y": 366,
+          "width": 42,
+          "height": 58
+        },
+        {
+          "id": 26,
+          "name": "solid-25",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 343,
+          "y": 343,
+          "width": 42,
+          "height": 74
+        },
+        {
+          "id": 27,
+          "name": "solid-26",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 94,
+          "y": 347,
+          "width": 43,
+          "height": 36
+        },
+        {
+          "id": 28,
+          "name": "solid-27",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 135,
+          "y": 370,
+          "width": 35,
+          "height": 29
+        },
+        {
+          "id": 29,
+          "name": "solid-28",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 209,
+          "y": 350,
+          "width": 31,
+          "height": 27
+        },
+        {
+          "id": 30,
+          "name": "solid-29",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 445,
+          "y": 359,
+          "width": 41,
+          "height": 35
+        },
+        {
+          "id": 31,
+          "name": "solid-30",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 465,
+          "y": 387,
+          "width": 29,
+          "height": 23
+        },
+        {
+          "id": 32,
+          "name": "solid-31",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 668,
+          "y": 166,
+          "width": 41,
+          "height": 37
+        },
+        {
+          "id": 33,
+          "name": "solid-32",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 658,
+          "y": 209,
+          "width": 30,
+          "height": 25
+        },
+        {
+          "id": 34,
+          "name": "solid-33",
+          "type": "solid",
+          "rotation": 0,
+          "visible": true,
+          "x": 560,
+          "y": 176,
+          "width": 43,
+          "height": 29
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Interactions",
+      "type": "objectgroup",
+      "opacity": 1,
+      "visible": true,
+      "objects": [
+        {
+          "id": 35,
+          "name": "computer",
+          "type": "interaction",
+          "x": 610,
+          "y": 374,
+          "width": 0,
+          "height": 0,
+          "point": true,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "label",
+              "type": "string",
+              "value": "USE COMPUTER"
+            },
+            {
+              "name": "radius",
+              "type": "int",
+              "value": 66
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "name": "telephone",
+          "type": "interaction",
+          "x": 686,
+          "y": 318,
+          "width": 0,
+          "height": 0,
+          "point": true,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "label",
+              "type": "string",
+              "value": "ANSWER TELEPHONE"
+            },
+            {
+              "name": "radius",
+              "type": "int",
+              "value": 58
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "name": "cabinet",
+          "type": "interaction",
+          "x": 362,
+          "y": 379,
+          "width": 0,
+          "height": 0,
+          "point": true,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "label",
+              "type": "string",
+              "value": "CHECK EQUIPMENT"
+            },
+            {
+              "name": "radius",
+              "type": "int",
+              "value": 56
+            }
+          ]
+        },
+        {
+          "id": 38,
+          "name": "television",
+          "type": "interaction",
+          "x": 325,
+          "y": 124,
+          "width": 0,
+          "height": 0,
+          "point": true,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "label",
+              "type": "string",
+              "value": "WATCH TELEVISION"
+            },
+            {
+              "name": "radius",
+              "type": "int",
+              "value": 58
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "name": "exit",
+          "type": "interaction",
+          "x": 385,
+          "y": 421,
+          "width": 0,
+          "height": 0,
+          "point": true,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "label",
+              "type": "string",
+              "value": "LEAVE APARTMENT"
+            },
+            {
+              "name": "radius",
+              "type": "int",
+              "value": 53
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "name": "training",
+          "type": "interaction",
+          "x": 701,
+          "y": 413,
+          "width": 0,
+          "height": 0,
+          "point": true,
+          "rotation": 0,
+          "visible": true,
+          "properties": [
+            {
+              "name": "label",
+              "type": "string",
+              "value": "ENTER TRAINING"
+            },
+            {
+              "name": "radius",
+              "type": "int",
+              "value": 53
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "spawnX",
+      "type": "int",
+      "value": 176
+    },
+    {
+      "name": "spawnY",
+      "type": "int",
+      "value": 239
+    }
+  ]
+}

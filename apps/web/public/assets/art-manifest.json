@@ -1,0 +1,544 @@
+{
+  "version": 1,
+  "provenance": "Original procedural raster artwork; scripts/generate-art.py; no third-party image inputs",
+  "world": {
+    "width": 768,
+    "height": 480,
+    "tileSize": 16,
+    "displayZoom": 2
+  },
+  "characters": {
+    "files": [
+      "player.png",
+      "enemy.png",
+      "enemy-gunner.png"
+    ],
+    "frameWidth": 32,
+    "frameHeight": 32,
+    "columns": 8,
+    "rows": 10,
+    "facing": "east; rotate runtime body around anchor",
+    "anchor": {
+      "x": 16,
+      "y": 16
+    },
+    "solidBounds": {
+      "x": 9,
+      "y": 9,
+      "width": 14,
+      "height": 14
+    },
+    "animations": {
+      "idle": {
+        "row": 0,
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "fps": 5,
+        "loop": true
+      },
+      "walk": {
+        "row": 1,
+        "frames": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "fps": 10,
+        "loop": true
+      },
+      "run": {
+        "row": 2,
+        "frames": [
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "fps": 14,
+        "loop": true
+      },
+      "aim": {
+        "row": 3,
+        "frames": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31
+        ],
+        "fps": 6,
+        "loop": true
+      },
+      "shoot": {
+        "row": 4,
+        "frames": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "fps": 18,
+        "loop": false
+      },
+      "reload": {
+        "row": 5,
+        "frames": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47
+        ],
+        "fps": 10,
+        "loop": false
+      },
+      "melee": {
+        "row": 6,
+        "frames": [
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "fps": 18,
+        "loop": false
+      },
+      "hit": {
+        "row": 7,
+        "frames": [
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63
+        ],
+        "fps": 18,
+        "loop": false
+      },
+      "death": {
+        "row": 8,
+        "frames": [
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71
+        ],
+        "fps": 12,
+        "loop": false
+      },
+      "wake": {
+        "row": 9,
+        "frames": [
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79
+        ],
+        "fps": 8,
+        "loop": false
+      }
+    },
+    "aliases": {
+      "patrol": "walk",
+      "chase": "run",
+      "attack": "shoot",
+      "wake-up": "wake"
+    },
+    "events": {
+      "shoot": {
+        "muzzleFrame": 1,
+        "muzzle": {
+          "x": 30,
+          "y": 15
+        }
+      },
+      "melee": {
+        "activeFrames": [
+          2,
+          3,
+          4
+        ]
+      },
+      "reload": {
+        "readyFrame": 7
+      }
+    }
+  },
+  "props": {
+    "file": "props.png",
+    "frames": {
+      "bed": {
+        "x": 0,
+        "y": 0,
+        "width": 80,
+        "height": 112,
+        "anchor": {
+          "x": 40,
+          "y": 56
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 74,
+          "height": 106
+        }
+      },
+      "desk": {
+        "x": 84,
+        "y": 0,
+        "width": 96,
+        "height": 64,
+        "anchor": {
+          "x": 48,
+          "y": 32
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 90,
+          "height": 58
+        }
+      },
+      "phone": {
+        "x": 184,
+        "y": 0,
+        "width": 40,
+        "height": 44,
+        "anchor": {
+          "x": 20,
+          "y": 22
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 34,
+          "height": 38
+        }
+      },
+      "sofa": {
+        "x": 228,
+        "y": 0,
+        "width": 112,
+        "height": 44,
+        "anchor": {
+          "x": 56,
+          "y": 22
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 106,
+          "height": 38
+        }
+      },
+      "tv": {
+        "x": 344,
+        "y": 0,
+        "width": 80,
+        "height": 64,
+        "anchor": {
+          "x": 40,
+          "y": 32
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 74,
+          "height": 58
+        }
+      },
+      "cabinet": {
+        "x": 428,
+        "y": 0,
+        "width": 48,
+        "height": 80,
+        "anchor": {
+          "x": 24,
+          "y": 40
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 42,
+          "height": 74
+        }
+      },
+      "plant": {
+        "x": 0,
+        "y": 116,
+        "width": 48,
+        "height": 64,
+        "anchor": {
+          "x": 24,
+          "y": 32
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 42,
+          "height": 58
+        }
+      },
+      "table": {
+        "x": 52,
+        "y": 116,
+        "width": 64,
+        "height": 48,
+        "anchor": {
+          "x": 32,
+          "y": 24
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 58,
+          "height": 42
+        }
+      },
+      "chair": {
+        "x": 120,
+        "y": 116,
+        "width": 32,
+        "height": 32,
+        "anchor": {
+          "x": 16,
+          "y": 16
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 26,
+          "height": 26
+        }
+      },
+      "window": {
+        "x": 156,
+        "y": 116,
+        "width": 80,
+        "height": 24,
+        "anchor": {
+          "x": 40,
+          "y": 12
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 74,
+          "height": 18
+        }
+      },
+      "door": {
+        "x": 240,
+        "y": 116,
+        "width": 48,
+        "height": 48,
+        "anchor": {
+          "x": 24,
+          "y": 24
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 42,
+          "height": 42
+        }
+      },
+      "counter": {
+        "x": 292,
+        "y": 116,
+        "width": 128,
+        "height": 48,
+        "anchor": {
+          "x": 64,
+          "y": 24
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 122,
+          "height": 42
+        }
+      },
+      "fridge": {
+        "x": 424,
+        "y": 116,
+        "width": 48,
+        "height": 72,
+        "anchor": {
+          "x": 24,
+          "y": 36
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 42,
+          "height": 66
+        }
+      },
+      "bookshelf": {
+        "x": 0,
+        "y": 192,
+        "width": 64,
+        "height": 64,
+        "anchor": {
+          "x": 32,
+          "y": 32
+        },
+        "solidBounds": {
+          "x": 3,
+          "y": 3,
+          "width": 58,
+          "height": 58
+        }
+      }
+    }
+  },
+  "portraits": {
+    "file": "portraits.png",
+    "frames": {
+      "player": {
+        "x": 0,
+        "y": 0,
+        "width": 64,
+        "height": 64
+      },
+      "caller": {
+        "x": 64,
+        "y": 0,
+        "width": 64,
+        "height": 64
+      }
+    }
+  },
+  "tiles": {
+    "file": "tiles.png",
+    "tileWidth": 16,
+    "tileHeight": 16,
+    "columns": 4,
+    "rows": 4,
+    "rowNames": [
+      "wood",
+      "tile",
+      "carpet",
+      "wall"
+    ]
+  },
+  "backgrounds": {
+    "apartment": {
+      "file": "apartment.png",
+      "geometry": "apartment.json",
+      "tiled": "apartment.tiled.json",
+      "width": 768,
+      "height": 480
+    },
+    "combat": {
+      "file": "combat.png",
+      "geometry": "combat.json",
+      "tiled": "combat.tiled.json",
+      "width": 768,
+      "height": 480
+    },
+    "menu": {
+      "file": "skyline.png",
+      "width": 768,
+      "height": 480
+    }
+  },
+  "environment": {
+    "phone-ring": {
+      "file": "phone-ring.png",
+      "frameWidth": 40,
+      "frameHeight": 44,
+      "frames": 4,
+      "fps": 8
+    },
+    "computer-screen": {
+      "file": "computer-screen.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "frames": 4,
+      "fps": 4
+    },
+    "tv-static": {
+      "file": "tv-static.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "frames": 4,
+      "fps": 10
+    },
+    "neon-flicker": {
+      "file": "neon-flicker.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "frames": 4,
+      "fps": 6
+    },
+    "doors": {
+      "file": "doors.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "fps": 10
+    }
+  },
+  "effects": {
+    "file": "effects.png",
+    "frameWidth": 16,
+    "frameHeight": 16,
+    "columns": 8,
+    "rows": [
+      "muzzle",
+      "impact",
+      "smoke",
+      "casing"
+    ],
+    "fps": [
+      24,
+      18,
+      8,
+      12
+    ]
+  }
+}
