@@ -52,7 +52,7 @@ async function hold(page: Page, key: string, milliseconds: number) {
   // Diagnostics refresh every twelve actual frames, independent of this test.
   await page.waitForTimeout(250);
 }
-async function walkTo(page: Page, x: number, y: number, tolerance = 4) {
+async function walkTo(page: Page, x: number, y: number, tolerance = 10) {
   for (const axis of ['x', 'y'] as const) {
     const target = axis === 'x' ? x : y;
     for (let tries = 0; tries < 35; tries++) {
@@ -396,8 +396,8 @@ test('FIRST CALL is playable through isolated training, persists after reload, a
   expect(explanation).toContain('Бой не выполняет задачи');
   expect(explanation).toContain('выполнять её ради обучения не нужно');
   await expect.poll(async () => (await snapshot(page)).tutorial.step).toBe('computer');
-  await walkTo(page, 280, 220);
-  await walkTo(page, 458, 220);
+  await walkTo(page, 280, 210);
+  await walkTo(page, 458, 210);
   await walkTo(page, 458, 160);
   await expect(page.locator('.interaction-prompt')).toContainText('ОТКРЫТЬ КОМПЬЮТЕР');
   await page.keyboard.press('e');
@@ -454,8 +454,8 @@ test('FIRST CALL is playable through isolated training, persists after reload, a
     contentType: 'application/json',
   });
   await expect(page.locator('canvas')).toHaveAttribute('data-scene', 'apartment');
-  await walkTo(page, 280, 220);
-  await walkTo(page, 440, 220);
+  await walkTo(page, 280, 210);
+  await walkTo(page, 440, 210);
   await walkTo(page, 440, 265);
   await walkTo(page, 479, 265);
   await expect(page.locator('.interaction-prompt')).toContainText('ОТВЕТИТЬ НА ЗВОНОК');
@@ -527,11 +527,12 @@ test('studio television opens with E, requests a muted player, and restores game
     }),
   );
   await startGame(page);
-  // Stay well left of the TV body while moving vertically. The lower aisle
-  // has too little clearance for a loose arrival tolerance.
-  await walkTo(page, 280, 232, 4);
-  await walkTo(page, 280, 384, 4);
-  await walkTo(page, 292, 384, 4);
+  // Leave clearance around the sofa, then approach the TV's left collision
+  // edge. Every accepted point is inside its interaction radius; no precise
+  // sub-frame stop beside the cabinet is required on slower CI browsers.
+  await walkTo(page, 280, 232);
+  await walkTo(page, 280, 384);
+  await walkTo(page, 300, 384);
   await expect(page.locator('.interaction-prompt')).toContainText('СМОТРЕТЬ ТЕЛЕВИЗОР');
   await page.keyboard.press('e');
   const television = page.getByRole('dialog', { name: 'ТЕЛЕВИЗОР / КАНАЛ 03' });
@@ -575,19 +576,19 @@ test('studio television opens with E, requests a muted player, and restores game
 
   // Reach the cabinet through the open upper/right aisles, avoiding the
   // narrow gap between the TV cabinet and exterior wall entirely.
-  await walkTo(page, 280, 384, 4);
-  await walkTo(page, 280, 220, 4);
-  await walkTo(page, 440, 220, 4);
-  await walkTo(page, 440, 330, 4);
-  await walkTo(page, 566, 330, 4);
-  await walkTo(page, 566, 383, 4);
+  await walkTo(page, 280, 384);
+  await walkTo(page, 280, 210);
+  await walkTo(page, 440, 210);
+  await walkTo(page, 440, 310);
+  await walkTo(page, 618, 310);
+  await walkTo(page, 618, 340);
   await expect(page.locator('.interaction-prompt')).toContainText('ПРОВЕРИТЬ СНАРЯЖЕНИЕ');
   await page.keyboard.press('e');
   const loadout = page.getByRole('dialog', { name: 'ДИСПЕТЧЕРСКАЯ / НОЧНАЯ СМЕНА' });
   await expect(loadout).toBeVisible();
   await loadout.locator('.close-button').click();
-  await walkTo(page, 566, 330);
-  await walkTo(page, 661, 330);
+  await walkTo(page, 618, 310);
+  await walkTo(page, 661, 310);
   await walkTo(page, 661, 382);
   await expect(page.locator('.interaction-prompt')).toContainText('ТРЕНИРОВКА');
   await page.keyboard.press('e');
