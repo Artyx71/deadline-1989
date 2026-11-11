@@ -52,7 +52,7 @@ async function hold(page: Page, key: string, milliseconds: number) {
   // Diagnostics refresh every twelve actual frames, independent of this test.
   await page.waitForTimeout(250);
 }
-async function walkTo(page: Page, x: number, y: number, tolerance = 10) {
+async function walkTo(page: Page, x: number, y: number, tolerance = 4) {
   for (const axis of ['x', 'y'] as const) {
     const target = axis === 'x' ? x : y;
     for (let tries = 0; tries < 35; tries++) {
@@ -528,7 +528,7 @@ test('studio television opens with E, requests a muted player, and restores game
   );
   await startGame(page);
   // Stay well left of the TV body while moving vertically. The lower aisle
-  // has too little clearance for the default ten-pixel arrival tolerance.
+  // has too little clearance for a loose arrival tolerance.
   await walkTo(page, 280, 232, 4);
   await walkTo(page, 280, 384, 4);
   await walkTo(page, 292, 384, 4);
