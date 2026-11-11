@@ -26,7 +26,7 @@ Task creation, completion, deletion, and reload persistence are P0. React expose
 
 This existing directory is the monorepo root. pnpm is installed; `package.json` pins pnpm 12.18.0 and Node >=24, with dependency versions recorded in manifests and the lockfile. React/TypeScript/Vite/Tailwind/Zustand/TanStack Query serve the client; Phaser 3 uses Arcade Physics and Tiled-compatible exports. Native persistence uses Fastify/better-sqlite3/Drizzle/Zod. Pages uses SQL.js/Drizzle in a Web Worker with IndexedDB and Web Locks; both call the same domain package. Vitest and Playwright provide verification.
 
-The checkout name contains `:`. `scripts/workspace.mjs` resolves tool entry points directly with Node, avoiding PATH/`pnpm exec` problems caused by that character. Root commands `pnpm dev`, `pnpm build`, `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm test:e2e` call this runner; `node scripts/workspace.mjs <mode>` is the equivalent direct invocation. `pnpm start` runs the built server. Prettier 3.10.0 is configured through `pnpm format` / `pnpm format:check`; generated assets, evidence, SQLite files, dependencies, builds, and lockfile are excluded. `pnpm build:pages` builds the static/browser mode into `apps/web/dist-pages`; `pnpm test:pages` runs its separate browser suite. Their acceptance and deployment results are pending and tracked separately.
+The checkout name contains `:`. `scripts/workspace.mjs` resolves tool entry points directly with Node, avoiding PATH/`pnpm exec` problems caused by that character. Root commands `pnpm dev`, `pnpm build`, `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm test:e2e` call this runner; `node scripts/workspace.mjs <mode>` is the equivalent direct invocation. `pnpm start` runs the built server. Prettier 3.10.0 is configured through `pnpm format` / `pnpm format:check`; generated assets, evidence, SQLite files, dependencies, builds, and lockfile are excluded. `pnpm build:pages` builds the static/browser mode into `apps/web/dist-pages`; `pnpm test:pages` runs its separate browser suite. Both editions passed acceptance; the static edition is deployed and also tested at its public URL. See VERIFICATION.md.
 
 ## Runtime ownership and dependency direction
 
@@ -44,7 +44,7 @@ The built server serves `apps/web/dist` when present and uses a single SPA fallb
 
 ## Public Pages mode and browser-local SQLite
 
-The repository is public by explicit user authorization. GitHub Pages is configured for `https://artyx71.github.io/deadline-1989/`, with GitHub Actions deployment from `feat/deadline-1989`. Deployment and the new browser-mode acceptance run are **pending**; configuration is not evidence of a live working site.
+The repository is public by explicit user authorization. GitHub Pages is configured for `https://artyx71.github.io/deadline-1989/`, with GitHub Actions deployment from `feat/deadline-1989`. Deployment and browser-mode acceptance are **PASS**: the hosted workflow and three additional Chromium scenarios against the public URL succeeded. See VERIFICATION.md.
 
 Pages serves static files and does not run Fastify. The full application selects a browser persistence transport instead of issuing requests to a missing `/api` server. `client.ts` sends typed messages to `profile.worker.ts`; `routes.ts` validates/dispatches the same domain operations. The worker initializes SQL.js WASM, and Drizzle adapts the resulting SQLite database to `DomainStore`.
 

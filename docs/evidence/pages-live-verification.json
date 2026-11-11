@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-11",
+  "url": "https://artyx71.github.io/deadline-1989/",
+  "repositoryVisibility": "PUBLIC",
+  "deployedCommit": "7b1e2748b12d44d91b63c33cdf503feeb5152caf",
+  "workflow": "https://github.com/Artyx71/deadline-1989/actions/runs/43074420801",
+  "workflowResult": "PASS",
+  "hostedNativeBrowserTests": 10,
+  "hostedStaticBrowserTests": 3,
+  "publicBrowserCommand": "PAGES_BASE_URL=https://artyx71.github.io/deadline-1989/ pnpm test:pages",
+  "publicBrowserTestsPassed": 3,
+  "publicBrowserDurationSeconds": 19.5,
+  "httpStatus": 200,
+  "storage": "Browser-local SQLite (SQL.js Worker) persisted in IndexedDB under Web Locks",
+  "crossDeviceSync": false,
+  "normalUserProfileTouched": false,
+  "externalTelevisionPlayback": "UNAVAILABLE: source host restrictions; fallback and close/resume verified"
+}

@@ -1,6 +1,6 @@
 # DEADLINE: 1989 — Architectural decisions
 
-This log retains the bootstrap history and subsequent implementation decisions. **Accepted** records an agreed direction; current implementation/test/deployment evidence belongs in [VERIFICATION.md](VERIFICATION.md). Later decisions explicitly supersede earlier scope choices where noted. Public Pages deployment and browser-mode acceptance are pending. Consult [architecture](ARCHITECTURE.md), [backlog](TASKS.md), and [AGENTS.md](../AGENTS.md).
+This log retains the bootstrap history and subsequent implementation decisions. **Accepted** records an agreed direction; current implementation/test/deployment evidence belongs in [VERIFICATION.md](VERIFICATION.md). Later decisions explicitly supersede earlier scope choices where noted. Public Pages deployment and browser-mode acceptance passed; evidence is recorded in VERIFICATION.md. Consult [architecture](ARCHITECTURE.md), [backlog](TASKS.md), and [AGENTS.md](../AGENTS.md).
 
 ## ADR-001 — Product independence and priority
 
@@ -156,7 +156,7 @@ This log retains the bootstrap history and subsequent implementation decisions. 
 
 **Consequences:** Full task/game/resource behavior does not require a remote API on Pages. Browser data belongs to that browser/device/origin; it does not synchronize with other devices, GitHub, or native profiles. Clearing site data loses it. Multiple tabs must coordinate through the lock. Storage/WASM/lock failures remain visible and must not overwrite a damaged/unavailable profile. Native idempotency retains SHA-256 fingerprints; browser mode uses canonical request fingerprints, with the same scope/replay/revision guarantees. Assets, workers, and WASM honor the repository base path. Public static hosting adds neither authentication nor a shared multi-user database.
 
-**Status:** Accepted; repository visibility and Pages configuration applied. Domain extraction and browser adapter integration are in progress/under acceptance. Deployment and Pages test results remain pending in VERIFICATION.md. This supersedes private-only publication, native-only persistence, and Fastify-only business-rule ownership in ADR-002/006/008/010; resource invariants remain unchanged.
+**Status:** Accepted; repository visibility and Pages configuration applied. Domain extraction and browser adapter integration passed native, SQL.js and static-browser acceptance. Hosted deployment and public-URL browser verification passed; see VERIFICATION.md. This supersedes private-only publication, native-only persistence, and Fastify-only business-rule ownership in ADR-002/006/008/010; resource invariants remain unchanged.
 
 ## ADR-014 — Explicit clean profile and separate story replay
 
@@ -168,7 +168,7 @@ This log retains the bootstrap history and subsequent implementation decisions. 
 
 **Consequences:** Users can intentionally start empty without turning ordinary death, replay, or task deletion into a data-loss mechanism. Old reset retries cannot purge newly created tasks; old creation/reward retries cannot restore deleted effects. Retained retry responses may be older than current state, so clients must keep revision guards. This is an explicit user-selected profile operation in both persistence modes; it is not a routine database repair or automatic reset on storage failure.
 
-**Status:** Accepted and implemented in the shared domain/native operation; UI/browser-mode acceptance is tracked in VERIFICATION.md. This supersedes the prior ambiguity that every new-game choice necessarily preserves all real data. Story replay preservation remains mandatory.
+**Status:** Accepted and implemented in the shared domain/native operation; UI and both persistence modes passed acceptance, recorded in VERIFICATION.md. This supersedes the prior ambiguity that every new-game choice necessarily preserves all real data. Story replay preservation remains mandatory.
 
 ## ADR-015 — Reproducible formatting
 
@@ -180,4 +180,4 @@ This log retains the bootstrap history and subsequent implementation decisions. 
 
 **Consequences:** Formatting is repeatable without relying on `pnpm exec` in the colon-containing path. Formatter setup does not establish that the whole repository is formatted, tested, committed, or deployed; those operations require their own evidence.
 
-**Status:** Configured. Current formatting/check and publication results are recorded in VERIFICATION.md and the orchestrator's milestone report.
+**Status:** Applied and format:check passed. Current publication results are recorded in VERIFICATION.md and the orchestrator's milestone report.

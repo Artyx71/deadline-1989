@@ -84,14 +84,20 @@ This is one local profile on loopback. Public multi-user hosting requires authen
 | `pnpm typecheck`, `pnpm lint`    | PASS                                                                                                                                      |
 | `pnpm build`, `pnpm build:pages` | PASS — separate native and static bundles, bundled Worker/WASM and `/deadline-1989/` asset base                                           |
 | `pnpm test:e2e`                  | PASS — 10 native Chromium scenarios, 1.6 minutes, including confirmed clean New Game and story-only preservation                          |
-| `pnpm test:pages`                | PASS — three production-static Chromium scenarios, 14.9 seconds, with no Fastify server                                                   |
+| `pnpm test:pages`                | PASS — three production-static Chromium scenarios, 14.2 seconds after formatting/localization, with no Fastify server                     |
 | Studio input smoke               | PASS — actual E interactions at computer, phone, TV, cabinet, training door and exit; separate training return; tasks/resources preserved |
 | Studio sound signal              | PASS — actual gunshot/melee/reload/impact source starts and effect-bus RMS peak 0.560142, no audio error                                  |
 | Art review                       | PASS for the captured studio and separate training; minor paper-note overlap with exit caption, central prompt readable                   |
 
 Static-browser scenarios prove UI create/edit/complete/reopen/delete/reload, once-only rewards, concurrent tabs and duplicate request keys, confirmed clean reset observed across tabs and reload, real Phaser asset loading, separate training, dispatch, actual committed gunshot and sound signal, refresh recovery with spent ammunition retained. They use the shipped Worker protocol and normal validated routes, without resource edits or hidden test endpoints. IndexedDB writes complete before successful mutation responses. Adapter tests additionally force failed writes and rollback before safe retry.
 
+`node scripts/production-smoke.mjs` also passed on the compiled native edition after domain extraction: actual process restart, task/reward/settings/tutorial persistence, durable shot replay and unused-round recovery. Bootstrap metadata/link validation passed after formatting; skill frontmatter retains its JSON-compatible double quotes through a dedicated Prettier override.
+
 Current captured evidence: [studio objects](evidence/studio-objects-verified.png), [separate training](evidence/studio-separate-training.png), [input report](evidence/studio-smoke.json), [TV restriction fallback](evidence/studio-television-network.png). Input-only checks do not establish human listening quality.
+
+### CI regression correction
+
+The first hosted Chromium run passed eight of ten native scenarios and exposed two unstable checks: a final-dialogue acknowledgement race and a TV approach accepted too close to furniture. Trace inspection also found a real dialogue rendering defect: the previous line's character count briefly revealed the new line before its effect reset. The component now resets characters atomically with advancing the line. Browser helpers wait for actual reveal/progress/closure, and navigation uses clear corridors and waypoints whose accepted regions stay clear of furniture and within interaction radii. A subsequent hosted run showed that forcing a sub-frame stop at a TV corner could oscillate under remote input latency; the final approach uses the object collision edge and a broad valid interaction region. The affected native scenarios passed separately; all three static scenarios passed again. No timeout increases, blind retries, actor teleportation or bypassed gates were used. The final hosted run passed all ten native and all three static-browser scenarios, as recorded below.
 
 ### External TV limitation
 
@@ -99,4 +105,6 @@ The official YouTube trailer returned error 150 and an explicit age restriction;
 
 ### Pages publication
 
-Repository visibility is PUBLIC and Pages uses GitHub Actions. The browser edition stores one profile in SQLite/WASM inside an origin-wide Worker lock and IndexedDB; it does not synchronize devices or share the native profile. Removing browser site data removes this profile. Live deployment verification is pending publication.
+Repository visibility is PUBLIC and Pages uses GitHub Actions. The browser edition stores one profile in SQLite/WASM inside an origin-wide Worker lock and IndexedDB; it does not synchronize devices or share the native profile. Removing browser site data removes this profile. Live deployment verification is **PASS**. [Workflow 43074420801](https://github.com/Artyx71/deadline-1989/actions/runs/43074420801) deployed commit `7b1e2748b12d44d91b63c33cdf503feeb5152caf` successfully after 55 logic/adapter tests, formatting, strict types, lint, both builds, 10 native browser cases (2.3 minutes), and three static browser cases (20.3 seconds).
+
+The public [Pages site](https://artyx71.github.io/deadline-1989/) returned HTTP 200. `PAGES_BASE_URL=https://artyx71.github.io/deadline-1989/ pnpm test:pages` then passed **3/3 in 19.5 seconds** in fresh isolated Chromium contexts, against the actual deployed assets/Worker/WASM. This verifies UI CRUD/rewards/reload, cross-tab serialization/confirmed reset, and real training/dispatch/shot/sound/refresh settlement. No Fastify server was used for these public checks. [Public training capture](evidence/pages-live-training.png) and [machine-readable publication report](evidence/pages-live-verification.json).

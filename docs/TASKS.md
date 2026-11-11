@@ -130,6 +130,6 @@ Each assignment returns **Summary**, **Files**, **Verification** (commands and r
 - [x] Confirmed clean New Game plus separate story-only replay. Native API and Chromium regression passed.
 - [x] Shared domain and browser SQLite worker; durable IndexedDB acknowledgement and cross-tab serialization. Seven adapter tests and three static-browser scenarios passed.
 - [x] Public repository and Pages configuration authorized and applied.
-- [ ] Publish and verify the GitHub Pages deployment.
-- [ ] Apply Prettier to all supported source/document files and verify final checks.
+- [x] Publish and verify the GitHub Pages deployment. Workflow `43074420801` PASS; three actual public-URL browser scenarios PASS.
+- [x] Apply Prettier to all supported source/document files and verify final checks. Functional commit `5e2bf1a`, separate formatting commit `6104b3e`.
 - [ ] External TV playback remains provider-restricted; fallback is verified, successful video playback is not.
