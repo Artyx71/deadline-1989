@@ -1,0 +1,28 @@
+{
+  "name": "deadline-1989",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "node scripts/workspace.mjs dev",
+    "build": "node scripts/workspace.mjs build",
+    "typecheck": "node scripts/workspace.mjs typecheck",
+    "lint": "node scripts/workspace.mjs lint",
+    "test": "node scripts/workspace.mjs test",
+    "test:e2e": "node scripts/workspace.mjs e2e",
+    "start": "node scripts/workspace.mjs start",
+    "validate:bootstrap": "python3 scripts/validate_bootstrap.py"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "5.1.0",
+    "@playwright/test": "1.65.0",
+    "eslint": "10.14.0",
+    "typescript-eslint": "8.72.2",
+    "@types/node": "26.6.6"
+  }
+}

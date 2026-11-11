@@ -1,0 +1,26 @@
+{
+  "name": "@deadline/server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node node_modules/tsx/dist/cli.mjs watch src/index.ts",
+    "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit",
+    "start": "node dist/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@deadline/shared": "workspace:*",
+    "fastify": "5.12.8",
+    "@fastify/static": "10.1.10",
+    "better-sqlite3": "13.0.3",
+    "drizzle-orm": "0.45.4",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15",
+    "drizzle-kit": "0.31.11",
+    "@types/better-sqlite3": "9.6.0"
+  }
+}

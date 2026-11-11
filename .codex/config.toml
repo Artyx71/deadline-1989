@@ -1,0 +1,9 @@
+# Verified with Codex CLI 0.163.0 and its bundled model catalog.
+# Parent permission settings and provider remain inherited.
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
+
+[agents]
+enabled = true
+# Counts spawned threads only; the host may impose a smaller total limit.
+max_concurrent_threads_per_session = 4
