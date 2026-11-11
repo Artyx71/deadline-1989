@@ -1,0 +1,2238 @@
+{
+  "started": "2026-11-11T16:12:01.111Z",
+  "origin": "http://127.0.0.1:5175",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "inputOnly": true,
+  "checks": [
+    {
+      "name": "pause-freezes-player-and-enemies",
+      "status": "PASS"
+    },
+    {
+      "name": "real-six-enemy-victory-and-authoritative-settlement",
+      "status": "PASS",
+      "stats": {
+        "kills": 6,
+        "shotsFired": 11,
+        "hits": 8,
+        "meleeKills": 0,
+        "durationMs": 29670,
+        "emptyMagazine": false
+      }
+    },
+    {
+      "name": "enemy-caused-one-hit-death-with-zero-ammo-and-task-preservation",
+      "status": "PASS",
+      "stats": {
+        "kills": 0,
+        "shotsFired": 0,
+        "hits": 0,
+        "meleeKills": 0,
+        "durationMs": 4266,
+        "emptyMagazine": true
+      }
+    },
+    {
+      "name": "repeated-scenes-apartment-movement-and-reload-resource-persistence",
+      "status": "PASS"
+    }
+  ],
+  "events": [
+    {
+      "type": "mission-enter",
+      "diagnostic": {
+        "x": 96,
+        "y": 389,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 213,
+            "y": 173,
+            "hp": 1,
+            "type": "grunt",
+            "state": "IDLE"
+          },
+          {
+            "x": 350,
+            "y": 178,
+            "hp": 1,
+            "type": "grunt",
+            "state": "IDLE"
+          },
+          {
+            "x": 317,
+            "y": 389,
+            "hp": 1,
+            "type": "grunt",
+            "state": "IDLE"
+          },
+          {
+            "x": 652,
+            "y": 388,
+            "hp": 1,
+            "type": "grunt",
+            "state": "IDLE"
+          },
+          {
+            "x": 633,
+            "y": 160,
+            "hp": 2,
+            "type": "gunner",
+            "state": "IDLE"
+          },
+          {
+            "x": 456,
+            "y": 378,
+            "hp": 2,
+            "type": "gunner",
+            "state": "IDLE"
+          }
+        ],
+        "magazine": 6,
+        "reserve": 30,
+        "frames": 24,
+        "avgFrameMs": 22.36,
+        "maxFrameMs": 31.67,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        152,
+        389
+      ],
+      "diagnostic": {
+        "x": 151,
+        "y": 389,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 216.5,
+            "y": 197.3,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 371.6,
+            "y": 196.4,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 338.6,
+            "y": 407.4,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 673.6,
+            "y": 406.4,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 654.6,
+            "y": 178.4,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 477.6,
+            "y": 396.4,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 6,
+        "reserve": 30,
+        "frames": 108,
+        "avgFrameMs": 26.88,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        152,
+        264
+      ],
+      "diagnostic": {
+        "x": 151,
+        "y": 268,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 384.8,
+            "y": 177.7,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 351.8,
+            "y": 388.7,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 686.8,
+            "y": 387.7,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 667.8,
+            "y": 159.7,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 487.8,
+            "y": 379.1,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 6,
+        "reserve": 30,
+        "frames": 204,
+        "avgFrameMs": 22.07,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        152,
+        191
+      ],
+      "diagnostic": {
+        "x": 151,
+        "y": 194.7,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 377.1,
+            "y": 161.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 344.1,
+            "y": 372.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 679.1,
+            "y": 371.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 660.1,
+            "y": 143.6,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 483.8,
+            "y": 362.5,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 5,
+        "reserve": 30,
+        "frames": 276,
+        "avgFrameMs": 20.66,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        152,
+        264
+      ],
+      "diagnostic": {
+        "x": 151,
+        "y": 257,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 365.1,
+            "y": 154.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 332.1,
+            "y": 365.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 667.1,
+            "y": 364.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 648.1,
+            "y": 136.6,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 470.8,
+            "y": 354.5,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 5,
+        "reserve": 30,
+        "frames": 324,
+        "avgFrameMs": 20.07,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        376,
+        264
+      ],
+      "diagnostic": {
+        "x": 371.4,
+        "y": 264.8,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 324.7,
+            "y": 195.8,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 291.7,
+            "y": 406.8,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 626.2,
+            "y": 405.4,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 607.7,
+            "y": 177.8,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 448.3,
+            "y": 352.7,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 6,
+        "reserve": 29,
+        "frames": 624,
+        "avgFrameMs": 18.43,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        376,
+        192
+      ],
+      "diagnostic": {
+        "x": 371.4,
+        "y": 191.4,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 327.7,
+            "y": 197.9,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 311.2,
+            "y": 414.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 646.3,
+            "y": 413.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 627.2,
+            "y": 185.6,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 450,
+            "y": 376.5,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 5,
+        "reserve": 29,
+        "frames": 696,
+        "avgFrameMs": 18.25,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        376,
+        264
+      ],
+      "diagnostic": {
+        "x": 371.4,
+        "y": 264.8,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 327.7,
+            "y": 197.9,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 332.2,
+            "y": 411.5,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 671.3,
+            "y": 409.6,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 652.2,
+            "y": 181.7,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 475.1,
+            "y": 399.7,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 4,
+        "reserve": 29,
+        "frames": 780,
+        "avgFrameMs": 18.08,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        376,
+        319
+      ],
+      "diagnostic": {
+        "x": 371.4,
+        "y": 316.1,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 327.7,
+            "y": 197.9,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 332.2,
+            "y": 411.5,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 686.7,
+            "y": 385.2,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 667.7,
+            "y": 157.4,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 487.8,
+            "y": 378.2,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 6,
+        "reserve": 27,
+        "frames": 900,
+        "avgFrameMs": 17.89,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        376,
+        404
+      ],
+      "diagnostic": {
+        "x": 371.4,
+        "y": 400.4,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 327.7,
+            "y": 197.9,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 332.2,
+            "y": 411.5,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 679.4,
+            "y": 372,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 660,
+            "y": 143.6,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 483.1,
+            "y": 361.8,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          }
+        ],
+        "magazine": 6,
+        "reserve": 27,
+        "frames": 960,
+        "avgFrameMs": 17.82,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        456,
+        408
+      ],
+      "diagnostic": {
+        "x": 447.4,
+        "y": 410.8,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 327.7,
+            "y": 197.9,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 332.2,
+            "y": 411.5,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 624.8,
+            "y": 371.8,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 599.6,
+            "y": 152.6,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 472.2,
+            "y": 384.6,
+            "hp": 0,
+            "type": "gunner",
+            "state": "DEAD"
+          }
+        ],
+        "magazine": 2,
+        "reserve": 27,
+        "frames": 1200,
+        "avgFrameMs": 17.59,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        376,
+        404
+      ],
+      "diagnostic": {
+        "x": 385.2,
+        "y": 400.8,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 327.7,
+            "y": 197.9,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 332.2,
+            "y": 411.5,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 620.1,
+            "y": 398,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 600.6,
+            "y": 169.6,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 472.2,
+            "y": 384.6,
+            "hp": 0,
+            "type": "gunner",
+            "state": "DEAD"
+          }
+        ],
+        "magazine": 2,
+        "reserve": 27,
+        "frames": 1272,
+        "avgFrameMs": 17.53,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "waypoint",
+      "target": [
+        376,
+        264
+      ],
+      "diagnostic": {
+        "x": 374.6,
+        "y": 271.1,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 231.2,
+            "y": 191,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 327.7,
+            "y": 197.9,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 332.2,
+            "y": 411.5,
+            "hp": 0,
+            "type": "grunt",
+            "state": "DEAD"
+          },
+          {
+            "x": 654.2,
+            "y": 413.9,
+            "hp": 1,
+            "type": "grunt",
+            "state": "PATROL"
+          },
+          {
+            "x": 634.6,
+            "y": 185.9,
+            "hp": 2,
+            "type": "gunner",
+            "state": "PATROL"
+          },
+          {
+            "x": 472.2,
+            "y": 384.6,
+            "hp": 0,
+            "type": "gunner",
+            "state": "DEAD"
+          }
+        ],
+        "magazine": 2,
+        "reserve": 27,
+        "frames": 1404,
+        "avgFrameMs": 17.45,
+        "maxFrameMs": 41.66,
+        "paused": "false"
+      }
+    },
+    {
+      "type": "mission-enter",
+      "diagnostic": {
+        "x": 96,
+        "y": 389,
+        "scene": "combat",
+        "enemies": [
+          {
+            "x": 213,
+            "y": 173,
+            "hp": 1,
+            "type": "grunt",
+            "state": "IDLE"
+          },
+          {
+            "x": 350,
+            "y": 178,
+            "hp": 1,
+            "type": "grunt",
+            "state": "IDLE"
+          },
+          {
+            "x": 317,
+            "y": 389,
+            "hp": 1,
+            "type": "grunt",
+            "state": "IDLE"
+          },
+          {
+            "x": 652,
+            "y": 388,
+            "hp": 1,
+            "type": "grunt",
+            "state": "IDLE"
+          },
+          {
+            "x": 633,
+            "y": 160,
+            "hp": 2,
+            "type": "gunner",
+            "state": "IDLE"
+          },
+          {
+            "x": 456,
+            "y": 378,
+            "hp": 2,
+            "type": "gunner",
+            "state": "IDLE"
+          }
+        ],
+        "magazine": 0,
+        "reserve": 0,
+        "frames": 24,
+        "avgFrameMs": 21.53,
+        "maxFrameMs": 30.01,
+        "paused": "false"
+      }
+    }
+  ],
+  "outcomes": [
+    {
+      "outcome": "cleared",
+      "stats": {
+        "kills": 6,
+        "shotsFired": 11,
+        "hits": 8,
+        "meleeKills": 0,
+        "durationMs": 29670,
+        "emptyMagazine": false
+      }
+    },
+    {
+      "outcome": "dead",
+      "stats": {
+        "kills": 0,
+        "shotsFired": 0,
+        "hits": 0,
+        "meleeKills": 0,
+        "durationMs": 4266,
+        "emptyMagazine": true
+      }
+    }
+  ],
+  "errors": [],
+  "networkErrors": [],
+  "browser": "152.0.7977.82",
+  "beforeRecovery": {
+    "revision": 84,
+    "tasks": [
+      {
+        "id": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:07:44.436Z",
+        "updatedAt": "2026-11-11T16:07:44.441Z",
+        "completedAt": "2026-11-11T16:07:44.441Z",
+        "rewarded": true
+      },
+      {
+        "id": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:56:31.640Z",
+        "updatedAt": "2026-11-11T15:56:31.645Z",
+        "completedAt": "2026-11-11T15:56:31.645Z",
+        "rewarded": true
+      },
+      {
+        "id": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:55:37.561Z",
+        "updatedAt": "2026-11-11T15:55:37.565Z",
+        "completedAt": "2026-11-11T15:55:37.565Z",
+        "rewarded": true
+      },
+      {
+        "id": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.523Z",
+        "updatedAt": "2026-11-11T15:52:23.527Z",
+        "completedAt": "2026-11-11T15:52:23.527Z",
+        "rewarded": true
+      },
+      {
+        "id": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.514Z",
+        "updatedAt": "2026-11-11T15:52:23.519Z",
+        "completedAt": "2026-11-11T15:52:23.519Z",
+        "rewarded": true
+      },
+      {
+        "id": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.505Z",
+        "updatedAt": "2026-11-11T15:52:23.509Z",
+        "completedAt": "2026-11-11T15:52:23.509Z",
+        "rewarded": true
+      },
+      {
+        "id": "fe138863-206a-42da-b0f5-d3cb2dd92282",
+        "title": "Review the studio invoice",
+        "description": "",
+        "difficulty": "easy",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.814Z",
+        "updatedAt": "2026-11-11T15:31:27.814Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "2b606fe3-16ab-4b59-9016-1b59613c25e5",
+        "title": "Send the final proposal",
+        "description": "Proof the final pages and call the client.",
+        "difficulty": "normal",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.810Z",
+        "updatedAt": "2026-11-11T15:31:27.810Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "description": "A synthetic QA task for screenshot and resource tests.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.799Z",
+        "updatedAt": "2026-11-11T15:31:27.805Z",
+        "completedAt": "2026-11-11T15:31:27.805Z",
+        "rewarded": true
+      }
+    ],
+    "rewards": [
+      {
+        "id": "2b7b53ab-0ee3-43f8-a942-298afbd5b4a5",
+        "taskId": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:07:44.441Z"
+      },
+      {
+        "id": "75c6c3a9-6c94-4e6a-bb64-aa4eaf2b601e",
+        "taskId": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:56:31.645Z"
+      },
+      {
+        "id": "1a942caf-859f-4df9-8759-61aa5f06030c",
+        "taskId": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:55:37.565Z"
+      },
+      {
+        "id": "391a63d5-e411-48fe-88b1-b406dcc06f42",
+        "taskId": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.527Z"
+      },
+      {
+        "id": "695d443d-8134-4379-af42-5f79834be376",
+        "taskId": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.519Z"
+      },
+      {
+        "id": "c41641f3-4a57-4f94-9c58-48fa1e8b7266",
+        "taskId": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.509Z"
+      },
+      {
+        "id": "9dee4120-f925-4549-b820-a6a010d63e8d",
+        "taskId": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:31:27.805Z"
+      }
+    ],
+    "player": {
+      "ammo": 37,
+      "xp": 1400,
+      "deaths": 5,
+      "consecutiveDeaths": 1
+    },
+    "tutorial": {
+      "step": "complete",
+      "completed": true,
+      "skipped": true
+    },
+    "attempt": null,
+    "progress": {
+      "missionId": "first-shift",
+      "unlocked": true,
+      "completions": 3,
+      "bestTimeMs": 25381
+    },
+    "dialogueHistory": [],
+    "settings": {
+      "masterVolume": 0.65,
+      "musicVolume": 0.55,
+      "sfxVolume": 0.7,
+      "muted": false,
+      "streamerMode": true,
+      "reducedMotion": false,
+      "crt": true
+    }
+  },
+  "afterRecovery": {
+    "revision": 84,
+    "tasks": [
+      {
+        "id": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:07:44.436Z",
+        "updatedAt": "2026-11-11T16:07:44.441Z",
+        "completedAt": "2026-11-11T16:07:44.441Z",
+        "rewarded": true
+      },
+      {
+        "id": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:56:31.640Z",
+        "updatedAt": "2026-11-11T15:56:31.645Z",
+        "completedAt": "2026-11-11T15:56:31.645Z",
+        "rewarded": true
+      },
+      {
+        "id": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:55:37.561Z",
+        "updatedAt": "2026-11-11T15:55:37.565Z",
+        "completedAt": "2026-11-11T15:55:37.565Z",
+        "rewarded": true
+      },
+      {
+        "id": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.523Z",
+        "updatedAt": "2026-11-11T15:52:23.527Z",
+        "completedAt": "2026-11-11T15:52:23.527Z",
+        "rewarded": true
+      },
+      {
+        "id": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.514Z",
+        "updatedAt": "2026-11-11T15:52:23.519Z",
+        "completedAt": "2026-11-11T15:52:23.519Z",
+        "rewarded": true
+      },
+      {
+        "id": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.505Z",
+        "updatedAt": "2026-11-11T15:52:23.509Z",
+        "completedAt": "2026-11-11T15:52:23.509Z",
+        "rewarded": true
+      },
+      {
+        "id": "fe138863-206a-42da-b0f5-d3cb2dd92282",
+        "title": "Review the studio invoice",
+        "description": "",
+        "difficulty": "easy",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.814Z",
+        "updatedAt": "2026-11-11T15:31:27.814Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "2b606fe3-16ab-4b59-9016-1b59613c25e5",
+        "title": "Send the final proposal",
+        "description": "Proof the final pages and call the client.",
+        "difficulty": "normal",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.810Z",
+        "updatedAt": "2026-11-11T15:31:27.810Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "description": "A synthetic QA task for screenshot and resource tests.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.799Z",
+        "updatedAt": "2026-11-11T15:31:27.805Z",
+        "completedAt": "2026-11-11T15:31:27.805Z",
+        "rewarded": true
+      }
+    ],
+    "rewards": [
+      {
+        "id": "2b7b53ab-0ee3-43f8-a942-298afbd5b4a5",
+        "taskId": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:07:44.441Z"
+      },
+      {
+        "id": "75c6c3a9-6c94-4e6a-bb64-aa4eaf2b601e",
+        "taskId": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:56:31.645Z"
+      },
+      {
+        "id": "1a942caf-859f-4df9-8759-61aa5f06030c",
+        "taskId": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:55:37.565Z"
+      },
+      {
+        "id": "391a63d5-e411-48fe-88b1-b406dcc06f42",
+        "taskId": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.527Z"
+      },
+      {
+        "id": "695d443d-8134-4379-af42-5f79834be376",
+        "taskId": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.519Z"
+      },
+      {
+        "id": "c41641f3-4a57-4f94-9c58-48fa1e8b7266",
+        "taskId": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.509Z"
+      },
+      {
+        "id": "9dee4120-f925-4549-b820-a6a010d63e8d",
+        "taskId": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:31:27.805Z"
+      }
+    ],
+    "player": {
+      "ammo": 37,
+      "xp": 1400,
+      "deaths": 5,
+      "consecutiveDeaths": 1
+    },
+    "tutorial": {
+      "step": "complete",
+      "completed": true,
+      "skipped": true
+    },
+    "attempt": null,
+    "progress": {
+      "missionId": "first-shift",
+      "unlocked": true,
+      "completions": 3,
+      "bestTimeMs": 25381
+    },
+    "dialogueHistory": [],
+    "settings": {
+      "masterVolume": 0.65,
+      "musicVolume": 0.55,
+      "sfxVolume": 0.7,
+      "muted": false,
+      "streamerMode": true,
+      "reducedMotion": false,
+      "crt": true
+    }
+  },
+  "baseline": {
+    "revision": 86,
+    "tasks": [
+      {
+        "id": "57ab82b1-19fd-42d7-8e4c-ea63771ba0e8",
+        "title": "Проверка боевой системы d6056fcc-ad3c-4853-8181-57bd18163833",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:12:01.576Z",
+        "updatedAt": "2026-11-11T16:12:01.581Z",
+        "completedAt": "2026-11-11T16:12:01.581Z",
+        "rewarded": true
+      },
+      {
+        "id": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:07:44.436Z",
+        "updatedAt": "2026-11-11T16:07:44.441Z",
+        "completedAt": "2026-11-11T16:07:44.441Z",
+        "rewarded": true
+      },
+      {
+        "id": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:56:31.640Z",
+        "updatedAt": "2026-11-11T15:56:31.645Z",
+        "completedAt": "2026-11-11T15:56:31.645Z",
+        "rewarded": true
+      },
+      {
+        "id": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:55:37.561Z",
+        "updatedAt": "2026-11-11T15:55:37.565Z",
+        "completedAt": "2026-11-11T15:55:37.565Z",
+        "rewarded": true
+      },
+      {
+        "id": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.523Z",
+        "updatedAt": "2026-11-11T15:52:23.527Z",
+        "completedAt": "2026-11-11T15:52:23.527Z",
+        "rewarded": true
+      },
+      {
+        "id": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.514Z",
+        "updatedAt": "2026-11-11T15:52:23.519Z",
+        "completedAt": "2026-11-11T15:52:23.519Z",
+        "rewarded": true
+      },
+      {
+        "id": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.505Z",
+        "updatedAt": "2026-11-11T15:52:23.509Z",
+        "completedAt": "2026-11-11T15:52:23.509Z",
+        "rewarded": true
+      },
+      {
+        "id": "fe138863-206a-42da-b0f5-d3cb2dd92282",
+        "title": "Review the studio invoice",
+        "description": "",
+        "difficulty": "easy",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.814Z",
+        "updatedAt": "2026-11-11T15:31:27.814Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "2b606fe3-16ab-4b59-9016-1b59613c25e5",
+        "title": "Send the final proposal",
+        "description": "Proof the final pages and call the client.",
+        "difficulty": "normal",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.810Z",
+        "updatedAt": "2026-11-11T15:31:27.810Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "description": "A synthetic QA task for screenshot and resource tests.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.799Z",
+        "updatedAt": "2026-11-11T15:31:27.805Z",
+        "completedAt": "2026-11-11T15:31:27.805Z",
+        "rewarded": true
+      }
+    ],
+    "rewards": [
+      {
+        "id": "094ac2a7-4246-47c0-83b9-9d1b652440d3",
+        "taskId": "57ab82b1-19fd-42d7-8e4c-ea63771ba0e8",
+        "title": "Проверка боевой системы d6056fcc-ad3c-4853-8181-57bd18163833",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:12:01.581Z"
+      },
+      {
+        "id": "2b7b53ab-0ee3-43f8-a942-298afbd5b4a5",
+        "taskId": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:07:44.441Z"
+      },
+      {
+        "id": "75c6c3a9-6c94-4e6a-bb64-aa4eaf2b601e",
+        "taskId": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:56:31.645Z"
+      },
+      {
+        "id": "1a942caf-859f-4df9-8759-61aa5f06030c",
+        "taskId": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:55:37.565Z"
+      },
+      {
+        "id": "391a63d5-e411-48fe-88b1-b406dcc06f42",
+        "taskId": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.527Z"
+      },
+      {
+        "id": "695d443d-8134-4379-af42-5f79834be376",
+        "taskId": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.519Z"
+      },
+      {
+        "id": "c41641f3-4a57-4f94-9c58-48fa1e8b7266",
+        "taskId": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.509Z"
+      },
+      {
+        "id": "9dee4120-f925-4549-b820-a6a010d63e8d",
+        "taskId": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:31:27.805Z"
+      }
+    ],
+    "player": {
+      "ammo": 49,
+      "xp": 1600,
+      "deaths": 5,
+      "consecutiveDeaths": 1
+    },
+    "tutorial": {
+      "step": "complete",
+      "completed": true,
+      "skipped": true
+    },
+    "attempt": null,
+    "progress": {
+      "missionId": "first-shift",
+      "unlocked": true,
+      "completions": 3,
+      "bestTimeMs": 25381
+    },
+    "dialogueHistory": [],
+    "settings": {
+      "masterVolume": 0.65,
+      "musicVolume": 0.55,
+      "sfxVolume": 0.7,
+      "muted": false,
+      "streamerMode": true,
+      "reducedMotion": false,
+      "crt": true
+    }
+  },
+  "initialMemory": {
+    "heap": 64776445,
+    "canvases": 1
+  },
+  "victory": {
+    "revision": 99,
+    "tasks": [
+      {
+        "id": "57ab82b1-19fd-42d7-8e4c-ea63771ba0e8",
+        "title": "Проверка боевой системы d6056fcc-ad3c-4853-8181-57bd18163833",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:12:01.576Z",
+        "updatedAt": "2026-11-11T16:12:01.581Z",
+        "completedAt": "2026-11-11T16:12:01.581Z",
+        "rewarded": true
+      },
+      {
+        "id": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:07:44.436Z",
+        "updatedAt": "2026-11-11T16:07:44.441Z",
+        "completedAt": "2026-11-11T16:07:44.441Z",
+        "rewarded": true
+      },
+      {
+        "id": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:56:31.640Z",
+        "updatedAt": "2026-11-11T15:56:31.645Z",
+        "completedAt": "2026-11-11T15:56:31.645Z",
+        "rewarded": true
+      },
+      {
+        "id": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:55:37.561Z",
+        "updatedAt": "2026-11-11T15:55:37.565Z",
+        "completedAt": "2026-11-11T15:55:37.565Z",
+        "rewarded": true
+      },
+      {
+        "id": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.523Z",
+        "updatedAt": "2026-11-11T15:52:23.527Z",
+        "completedAt": "2026-11-11T15:52:23.527Z",
+        "rewarded": true
+      },
+      {
+        "id": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.514Z",
+        "updatedAt": "2026-11-11T15:52:23.519Z",
+        "completedAt": "2026-11-11T15:52:23.519Z",
+        "rewarded": true
+      },
+      {
+        "id": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.505Z",
+        "updatedAt": "2026-11-11T15:52:23.509Z",
+        "completedAt": "2026-11-11T15:52:23.509Z",
+        "rewarded": true
+      },
+      {
+        "id": "fe138863-206a-42da-b0f5-d3cb2dd92282",
+        "title": "Review the studio invoice",
+        "description": "",
+        "difficulty": "easy",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.814Z",
+        "updatedAt": "2026-11-11T15:31:27.814Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "2b606fe3-16ab-4b59-9016-1b59613c25e5",
+        "title": "Send the final proposal",
+        "description": "Proof the final pages and call the client.",
+        "difficulty": "normal",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.810Z",
+        "updatedAt": "2026-11-11T15:31:27.810Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "description": "A synthetic QA task for screenshot and resource tests.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.799Z",
+        "updatedAt": "2026-11-11T15:31:27.805Z",
+        "completedAt": "2026-11-11T15:31:27.805Z",
+        "rewarded": true
+      }
+    ],
+    "rewards": [
+      {
+        "id": "094ac2a7-4246-47c0-83b9-9d1b652440d3",
+        "taskId": "57ab82b1-19fd-42d7-8e4c-ea63771ba0e8",
+        "title": "Проверка боевой системы d6056fcc-ad3c-4853-8181-57bd18163833",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:12:01.581Z"
+      },
+      {
+        "id": "2b7b53ab-0ee3-43f8-a942-298afbd5b4a5",
+        "taskId": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:07:44.441Z"
+      },
+      {
+        "id": "75c6c3a9-6c94-4e6a-bb64-aa4eaf2b601e",
+        "taskId": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:56:31.645Z"
+      },
+      {
+        "id": "1a942caf-859f-4df9-8759-61aa5f06030c",
+        "taskId": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:55:37.565Z"
+      },
+      {
+        "id": "391a63d5-e411-48fe-88b1-b406dcc06f42",
+        "taskId": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.527Z"
+      },
+      {
+        "id": "695d443d-8134-4379-af42-5f79834be376",
+        "taskId": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.519Z"
+      },
+      {
+        "id": "c41641f3-4a57-4f94-9c58-48fa1e8b7266",
+        "taskId": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.509Z"
+      },
+      {
+        "id": "9dee4120-f925-4549-b820-a6a010d63e8d",
+        "taskId": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:31:27.805Z"
+      }
+    ],
+    "player": {
+      "ammo": 38,
+      "xp": 1600,
+      "deaths": 5,
+      "consecutiveDeaths": 0
+    },
+    "tutorial": {
+      "step": "complete",
+      "completed": true,
+      "skipped": true
+    },
+    "attempt": null,
+    "progress": {
+      "missionId": "first-shift",
+      "unlocked": true,
+      "completions": 4,
+      "bestTimeMs": 25381
+    },
+    "dialogueHistory": [],
+    "settings": {
+      "masterVolume": 0.65,
+      "musicVolume": 0.55,
+      "sfxVolume": 0.7,
+      "muted": false,
+      "streamerMode": true,
+      "reducedMotion": false,
+      "crt": true
+    }
+  },
+  "victoryOutcome": {
+    "outcome": "cleared",
+    "stats": {
+      "kills": 6,
+      "shotsFired": 11,
+      "hits": 8,
+      "meleeKills": 0,
+      "durationMs": 29670,
+      "emptyMagazine": false
+    }
+  },
+  "death": {
+    "revision": 101,
+    "tasks": [
+      {
+        "id": "57ab82b1-19fd-42d7-8e4c-ea63771ba0e8",
+        "title": "Проверка боевой системы d6056fcc-ad3c-4853-8181-57bd18163833",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:12:01.576Z",
+        "updatedAt": "2026-11-11T16:12:01.581Z",
+        "completedAt": "2026-11-11T16:12:01.581Z",
+        "rewarded": true
+      },
+      {
+        "id": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:07:44.436Z",
+        "updatedAt": "2026-11-11T16:07:44.441Z",
+        "completedAt": "2026-11-11T16:07:44.441Z",
+        "rewarded": true
+      },
+      {
+        "id": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:56:31.640Z",
+        "updatedAt": "2026-11-11T15:56:31.645Z",
+        "completedAt": "2026-11-11T15:56:31.645Z",
+        "rewarded": true
+      },
+      {
+        "id": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:55:37.561Z",
+        "updatedAt": "2026-11-11T15:55:37.565Z",
+        "completedAt": "2026-11-11T15:55:37.565Z",
+        "rewarded": true
+      },
+      {
+        "id": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.523Z",
+        "updatedAt": "2026-11-11T15:52:23.527Z",
+        "completedAt": "2026-11-11T15:52:23.527Z",
+        "rewarded": true
+      },
+      {
+        "id": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.514Z",
+        "updatedAt": "2026-11-11T15:52:23.519Z",
+        "completedAt": "2026-11-11T15:52:23.519Z",
+        "rewarded": true
+      },
+      {
+        "id": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.505Z",
+        "updatedAt": "2026-11-11T15:52:23.509Z",
+        "completedAt": "2026-11-11T15:52:23.509Z",
+        "rewarded": true
+      },
+      {
+        "id": "fe138863-206a-42da-b0f5-d3cb2dd92282",
+        "title": "Review the studio invoice",
+        "description": "",
+        "difficulty": "easy",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.814Z",
+        "updatedAt": "2026-11-11T15:31:27.814Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "2b606fe3-16ab-4b59-9016-1b59613c25e5",
+        "title": "Send the final proposal",
+        "description": "Proof the final pages and call the client.",
+        "difficulty": "normal",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.810Z",
+        "updatedAt": "2026-11-11T15:31:27.810Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "description": "A synthetic QA task for screenshot and resource tests.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.799Z",
+        "updatedAt": "2026-11-11T15:31:27.805Z",
+        "completedAt": "2026-11-11T15:31:27.805Z",
+        "rewarded": true
+      }
+    ],
+    "rewards": [
+      {
+        "id": "094ac2a7-4246-47c0-83b9-9d1b652440d3",
+        "taskId": "57ab82b1-19fd-42d7-8e4c-ea63771ba0e8",
+        "title": "Проверка боевой системы d6056fcc-ad3c-4853-8181-57bd18163833",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:12:01.581Z"
+      },
+      {
+        "id": "2b7b53ab-0ee3-43f8-a942-298afbd5b4a5",
+        "taskId": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:07:44.441Z"
+      },
+      {
+        "id": "75c6c3a9-6c94-4e6a-bb64-aa4eaf2b601e",
+        "taskId": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:56:31.645Z"
+      },
+      {
+        "id": "1a942caf-859f-4df9-8759-61aa5f06030c",
+        "taskId": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:55:37.565Z"
+      },
+      {
+        "id": "391a63d5-e411-48fe-88b1-b406dcc06f42",
+        "taskId": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.527Z"
+      },
+      {
+        "id": "695d443d-8134-4379-af42-5f79834be376",
+        "taskId": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.519Z"
+      },
+      {
+        "id": "c41641f3-4a57-4f94-9c58-48fa1e8b7266",
+        "taskId": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.509Z"
+      },
+      {
+        "id": "9dee4120-f925-4549-b820-a6a010d63e8d",
+        "taskId": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:31:27.805Z"
+      }
+    ],
+    "player": {
+      "ammo": 38,
+      "xp": 1600,
+      "deaths": 6,
+      "consecutiveDeaths": 1
+    },
+    "tutorial": {
+      "step": "complete",
+      "completed": true,
+      "skipped": true
+    },
+    "attempt": null,
+    "progress": {
+      "missionId": "first-shift",
+      "unlocked": true,
+      "completions": 4,
+      "bestTimeMs": 25381
+    },
+    "dialogueHistory": [],
+    "settings": {
+      "masterVolume": 0.65,
+      "musicVolume": 0.55,
+      "sfxVolume": 0.7,
+      "muted": false,
+      "streamerMode": true,
+      "reducedMotion": false,
+      "crt": true
+    }
+  },
+  "deathOutcome": {
+    "outcome": "dead",
+    "stats": {
+      "kills": 0,
+      "shotsFired": 0,
+      "hits": 0,
+      "meleeKills": 0,
+      "durationMs": 4266,
+      "emptyMagazine": true
+    }
+  },
+  "afterReload": {
+    "revision": 101,
+    "tasks": [
+      {
+        "id": "57ab82b1-19fd-42d7-8e4c-ea63771ba0e8",
+        "title": "Проверка боевой системы d6056fcc-ad3c-4853-8181-57bd18163833",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:12:01.576Z",
+        "updatedAt": "2026-11-11T16:12:01.581Z",
+        "completedAt": "2026-11-11T16:12:01.581Z",
+        "rewarded": true
+      },
+      {
+        "id": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "description": "Изолированная тестовая задача для проверки боя.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T16:07:44.436Z",
+        "updatedAt": "2026-11-11T16:07:44.441Z",
+        "completedAt": "2026-11-11T16:07:44.441Z",
+        "rewarded": true
+      },
+      {
+        "id": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:56:31.640Z",
+        "updatedAt": "2026-11-11T15:56:31.645Z",
+        "completedAt": "2026-11-11T15:56:31.645Z",
+        "rewarded": true
+      },
+      {
+        "id": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:55:37.561Z",
+        "updatedAt": "2026-11-11T15:55:37.565Z",
+        "completedAt": "2026-11-11T15:55:37.565Z",
+        "rewarded": true
+      },
+      {
+        "id": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.523Z",
+        "updatedAt": "2026-11-11T15:52:23.527Z",
+        "completedAt": "2026-11-11T15:52:23.527Z",
+        "rewarded": true
+      },
+      {
+        "id": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.514Z",
+        "updatedAt": "2026-11-11T15:52:23.519Z",
+        "completedAt": "2026-11-11T15:52:23.519Z",
+        "rewarded": true
+      },
+      {
+        "id": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "description": "Synthetic isolated playtest fixture.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:52:23.505Z",
+        "updatedAt": "2026-11-11T15:52:23.509Z",
+        "completedAt": "2026-11-11T15:52:23.509Z",
+        "rewarded": true
+      },
+      {
+        "id": "fe138863-206a-42da-b0f5-d3cb2dd92282",
+        "title": "Review the studio invoice",
+        "description": "",
+        "difficulty": "easy",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.814Z",
+        "updatedAt": "2026-11-11T15:31:27.814Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "2b606fe3-16ab-4b59-9016-1b59613c25e5",
+        "title": "Send the final proposal",
+        "description": "Proof the final pages and call the client.",
+        "difficulty": "normal",
+        "status": "active",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.810Z",
+        "updatedAt": "2026-11-11T15:31:27.810Z",
+        "completedAt": null,
+        "rewarded": false
+      },
+      {
+        "id": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "description": "A synthetic QA task for screenshot and resource tests.",
+        "difficulty": "hard",
+        "status": "completed",
+        "dueAt": null,
+        "createdAt": "2026-11-11T15:31:27.799Z",
+        "updatedAt": "2026-11-11T15:31:27.805Z",
+        "completedAt": "2026-11-11T15:31:27.805Z",
+        "rewarded": true
+      }
+    ],
+    "rewards": [
+      {
+        "id": "094ac2a7-4246-47c0-83b9-9d1b652440d3",
+        "taskId": "57ab82b1-19fd-42d7-8e4c-ea63771ba0e8",
+        "title": "Проверка боевой системы d6056fcc-ad3c-4853-8181-57bd18163833",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:12:01.581Z"
+      },
+      {
+        "id": "2b7b53ab-0ee3-43f8-a942-298afbd5b4a5",
+        "taskId": "2e96d8cc-2d70-466c-af08-bdb29135ffb8",
+        "title": "Проверка боевой системы 15b6fec2-14b3-46af-9984-1f7d8191572c",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T16:07:44.441Z"
+      },
+      {
+        "id": "75c6c3a9-6c94-4e6a-bb64-aa4eaf2b601e",
+        "taskId": "f15d0136-6834-4fef-8b1c-ac1934350bf2",
+        "title": "Combat QA fixture e862eecb-93d4-4991-887a-4602ee12fa29",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:56:31.645Z"
+      },
+      {
+        "id": "1a942caf-859f-4df9-8759-61aa5f06030c",
+        "taskId": "66e03447-b92b-4adb-b7fa-8b602ce62f5e",
+        "title": "Combat QA fixture c4ac90a5-52d1-4d67-8bca-7bcad0d0e3b7",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:55:37.565Z"
+      },
+      {
+        "id": "391a63d5-e411-48fe-88b1-b406dcc06f42",
+        "taskId": "0bfd1f07-dfd9-49fe-b199-91928512706e",
+        "title": "Combat QA fixture 5a3bc543-f2a6-44b3-a396-46e75921c0dd",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.527Z"
+      },
+      {
+        "id": "695d443d-8134-4379-af42-5f79834be376",
+        "taskId": "d520d782-58e2-4d6d-adbe-9af28681a2c4",
+        "title": "Combat QA fixture 2eb8f45d-ef08-4c80-930b-462cd6bdf1a6",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.519Z"
+      },
+      {
+        "id": "c41641f3-4a57-4f94-9c58-48fa1e8b7266",
+        "taskId": "487152c0-ff33-46ca-90e8-c94e69ce8d65",
+        "title": "Combat QA fixture 03e73406-baa3-41e0-b65c-09c4483af1fc",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:52:23.509Z"
+      },
+      {
+        "id": "9dee4120-f925-4549-b820-a6a010d63e8d",
+        "taskId": "e0d3c1c8-8938-4076-aaea-5bbb18ec475d",
+        "title": "Prepare the printworks brief",
+        "ammo": 12,
+        "xp": 200,
+        "createdAt": "2026-11-11T15:31:27.805Z"
+      }
+    ],
+    "player": {
+      "ammo": 38,
+      "xp": 1600,
+      "deaths": 6,
+      "consecutiveDeaths": 1
+    },
+    "tutorial": {
+      "step": "complete",
+      "completed": true,
+      "skipped": true
+    },
+    "attempt": null,
+    "progress": {
+      "missionId": "first-shift",
+      "unlocked": true,
+      "completions": 4,
+      "bestTimeMs": 25381
+    },
+    "dialogueHistory": [],
+    "settings": {
+      "masterVolume": 0.65,
+      "musicVolume": 0.55,
+      "sfxVolume": 0.7,
+      "muted": false,
+      "streamerMode": true,
+      "reducedMotion": false,
+      "crt": true
+    }
+  },
+  "finalMemory": {
+    "heap": 66544791,
+    "canvases": 1
+  },
+  "status": "PASS",
+  "finished": "2026-11-11T16:12:57.099Z"
+}
