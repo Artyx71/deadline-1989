@@ -1,88 +1,112 @@
 # DEADLINE: 1989 — Architecture
 
-This document defines boundaries for future implementation. Bootstrap contains instructions and documentation only. Implementation starts after the master implementation goal is supplied. Read [AGENTS.md](../AGENTS.md) and [architecture rules](../.agents/rules/architecture.md) before changing these boundaries.
+This document describes the implemented system. It does not certify completion or test coverage; consult [VERIFICATION.md](VERIFICATION.md) for current evidence. Project ownership rules remain in [AGENTS.md](../AGENTS.md) and [architecture rules](../.agents/rules/architecture.md).
 
 ## Product gate
 
-Task creation, completion, deletion, and persistence after reload are P0. Task management must work while Phaser is loading, paused, unavailable, or reporting an error. Combat cannot complete tasks; death cannot change task status. Optional gameplay work must not delay or regress that gate.
+Task creation, completion, deletion, and reload persistence are P0. React exposes task management while Phaser loads, pauses, or fails. Combat never completes tasks; death never changes task status. Resource integrity takes priority over optional simulation or visual features.
 
-## Monorepo layout
+## Workspace and tooling
 
-| Path | Responsibility | Primary owner |
-| --- | --- | --- |
-| `apps/web/` | React client and embedded Phaser game | Frontend/game engineers by subtree |
-| `apps/web/src/components/`, `apps/web/src/features/` | Reusable UI and product features | Frontend engineer |
-| `apps/web/src/game/` | Scenes, simulation, input, physics, animation | Game engineer |
-| `apps/web/src/narrative/` | Dialogue content and presentation integration | Narrative designer |
-| `apps/web/public/assets/` | Reviewed, licensed game assets | Pixel art director |
-| `apps/server/` | Fastify API, domain services, Drizzle schema and migrations | Backend engineer |
-| `packages/shared/` | Transport schemas, DTOs, error codes, bridge contracts | Orchestrator |
-| `tests/`, `e2e/` | Cross-system verification when implementation begins | QA engineer |
-| `.agents/`, `.codex/`, `docs/` | Development instructions, agent configuration, design | Orchestrator; explicit document delegation |
+| Path | Responsibility |
+| --- | --- |
+| `apps/web/src/components/`, `features/` | React shell, task terminal, forms, menus, HUD, dialogue, settings |
+| `apps/web/src/game/` | Phaser scene, input, Arcade Physics, weapons, enemies, paths, simulation |
+| `apps/web/src/narrative/` | Original dialogue and pure tutorial progression |
+| `apps/web/src/audio/` | Web Audio graph and state-driven playback |
+| `apps/web/public/assets/` | Original/registered images, Tiled-compatible map data, audio |
+| `apps/server/src/` | Fastify routes, domain services, Drizzle schema, SQLite connection |
+| `apps/server/migrations/` | Versioned SQL migrations |
+| `apps/server/tests/` | Real SQLite API integration tests |
+| `packages/shared/src/` | Zod transport schemas, DTOs, game/UI bridge contracts |
+| `e2e/`, `playwright.config.ts` | Browser scenarios and isolated server startup |
+| `.agents/`, `.codex/`, `docs/` | Agent infrastructure, project rules, design, evidence |
 
-The existing repository root is the project root; do not add a redundant `deadline-1989/` wrapper. The future package graph uses pnpm workspaces. No manifests, application scaffolds, dependencies, or lockfile are created by bootstrap. The inspected machine has no available pnpm command, the repository has no initialized Git metadata, and dependency versions remain unpinned until implementation setup. Recheck these conditions before relying on them.
+This existing directory is the monorepo root. pnpm is installed; `package.json` pins pnpm 12.18.0 and Node >=24, with dependency versions recorded in manifests and the lockfile. React/TypeScript/Vite/Tailwind/Zustand/TanStack Query serve the client; Phaser 3 uses Arcade Physics and Tiled-compatible exports; Fastify/better-sqlite3/Drizzle/Zod serve persistence. Vitest and Playwright provide verification.
+
+The checkout name contains `:`. `scripts/workspace.mjs` resolves tool entry points directly with Node, avoiding PATH/`pnpm exec` problems caused by that character. Root commands `pnpm dev`, `pnpm build`, `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm test:e2e` call this runner; `node scripts/workspace.mjs <mode>` is the equivalent direct invocation. `pnpm start` runs the built server.
 
 ## Runtime ownership and dependency direction
 
-- React owns menus, task terminal, HUD, accessible forms, settings, loading/error surfaces, pause UI, and dialogue overlays.
-- Phaser 3 owns scene transitions inside the game, movement, aiming, Arcade Physics, collision, AI, mission simulation, and sprite animation. React rendering must not drive per-frame simulation.
-- Fastify owns task business rules, reward definitions, authoritative resource mutations, mission/tutorial progress, dialogue history, validation, and idempotency.
-- SQLite is the source of truth for all durable state. Drizzle owns schema access and migrations. A browser cache is never a second authority.
-- Zod validates external inputs at the server boundary. Shared schemas/types describe public contracts; server domain logic and database internals remain server-only.
-- Both applications may import `packages/shared`; shared code must not import either application, React, Phaser, Fastify handlers, or SQLite drivers. Web and server must not import one another's source modules.
+React owns interfaces, accessibility, focus, loading/error presentation, and the application session. Phaser owns frame-level movement, aiming, collision, AI, projectiles, animation, and camera. Fastify owns validated business operations, rewards, inventory, progression, and retry safety. SQLite is the durable source of truth.
 
-TanStack Query owns remote state and mutation lifecycles. Zustand owns client-only UI state and a narrow game/UI bridge snapshot. Do not duplicate remote task/resource stores in Zustand. Phaser retains transient simulation state. Persisted server snapshots replace client guesses after reconnect or reload.
+Both applications depend on `@deadline/shared`; shared contracts do not import either application or framework internals. Web never imports server/database code. The server validates external input with Zod. The API adapter validates returned snapshots rather than relying on TypeScript alone.
 
-## Phaser integration and scene lifecycle
+TanStack Query caches server snapshots and mutation results. Zustand holds transient screen/overlay/HUD state. Phaser retains transient simulation. No React state update drives each game frame. Reward amounts come from server definitions; `/api/rules` provides UI display values.
 
-Create the Phaser instance through one React host with explicit mount and teardown. Pass a typed bridge adapter to the game; never give scenes React component references, QueryClient access, or database adapters. Use commands for UI-to-game intent and events for game-to-UI observations. Contracts live in `packages/shared/` after orchestrator review.
+## Local profile and serving
 
-Commands include pause/resume, apply an authoritative resource snapshot, and enter a permitted mission. Events include scene readiness, interaction requests, mission observations, and fatal game errors. Define payload schemas and request identifiers where correlation is needed. A scene event is an observation until an API transaction confirms a durable effect.
+The MVP uses one local profile without authentication. Fastify defaults to `127.0.0.1:3001`; `HOST`, `PORT`, and `DATABASE_PATH` configure startup. The default database path is `data/deadline.sqlite`, relative to the server working directory. Development Vite defaults to port 5173 and proxies `/api` to the backend; `VITE_PORT` and `VITE_API_TARGET` support isolated test ports.
 
-Each scene owns and disposes its subscriptions, timers, keyboard handlers, physics callbacks, pools, and transient objects on shutdown/destroy. Repeated scene entry must not multiply callbacks. React unmount destroys the host and detaches bridge subscriptions. Pause must stop simulation/input while keeping task UI operable.
+The built server serves `apps/web/dist` when present and uses a single SPA fallback for non-API paths. API misses retain structured 404 errors. Public multi-user deployment requires authentication, profile isolation, authorization, and deployment hardening; changing the listen address does not provide those features.
 
-When a form, dialogue, menu, or modal owns focus, disable gameplay input. Ignore movement/shooting keys while editing text; prevent browser defaults only inside the active game surface. Restore focus predictably after overlays close. Prefer coarse state events and throttled HUD snapshots; avoid events or React state changes on every physics step.
+## React/Phaser integration and lifecycle
 
-## API boundaries and shared contracts
+`App` dynamically creates one Phaser host through `createGame`; `useSession` owns the typed `GamePort` and controller. The shared bridge exposes pause, scene entry, effects/phone state, and destruction; game events report loading, readiness, interactions, HUD, outcomes, tutorial actions, sounds, prompts, and errors. `spendShot()` requests committed authorization through the API.
 
-The initial contract surface is a proposal, not an implemented API. Final routes and schema fields require an orchestrator decision before consumers implement them.
+Scenes receive bridge contracts, not React components, QueryClient, or database adapters. Only coarse events cross into React; HUD observations are throttled/deduplicated. Scene readiness has a version so overlay/focus pause state is reapplied on every transition.
 
-| Domain | Intended API operations | Authority and safeguards |
-| --- | --- | --- |
-| Tasks | List, create, edit, complete, reopen, delete | Validate fields; server timestamps and identifiers; completion transaction records reward history |
-| Resources | Read balance; consume ammunition through an idempotent operation | Server definitions; conditional debit; never negative |
-| Missions | Read progress; start, checkpoint if approved, finish/abandon session | Validate state transitions and distinguish observations from authoritative progression |
-| Tutorial | Read/update progress; skip | Durable permitted transitions; no fabricated task completion |
-| Dialogue | Read eligible history; record playback/ignore/cooldown events | Stable trigger IDs and persisted cooldown policy |
+Scene shutdown removes keyboard/pointer handlers, blur listeners, timers, tweens, physics objects, and combat resources. React unmount destroys Phaser. Pause stops physics, simulation timers, animations, AI, and gameplay input; forms remain operable. Browser blur and hidden tabs relinquish control. Input latches preserve brief action presses across frame boundaries, while UI focus prevents typing from becoming movement/fire.
 
-Use separate completion/reopen operations or an equally explicit validated command to prevent an incidental edit from issuing rewards. Completion accepts task identity and a retry token, never client-provided reward amounts. Define structured errors with a stable code, safe message, field details where useful, and a correlation ID; choose status codes consistently. Do not expose stack traces or SQL internals.
+Maps combine original raster art with Tiled collision objects and typed world/interaction exports. Geometry, obstacle paths, enemy state transitions, weapon timing, and hit-stop timing are separated from the scene. Bullet objects are pooled. Training and combat share systems while keeping resource authority distinct.
 
-At bootstrap, identity/authentication and deployment topology are unresolved. Do not infer anonymous multi-user access, public hosting, or an authentication system. Settle the intended single-user/local versus authenticated deployment before persistent schemas and route authorization are finalized.
+## Implemented API
 
-## Persistence model
+All mutations require an `Idempotency-Key` header. Successful mutations return `MutationResult = { state: StateSnapshot, reward?: RewardClaim }`. Reads return the indicated DTO. Routes validate strict inputs and never accept client reward amounts.
 
-Proposed tables/entities are tasks; durable reward receipts; resource balances/ledger; idempotency operations; mission sessions/progress; tutorial progress; and dialogue history. Final names and columns await schema implementation. Store reward history independently of task reopening and deletion. A task tombstone or durable receipt must preserve the identity required to prove that its reward was already issued.
+| Method and route | Contract |
+| --- | --- |
+| `GET /api/health` | Health response |
+| `GET /api/rules` | Server reward definitions for display |
+| `GET /api/state` | Revisioned tasks, receipts, player, active attempt, progression, tutorial, dialogue history, settings |
+| `GET /api/tasks` | Task list |
+| `POST /api/tasks` | Create title/description/difficulty/optional deadline |
+| `PATCH /api/tasks/:id` | Edit supplied task fields without applying creation defaults |
+| `POST /api/tasks/:id/complete` | Complete and issue the first eligible reward atomically |
+| `POST /api/tasks/:id/reopen` | Reopen without resetting reward history |
+| `DELETE /api/tasks/:id` | Delete task; retain earned resources and receipt |
+| `GET /api/player` | Authoritative ammunition, XP, deaths, consecutive deaths |
+| `POST /api/missions/start` | `{ missionId: 'first-shift', ammo }`; reserve inventory and create attempt |
+| `POST /api/missions/:id/shots` | `{ count: 1 }`; commit one reserved round |
+| `POST /api/missions/:id/finish` | `{ outcome: 'dead' | 'cleared' | 'abandoned', stats }`; settle/refund once |
+| `GET /api/dialogue/next` | `{ next, history }` after eligibility/priority/cooldown checks |
+| `POST /api/dialogue/:id/acknowledge` | Persist answered/ignored history |
+| `GET /api/settings`, `PATCH /api/settings` | Read/patch audio and accessibility/effect preferences |
+| `PATCH /api/tutorial` | Persist valid cursor/completed/skipped fields; completion/skip unlocks mission |
+| `POST /api/game/reset` | Reset gameplay/tutorial progression/history, preserving tasks/resources/receipts/settings |
 
-Task completion and reward issuance run in one transaction. The transaction validates the current state, creates a unique reward receipt for the task, updates task status, credits server-defined ammunition/XP only when the receipt is newly created, and stores the idempotent response. Uniqueness constraints and conditional writes enforce at-most-once issuance under concurrent requests. Reopening and subsequent completion retain the original receipt; deleting never rewards or removes proof of a reward. Deleting then creating a distinct task creates a distinct identity; any product-level abuse prevention is a later explicit decision.
+Errors use `{ error: { code, message, requestId } }`. Invalid input is 400, absent entities 404, and resource/state/idempotency conflicts 409. Unexpected failures return a safe 500 with a retry instruction and internal request-correlated logging. Unknown API paths never return the SPA HTML.
 
-Resource changes use transactions and a durable ledger or equivalent auditable receipt. A conditional debit succeeds only if the committed balance covers the cost. Repeating a request returns the original result without applying a second change. Reusing an idempotency key with a different payload returns a conflict. Failed operations must not record a false success. Keep retry records long enough for the promised retry behavior; define retention before implementation.
+## SQLite, migrations, and transactions
 
-### Ammunition synchronization proposal
+The schema contains `tasks`, `reward_claims`, `player_state`, `mission_progress`, `mission_attempts`, `tutorial_progress`, `dialogue_history`, `settings`, `state_meta`, `idempotency_operations`, and `resource_ledger`. Drizzle performs domain queries and updates over better-sqlite3. A checksum-tracked versioned SQL migration initializes the database; startup rejects an altered applied migration or a schema newer than this server.
 
-The conservative proposed baseline is a committed ammunition debit before a shot becomes effective in gameplay. A timeout has an unknown outcome: retry with the same operation ID or reconcile before firing. Reloading reads committed balances and cannot restore spent ammunition. Death, mission restart, and tutorial restart cannot roll back a committed debit.
+Connections enable WAL, foreign keys, a 5-second busy timeout, and FULL synchronous durability. Resource mutations use synchronous immediate SQLite transactions. Database CHECK constraints prevent negative balances and invalid reserved/spent relationships; a partial unique index permits only one active mission attempt.
 
-This baseline may add unacceptable latency to rapid combat. Before implementing combat, benchmark it and resolve the [resource synchronization decision](DECISIONS.md#adr-004--authoritative-ammunition-consumption). A reservation/batch protocol is an alternative only with explicit durable allocation, per-session identities, consumed-versus-unconsumed accounting, crash/reconnect recovery, and no automatic refund of possibly spent rounds. An in-memory decrement followed by eventual persistence is not sufficient.
+Task completion updates status, inserts a unique receipt keyed by task ID, credits server-defined resources, records the ledger event, increments the snapshot revision, and stores the idempotent response in one transaction. Easy/normal/hard rewards are 3/6/12 ammunition and 50/100/200 XP. Claims survive physical task deletion and reopening. Recompletion cannot reward twice, including concurrent requests.
 
-## State synchronization and failure behavior
+Idempotency keys bind a canonical payload fingerprint to method/path scope. The committed response is persisted in the same transaction. A retry returns that exact response without applying a second effect; different input/scope with the same key returns 409. Failed transactions leave no successful receipt. Receipts currently have no expiry/pruning policy.
 
-After a successful mutation, apply the returned authoritative snapshot and invalidate affected queries. Optimistic UI may improve non-resource presentation only when rollback and stale-response handling are defined; never predict committed rewards or spendable ammunition. Use revisions or a documented equivalent to prevent delayed responses overwriting newer state.
+## Ammunition reservation, shots, and settlement
 
-On refresh or server restart, load tasks/resources/progress from SQLite through the API before enabling actions that depend on them. Loading a combat scene from scratch cannot restore an earlier balance. Define whether refresh abandons or resumes a mission before implementing mission persistence.
+Mission start checks the tutorial unlock, available balance, and absence of another active attempt. It conditionally debits selected inventory, records the reservation, and persists `reserved`, `spent = 0`, status, and timestamps. Carrying zero is valid for melee.
 
-Show actionable loading, validation, connectivity, and server error states. Keep a failed form's input available. Retrying must preserve the original mutation identity. An offline client must not claim a task is durably saved; offline task queues require a separate approved design. Losing the game must not remove access to task management; losing the API must produce a clear terminal error with safe retry.
+A shot succeeds only for an active attempt with `spent < reserved`. The transaction increments `spent` before gameplay creates the effective shot. Retries preserve their operation identity. The browser magazine/reserve are simulation projections; SQLite's committed counters determine what can be refunded. Reload never writes an inventory credit.
+
+Finish validates authoritative shot count, bounded statistics, `hits <= shotsFired`, `meleeKills <= kills`, `kills <= hits + meleeKills`, and six kills for a clear. It atomically changes the attempt status, records statistics, credits only `reserved − spent`, and stores the retry response. Death increments death statistics; victory increments mission completions/best time and resets the death streak. Neither changes real tasks or awards combat resources.
+
+State snapshots expose only the active attempt; finished attempts remain durable for history/dialogue. Refresh/restart leaves reservations intact. The client displays recovery, then explicitly abandons using the persisted spent count and returns to the apartment. GET never settles or refunds. If a response is lost, retry/reconcile before another effect. Outcomes are client-observed and validated against resource/counter constraints; the local MVP does not run a server-authoritative physics simulation.
+
+## Synchronization and failures
+
+Every mutation response has a monotonically advanced snapshot revision; the UI rejects older snapshots arriving late. Exact idempotency replays may contain an older revision and must not overwrite newer state. The API adapter retains pending operation keys through transient failures in memory/session storage, retries the same operation, and exposes persistent failures rather than inventing success.
+
+`useSession` serializes tutorial and settings mutations and coordinates scene entry, recovery, and settlement. Failed settlement retains a retry surface and terminal access. Offline durable task queues are not implemented: input can remain available, but persistence is not reported until the backend commits.
+
+Tutorial progression, skip/completion, settings, and acknowledged/ignored dialogue IDs persist in SQLite. Tutorial calls take priority; contextual calls have once-per-ID history and a 60-second global acknowledgement cooldown. Training starts with 36 temporary simulation-only rounds and never calls persistent shot/reward operations.
 
 ## Verification and integration
 
-Use Vitest for domain and contract logic, API integration tests against isolated temporary SQLite databases, and Playwright for real browser workflows. Reward concurrency, transaction rollback, server restart, and ambiguous network outcomes need integration evidence. Phaser smoke checks must verify collisions, input focus, scene cleanup, pause, and death without task changes. Record browser availability and never present an unavailable check as passed.
+Vitest covers pure gameplay/narrative logic and API integration against temporary real SQLite databases. Playwright uses actual Chromium, real client/server routes, unique temporary profiles, and separate ports. Browser scenarios record screenshots/traces and do not gain gameplay outcomes through hidden test APIs.
 
-The orchestrator reviews shared contracts and dependency changes, assigns one writer per file, integrates changes, and runs affected checks. Verification evolves with each feature; the final QA phase adds full regression evidence. See [testing rules](../.agents/rules/testing.md) and [backlog](TASKS.md).
+The orchestrator reviews shared contracts and dependencies, assigns one writer per file, integrates changes, and runs affected checks. Passing a database test does not establish browser behavior or visual quality. Read [testing rules](../.agents/rules/testing.md), [TASKS.md](TASKS.md), and [VERIFICATION.md](VERIFICATION.md) for actual acceptance status and remaining evidence.

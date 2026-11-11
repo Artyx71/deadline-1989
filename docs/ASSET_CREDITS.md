@@ -111,10 +111,10 @@ Current coverage below distinguishes produced source artwork from unverified run
 | Apartment/interiors | Floors, walls, dense domestic/office/kitchen furniture, telephone, computer, doors | Produced; actual second apartment/terminal screenshots accepted for M3 progression |
 | Mission environment | Original six-room printworks | Produced; geometry/reachability/initial spawn LOS checks passed; actual initial combat screenshot inspected; corrective density/weapon-readability pass awaits repeat capture |
 | Environment animations | Phone, computer, neon, TV, doors, particles | Strips produced; runtime scene particles and overlay positioning pending |
-| Combat effects | Muzzle flashes, impacts, smoke, shell casings | Produced; runtime review pending |
+| Combat effects | Muzzle flashes, impacts, smoke, shell casings | Integrated; actual control and screenshot review recorded in VERIFICATION.md |
 | Dialogue/UI | Original portraits, terminal/HUD styling, loading/transition art | Portraits and skyline produced; UI styling/integration owned by frontend |
 | Fonts | Retro display/body typography | No font files adopted by art agent; record future external font licenses |
-| Audio | State music, phone, weapons, impacts, interactions, ambience | Nineteen original WAVs produced and signal-validated; playback/mixing browser review pending; dialogue text tick can use short menu/computer synthesis |
+| Audio | State music, phone, weapons, impacts, interactions, ambience | Nineteen original WAVs produced and signal-validated; browser AudioContext/state/settings checks passed; human listening not claimed; dialogue text tick can use short menu/computer synthesis |
 
 ## Comparison and selection procedure
 
@@ -124,6 +124,6 @@ Do not use extracted Hotline Miami sprites, original maps, copyrighted portraits
 
 ## Credit publication plan
 
-Keep required attribution text verbatim in the asset's record and carry it into an accessible in-application credits view or distributed notices as required by its actual license. Repository notices alone may be insufficient; assess the terms for the browser delivery model. Credits UI and notice files will be implemented only after assets are chosen and the master implementation goal is supplied.
+Keep required attribution text verbatim in the asset's record and carry it into an accessible in-application credits view or distributed notices as required by its actual license. Repository notices alone may be insufficient; assess the terms for the browser delivery model. The implemented Russian credits view describes original art/audio and runtime tools; no third-party assets requiring additional attribution were adopted.
 
 For original commissioned or generated work, record creator/tool provenance, agreed usage terms, source files, edits, and distribution permissions. Mark unresolved rights pending. This registry records original production art and candidate-page license evidence; no third-party artwork has been adopted.

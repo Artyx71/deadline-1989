@@ -36,7 +36,7 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Consequences:** Schema needs durable identity/history beyond mutable task state. Request payload conflicts must be detectable. Test rollback, duplicate/concurrent completion, reopen/recomplete, deletion, and concurrent spending at the API/database level.
 
-**Status:** Accepted; exact schema, retry retention, and response fields await implementation design.
+**Status:** Accepted and implemented: durable receipts and idempotency records are retained; current contracts and verification are documented in ARCHITECTURE.md and VERIFICATION.md.
 
 ## ADR-004 — Authoritative ammunition consumption
 
@@ -60,7 +60,7 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Consequences:** Unverified licenses remain pending and block asset use. Missing or incompatible assets require original work or explicit art direction revision. Final palette/scale decisions may be tuned through screenshot review without inconsistent pixel density.
 
-**Status:** Accepted; specific asset selections remain pending research.
+**Status:** Accepted; source research completed and one coherent original art/audio set selected. See ASSET_CREDITS.md.
 
 ## ADR-006 — Monorepo and implementation setup
 
@@ -96,7 +96,7 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Consequences:** Do not invent an authentication system or imply a public deployment is secure. UI must report unavailable persistence honestly. All recovery options must preserve tasks/reward history and committed ammunition spend.
 
-**Status:** Proposed; resolve relevant parts in P0-01 and P2-01.
+**Status:** Superseded by ADR-010: one local loopback profile, no offline mutation queue, interrupted attempts explicitly abandoned with durable settlement.
 
 ## ADR-009 — Isolated training ammunition
 
@@ -108,7 +108,7 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Consequences:** Game and backend engineers must review an explicit training boundary in the shared contract before implementation. The amount and presentation remain tuning choices. Exiting training restores the authoritative mission inventory without importing training rounds.
 
-**Status:** Accepted as a bootstrap design choice; implementation and verification pending.
+**Status:** Accepted and implemented; browser FIRST CALL completes using isolated temporary rounds without completing any real task.
 
 ## ADR-010 — Master implementation and durable mission allocation
 
@@ -120,7 +120,7 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Consequences:** Local network round-trip latency is part of firing; errors retain the same shot operation key. Finish waits for pending shots. Client game observations cannot mint resources. Branch is `feat/deadline-1989`; private GitHub synchronization is authorized without merging.
 
-**Status:** Accepted; backend implemented and integration tests pass, browser integration pending.
+**Status:** Accepted and implemented; API rollback/concurrency/restart tests, browser interrupted-mission recovery, and actual combat death/victory settlement pass.
 
 ## ADR-011 — Tool execution in a path containing a colon
 
@@ -133,3 +133,15 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 **Consequences:** Standard `pnpm dev`, `pnpm build`, `pnpm test`, and checks work without putting the colon-containing directory in PATH. `pnpm exec` should be replaced with documented scripts or direct Node entry points in this checkout.
 
 **Status:** Accepted; shared build/lint and dependency installation verified.
+
+## ADR-012 — Russian application language
+
+**Context:** During final acceptance the user requested that the application be translated into Russian.
+
+**Options considered:** Add a multilingual framework and language selector; deliver the requested Russian interface directly.
+
+**Decision:** Use Russian for user-facing interface text, task labels, tutorial, original dialogue, accessible labels, validation, and runtime errors. Keep DEADLINE: 1989, keyboard key names, routes, persisted enum values, and technical identifiers stable. Use Russian date formatting. Browser tests prefer stable test IDs so wording does not determine behavior.
+
+**Consequences:** No translation dependency or database migration is needed. Existing tasks and resource history stay intact. Original English diegetic room signs remain part of the 1989 setting; they are not interface instructions. Repeat layout and browser acceptance with Cyrillic text.
+
+**Status:** Accepted; implementation and current verification recorded in VERIFICATION.md.

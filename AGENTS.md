@@ -2,7 +2,7 @@
 
 ## Current scope
 
-Bootstrap is complete only when instructions, agent definitions, skills, and documentation are validated. Wait for the user's master implementation goal before creating application code, dependencies, React components, Phaser scenes, backend code, or downloading assets. This bootstrap hold ends when the user supplies that implementation goal; it is not a permanent ban on development.
+Bootstrap is complete. The user supplied the full master implementation goal on 2026-11-11, ending the bootstrap hold and authorizing application development, dependencies, original assets, testing, and private GitHub publication. Current implementation and acceptance evidence are tracked in `docs/TASKS.md` and `docs/VERIFICATION.md`. The user subsequently requested Russian application text: interface, tutorial, dialogue, accessibility labels, and user-facing errors are Russian; keep the DEADLINE: 1989 identity and technical contract identifiers.
 
 Use this directory as the project root; do not create a nested `deadline-1989/` checkout. The intended layout is `apps/web`, `apps/server`, and `packages/shared`, using pnpm workspaces when implementation starts.
 

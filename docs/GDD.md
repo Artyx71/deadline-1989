@@ -1,123 +1,142 @@
 # DEADLINE: 1989 — Game Design Document
 
-Status: bootstrap design baseline. The product requirements below are agreed; details explicitly marked **proposed** need review during future implementation. No gameplay, backend, UI, assets, or dependency installation is authorized by this document. Wait for the master implementation goal.
+This document describes the implemented product and its design constraints. It is not a claim that every quality gate has passed. Current test results, browser evidence, and remaining checks belong in [VERIFICATION.md](VERIFICATION.md).
 
 ## Product concept and priorities
 
-DEADLINE: 1989 is a desktop-first browser To-Do List integrated with an original pixel-art, top-down crime thriller set in a late-1980s atmosphere. Completing real tasks earns ammunition and experience; the player spends ammunition during missions.
+DEADLINE: 1989 is a desktop-first browser To-Do List integrated with an original pixel-art, top-down crime thriller. Real task completion earns ammunition and experience for fictional night missions.
 
-Task creation, completion, deletion, and persistence across page reload are P0. A user must be able to manage tasks while the game is unavailable, loading, paused, or skipped. Combat never completes real tasks. Death never changes a real task's completion state. A functional To-Do List is the first acceptance gate for any integrated release.
+Creating, completing, deleting, and persisting tasks after reload are P0. The terminal remains available from the React shell during game loading, pause, or renderer failure. Combat never completes a real task, and death never changes task status. Gameplay, tutorial instructions, and phone calls cannot require false task completion.
 
-Hotline Miami and Hotline Miami 2 are references for pace, silhouette clarity, and atmosphere only. All story, characters, dialogue, maps, art, music, and code must be original or separately licensed.
+Hotline Miami and Hotline Miami 2 are references for pacing, silhouettes, and atmosphere. Characters, dialogue, maps, artwork, and audio have an original project identity; provenance is recorded in [ASSET_CREDITS.md](ASSET_CREDITS.md). The supplied screenshot references and their interpretation are recorded in [ART_BIBLE.md](ART_BIBLE.md).
 
-## Core gameplay loop
+## Core loop
 
-1. Open the task terminal or its independently accessible interface.
-2. Create and manage real tasks; complete a task only when its real work is done.
-3. The server atomically records completion and issues its one eligible reward.
-4. Review ammunition and experience confirmed by the server.
-5. Explore the apartment, answer optional calls, and enter an unlocked mission.
-6. Fight using persistent ammunition and ammunition-free melee.
-7. Return to the apartment after death or mission completion; real task status remains intact.
-
-Gameplay is optional. No mission, phone call, animation, or tutorial step may block task management.
+1. Open the task terminal from the computer, Tab, or the shell terminal button.
+2. Create and manage real tasks; mark a task complete only after doing its real work.
+3. Receive the server-confirmed once-only ammunition and XP reward.
+4. Explore the safe apartment, answer or ignore calls, and choose a mission loadout.
+5. Fight with carried ammunition, reloading, dash, and ammunition-free melee.
+6. Return to the apartment after death or victory with unused ammunition refunded. Real tasks and XP remain intact.
 
 ## Apartment hub
 
-The apartment contains a wake-up location, telephone, computer terminal, mission entry interaction, and training access. It is the player's return point after death. Interactions need clear prompts and accessible UI equivalents where relevant.
+The original apartment contains a bedroom/wake location, living area, kitchen, computer, telephone, television, weapon cabinet, exit, and training access. It has no combat enemies. Furniture and walls use physical collision; nearby objects show E interaction prompts.
 
-The player may answer or ignore ringing calls. The apartment must remain navigable while optional calls are pending. **Proposed:** use an original cramped, rain-lit apartment above a closed print shop as the visual setting; floor plan and environmental storytelling remain open.
+The computer opens the task terminal. The telephone offers eligible narrative calls and dispatch when the first mission is unlocked and no call is pending. The cabinet opens loadout/inventory. The television provides an ambient interaction. The exit opens mission dispatch. Training is available separately from persistent mission ammunition.
+
+The world uses a 768×480 logical canvas, 16px base tiles, and 32px character frames with nearest-neighbor pixel rendering. Camera follow, environmental animation, restrained neon lighting, and original room detail establish the visual language. Quality findings and screenshot comparisons remain in the verification/art documents.
 
 ## Task terminal
 
-The computer presents the task interface using coherent retro terminal styling. The same task operations must remain reachable independently of Phaser and the in-world computer interaction.
+The React CRT terminal supports create, edit, complete, reopen, delete, descriptions, difficulty, optional deadlines, active/completed/all filters, completion statistics, and reward receipts. It is reachable independently of Phaser. Opening it during play pauses simulation.
 
-Required P0 behavior: create, complete, delete, and reload with state intact. Editing, filtering, and reopening are planned supporting operations. Display pending operations, server errors, and retry actions. Confirmed task state comes from the API and SQLite; cached client state must reconcile after refresh or interruption.
+Task records contain identity, title, description, difficulty, status, deadline, creation/update/completion timestamps, and reward-history display. Loading, pending commits, validation, connectivity failures, and reconnect actions are visible. A failed save does not imply persistence succeeded.
 
-Deleting a task never grants a reward. Reopening a task does not erase its reward history. Completing a reopened task cannot issue a second reward. A UI animation must not report completion or resources as confirmed before the server accepts the operation.
+Deleting never issues a reward or removes a previously earned receipt. Reopening retains reward history. Recompletion cannot pay again. Completion effects follow a committed API response.
 
-## Reward system and persistent resources
+## Reward system
 
-The backend defines reward amounts. Clients cannot choose or multiply rewards. Task completion and initial reward issuance are one transaction, with durable history and duplicate-request protection. SQLite is authoritative for ammunition, XP, tasks, and progress.
+| Difficulty | Ammunition | XP |
+| --- | ---: | ---: |
+| Easy | 3 | 50 |
+| Normal | 6 | 100 |
+| Hard | 12 | 200 |
 
-Ammunition cannot become negative. Spent ammunition cannot return through page refresh, reconnect, death, or server restart. Resource-changing actions must use server-authorized, retry-safe operations. The exact combat authorization and synchronization protocol is an implementation decision requiring architecture review before weapons are built.
+The backend owns these definitions and exposes them for display through `/api/rules`. A new local profile starts with zero ammunition and zero XP. Completion, a unique reward claim, resource credits, and the retry receipt commit atomically. The client cannot supply reward amounts.
 
-**Open design decisions:** reward quantities, task eligibility rules, ammunition types, XP thresholds, and progression unlocks. XP must not introduce a paid or gameplay-only gate to task CRUD. Mission victory does not complete tasks or grant task-completion rewards.
+XP is accumulated progress, with no XP threshold restricting task management. Mission combat grants no task-completion rewards. Training grants no persistent ammunition or XP.
 
 ## Combat and controls
 
-MVP combat is fast, readable, top-down action with responsive movement, normalized diagonals, mouse aiming, wall collisions, projectile collisions, reloading, melee, and one-hit player death. Melee remains usable at zero ammunition. Solid obstacles block enemy vision.
+| Input | Action |
+| --- | --- |
+| WASD | Move, with normalized diagonals |
+| Mouse | Aim |
+| Left click | Attack; pistol when loaded, melee fallback when empty |
+| F / right click | Melee |
+| E | Interact |
+| R | Reload |
+| Shift | Dash |
+| Tab | Task terminal |
+| Escape | Pause / close an overlay |
 
-Keyboard mappings, dash availability, weapon counts, magazine sizes, and combat tuning remain **proposed/open**. Provide discoverable controls and avoid gameplay shortcuts firing while a task input or dialogue control has focus. React owns UI; Phaser owns frame-by-frame simulation.
+| Parameter | Current value |
+| --- | ---: |
+| Player health | 1 HP |
+| Movement | 220 px/s |
+| Dash | 400 px/s for 150 ms |
+| Dash cooldown | 850 ms |
+| Pistol magazine | 6 rounds |
+| Fire interval | 250 ms |
+| Reload | 900 ms |
+| Melee cooldown | 400 ms |
+| Melee reach | 44 px |
+| Bullet speed | 760 px/s |
 
-Weapons, enemy bodies, telegraphs, and important interactions must retain readable silhouettes under neon lighting and effects. Camera shake, hit stop, flashes, and CRT treatments need reduced-effect settings.
+Phaser owns aiming, physics, obstacles, projectile collision, hit stop, and animation. React owns focus and overlays. Menus, forms, dialogue, browser blur, and pause suppress gameplay input. Reduced motion reduces visual effects; CRT treatment and audio have persisted settings.
 
-## Enemies
+## Enemies and mission
 
-Enemy finite state machines cover idle, patrol, detection/chase, attack, and death. Occlusion-aware line of sight and physical collision prevent attacks through solid walls. State transitions must be inspectable and testable outside rendering where practical.
+The single mission has backend ID `first-shift` and the player-facing dispatch presentation THE NIGHT SHIFT / FIRST SHIFT. It contains four Grunts with 1 HP and two Gunners with 2 HP, arranged across a multiroom office with doors, cover, and obstacles.
 
-**Proposed MVP scope:** one readable enemy archetype before adding variants. Enemy counts, equipment, perception distances, patrol routes, and alert sharing remain open. No enemy or kill event may alter real task completion.
+Enemy state machines use IDLE, PATROL, ALERT, CHASE, ATTACK, SEARCH, and DEAD. Grunts pursue and attack nearby; Gunners use ranged attacks and distance control. Solid obstacles block sight and projectiles. Pathfinding routes around obstacles. These are implementation behaviors whose current verification is recorded separately.
 
-## Death and return
+Defeating all six enemies clears the floor. The server records completion count and best time. Death resets the encounter. Missions can be replayed; there is no additional campaign or combat-generated resource reward in this scope.
 
-One hit kills the player in the MVP. Death stops active combat, cleans up scene-owned work, and returns the player to waking in the apartment. Consumed ammunition stays consumed; real tasks and reward history stay intact.
+## Ammunition and durable mission attempts
 
-An optional contextual call may be queued. Death does not force repeated dialogue. Reload during combat must reconcile persistent resources and return to a documented recovery state. **Proposed:** interrupted combat returns to the apartment rather than attempting an exact simulation resume; confirm this during architecture planning.
+Before deployment, choose how many rounds to carry, including zero for melee-only play. The backend subtracts that allocation from inventory and creates one durable active attempt. It rejects a second active attempt and insufficient inventory.
 
-## Tutorial: FIRST CALL
+Every live mission shot commits one unit of that attempt's reserved ammunition before becoming effective. Retries reuse their request identity. Reloading transfers rounds inside the carried loadout; it cannot create ammunition.
 
-The tutorial sequence is:
+On death, victory, or explicit abandonment, the server settles once and returns only `reserved − spent`. Spent rounds stay spent. Death changes gameplay death statistics, while tasks, receipts, and XP remain intact. Victory saves mission progression without awarding resources.
 
-1. Player wakes up in the apartment.
-2. The telephone rings.
-3. The player learns movement.
-4. The player approaches the telephone.
-5. The player answers the mysterious caller.
-6. The caller introduces contracts.
-7. The player approaches the computer.
-8. The player creates a real task.
-9. The player learns how task rewards work.
-10. The player enters the training area.
-11. The player practices shooting and melee.
-12. A second telephone call occurs.
-13. The first mission unlocks.
+Refresh or server restart preserves an active attempt and its spent counter. The browser shows recovery and requires explicit abandonment before returning unused rounds and entering the apartment. Reading state alone never refunds a reservation. Exact combat simulation is not resumed after refresh.
 
-The tutorial is skippable and its progress persists. Skipping must provide a usable route to the first mission and task interface without requiring false task completion. Creating a real task is part of the guided route; the user can skip that route. Reward explanations must explicitly say that combat does not complete tasks.
+## Death and victory presentation
 
-Training must not require the user to falsely complete real work. **Bootstrap design decision:** use a clearly labeled training-only ammunition supply isolated from the persistent inventory, unusable in missions and unable to issue XP or rewards. The isolation rule is accepted in ADR-009; its shared contract and backend integration still require review before implementation.
+One successful enemy hit kills the player. Death has hit stop, a red flash, animation, an audio interruption, and a YOU ARE DEAD result. Victory presents FLOOR CLEARED. Results include time, eliminations, shots/accuracy, ammunition spent, and melee kills where applicable.
 
-## Phone calls and dialogue
+Settlement confirms the durable resource result before return. A failed settlement offers retry and task access. Returning wakes the player in the apartment; contextual calls are optional. Result presentation and transitions are skippable without changing settlement rules.
 
-The caller is mysterious, economical, and original. **Proposed narrative premise:** anonymous instructions on the telephone connect mundane obligations with a fictional network of nocturnal contracts. The user's real task text is private productivity data and must not be incorporated into generated dialogue or external services without a separate product decision.
+## FIRST CALL tutorial
 
-Dialogue presentation includes original or licensed pixel-art portraits, speaker names, typewriter text, optional text sounds, Enter/click progression, skipping, and background dimming. Preserve keyboard focus, support immediate text reveal, and respect reduced motion and audio settings. Task management remains reachable.
+The physical sequence is:
 
-Contextual call candidates include first death, three consecutive deaths, death without kills, death with an empty magazine, death near mission completion, victory without firing, multiple tasks completed, and first mission victory.
+1. Wake in the apartment while the telephone rings.
+2. Learn movement and approach the telephone.
+3. Answer the first call; learn the contract system.
+4. Approach/open the computer.
+5. Create a real task without falsely completing it.
+6. Read the once-only reward explanation.
+7. Enter training with temporary practice ammunition.
+8. Aim, shoot, reload, and practice melee in order.
+9. Return to the apartment for the second call.
+10. Complete that call and unlock the first mission.
 
-Use event identifiers, priorities, durable seen-state, and cooldowns. One event may qualify for multiple calls; queue a chosen eligible call once and avoid interrupting a higher priority conversation. **Proposed priority:** tutorial-critical calls, first-occurrence milestones, then repeatable commentary. Thresholds for “near completion,” “multiple tasks,” cooldowns, expiry, and streak resets remain open. Answering or ignoring a call must never modify task completion or invent rewards.
+The persisted tutorial cursor is `wake → movement → first-call → computer → create-task → rewards → training → aim → shoot → reload → melee → second-call → complete`. Physical actions and narrative beats share cursors where appropriate. Out-of-order events do not advance the reducer.
 
-## Loading screens and transitions
+Training provides 36 temporary rounds with no resource API debit or credit. Skipping persists completion/skip and unlocks the first mission. START GAME resets gameplay/tutorial history for replay while preserving real tasks, earned resources, reward receipts, and settings. An active mission must be settled before this reset.
 
-Loading screens provide clear progress or status, a useful error/retry path, and a consistent retro identity. Prepare original transition art and tips only after asset approval. Do not conceal stalled API calls under an indefinite cinematic.
+## Caller and dialogue
 
-Task UI must work without waiting for game asset loads. Scene transitions must release old input handlers, timers, and event subscriptions. Glitch transitions and dimming need motion/flash controls.
+NO. 9 is an unidentified recurring caller in an original late-1980s crime-noir story. Fixed original lines connect the fictional night shift with the user's real obligations. Dialogue does not ingest private task text or send it to an external generation service.
 
-## Mission progression
+Presentation uses original pixel portraits, speaker names, typewriter text, text sound, background dimming, Enter/click reveal and progression, and an ignore option. Reduced motion reveals text immediately. Answered and ignored calls both leave durable history; neither changes task completion.
 
-Missions have explicit locked, available, loading, active, succeeded, failed, and interrupted/recovery states. Persistent unlocks and completion belong to the backend; moment-to-moment combat belongs to Phaser. First mission availability follows tutorial completion or skip.
+Tutorial calls take priority. Contextual candidates are ordered: first death; three consecutive deaths; death with at least five kills; empty-magazine death; death without kills; victory without firing; first victory; at least three reward claims. Each ID is offered once until a gameplay reset. A global 60-second interval between contextual acknowledgements suppresses repetitive calls; tutorial calls bypass that contextual cooldown. Victory resets the consecutive-death count. Ringing remains optional and does not interrupt task management.
 
-Mission results are separate from real tasks. The amount of persistent mission history, replay behavior, unlock conditions beyond the first mission, and any non-task rewards remain open. Keep the initial mission set small enough to verify collisions, resource spending, death, and return before expansion.
+## Startup, menus, audio, and settings
 
-## MVP boundaries and future sequence
+Startup uses black/VHS/logo/glitch phases and real Phaser loading progress. The cinematic can be skipped after renderer readiness or a reported renderer failure. The shell terminal stays available during initialization. The animated main menu offers START GAME, CONTINUE, SETTINGS, and CREDITS with mouse and keyboard navigation.
 
-MVP product scope is task CRUD and persistence, followed by a coherent apartment, task rewards, ammunition persistence, a small combat loop, death/return, a skippable FIRST CALL tutorial, contextual dialogue, and consistent original visual treatment. Advanced weapon variety, larger campaigns, elaborate cinematics, complex enemy coordination, and extensive effects are optional expansions.
+Original generated WAV music and effects are loaded through a Web Audio graph after a browser gesture. Music states are MAIN_MENU, APARTMENT, TASK_TERMINAL, PHONE_DIALOGUE, COMBAT, PLAYER_DEATH, and MISSION_CLEARED. The graph owns transitions, crossfades, dialogue ducking, pause handling, and source cleanup. Music and SFX provenance belongs in the asset registry; file existence is not a listening-quality claim.
 
-Future planning sequence from the brief: architecture and asset research; apartment/movement; task terminal/SQLite; rewards/ammunition; combat/AI; death/mission lifecycle; tutorial/dialogue; loading/audio/polish; final automated and browser QA. This is planning guidance, not authority to implement now. P0 task CRUD takes precedence whenever this sequence could block standalone task access. Tests accompany each future change; the final QA phase consolidates evidence and regressions.
+Master/music/SFX volume, mute, Streamer Mode, reduced motion, and CRT scanlines persist on the backend. Streamer Mode requires suitable streaming rights; uncertain tracks must be disabled. Required effects include movement, weapons, impacts, telephone, computer/menu interactions, task completion, death, victory, and ambience.
 
-## Related documents
+## Current scope and evidence
 
-- [Architecture](ARCHITECTURE.md) defines contracts and persistence responsibilities.
-- [Art bible](ART_BIBLE.md) defines visual standards and review gates.
-- [Asset registry](ASSET_CREDITS.md) records provenance and rights evidence.
-- [Backlog](TASKS.md) records dependencies and acceptance criteria.
-- [Decisions](DECISIONS.md) records accepted and pending design choices.
+The implemented scope is one local profile, independent task management, one apartment, isolated training, one six-enemy mission, durable resources/progression, original caller/tutorial, menus/cinematics/audio, and coherent original pixel assets. Additional campaigns, weapons, XP unlock trees, authentication, and public multi-user hosting are future product work.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for contracts and persistence, [TASKS.md](TASKS.md) for milestone status, [DECISIONS.md](DECISIONS.md) for decisions, and [VERIFICATION.md](VERIFICATION.md) for actual passes, failures, evidence, and remaining gates.
