@@ -85,14 +85,50 @@ async function screenshot(page: Page, info: TestInfo, name: string) {
 async function finishCall(page: Page) {
   const panel = page.getByRole('dialog', { name: 'ВХОДЯЩИЙ ВЫЗОВ' });
   await expect(panel).toBeVisible();
+  const readLine = () =>
+    panel.evaluateAll((elements) => {
+      const element = elements[0];
+      if (!element) return null;
+      return {
+        text: element.querySelector('.dialogue-text .sr-only')?.textContent ?? '',
+        progress: element.querySelector('.dialogue-actions > span')?.textContent?.trim() ?? '',
+        advance:
+          element.querySelector('[data-testid="dialogue-advance"]')?.textContent?.trim() ?? '',
+      };
+    });
   const lines = new Set<string>();
-  for (let line = 0; line < 20 && (await panel.isVisible()); line++) {
-    lines.add(await panel.locator('.dialogue-text .sr-only').innerText());
+  let finalLineClicked = false;
+  for (let action = 0; action < 20; action++) {
+    // Read the complete accessible text and its progress in one DOM snapshot.
+    const current = await readLine();
+    if (!current && finalLineClicked) {
+      await expect(panel).toBeHidden();
+      return [...lines].join('\n');
+    }
+    expect(current, 'Dialogue disappeared before its final acknowledgement').not.toBeNull();
+    if (!current) throw new Error('Dialogue disappeared unexpectedly');
+    expect(current.text).not.toBe('');
+    const progress = /^(\d+)\s*\/\s*(\d+)$/.exec(current.progress);
+    if (!progress) throw new Error(`Invalid dialogue progress: ${current.progress}`);
+    lines.add(current.text);
+    finalLineClicked = progress[1] === progress[2];
     await panel.getByTestId('dialogue-advance').click();
-    await page.waitForTimeout(60);
+    if (progress[1] === progress[2] && current.advance.includes('ДАЛЕЕ')) {
+      // The acknowledgement is asynchronous; never click/read the departing
+      // panel again while its durable history is being committed.
+      await expect(panel).toBeHidden();
+      return [...lines].join('\n');
+    }
+    await expect.poll(readLine).not.toEqual(current);
+    if ((await readLine()) === null) {
+      // Typing may finish before the click is dispatched, so a click sampled
+      // as "reveal" can legitimately acknowledge the final line instead.
+      expect(progress[1]).toBe(progress[2]);
+      await expect(panel).toBeHidden();
+      return [...lines].join('\n');
+    }
   }
-  await expect(panel).toBeHidden();
-  return [...lines].join('\n');
+  throw new Error('Dialogue exceeded its bounded reveal/advance sequence');
 }
 
 test.afterEach(async ({ page, request }, info) => {
@@ -491,10 +527,11 @@ test('studio television opens with E, requests a muted player, and restores game
     }),
   );
   await startGame(page);
-  await walkTo(page, 248, 232);
-  await walkTo(page, 248, 400);
-  await walkTo(page, 298, 400, 4);
-  await walkTo(page, 298, 384, 4);
+  // Stay well left of the TV body while moving vertically. The lower aisle
+  // has too little clearance for the default ten-pixel arrival tolerance.
+  await walkTo(page, 280, 232, 4);
+  await walkTo(page, 280, 384, 4);
+  await walkTo(page, 292, 384, 4);
   await expect(page.locator('.interaction-prompt')).toContainText('СМОТРЕТЬ ТЕЛЕВИЗОР');
   await page.keyboard.press('e');
   const television = page.getByRole('dialog', { name: 'ТЕЛЕВИЗОР / КАНАЛ 03' });
@@ -536,11 +573,14 @@ test('studio television opens with E, requests a muted player, and restores game
   await hold(page, 'a', 200);
   expect((await position(page)).x).toBeLessThan(paused.x - 5);
 
-  // The lower aisle is narrow: keep the body below the TV cabinet and above
-  // the exterior wall while approaching the equipment cabinet from the left.
-  await walkTo(page, 248, 407, 3);
-  await walkTo(page, 566, 407);
-  await walkTo(page, 566, 383);
+  // Reach the cabinet through the open upper/right aisles, avoiding the
+  // narrow gap between the TV cabinet and exterior wall entirely.
+  await walkTo(page, 280, 384, 4);
+  await walkTo(page, 280, 220, 4);
+  await walkTo(page, 440, 220, 4);
+  await walkTo(page, 440, 330, 4);
+  await walkTo(page, 566, 330, 4);
+  await walkTo(page, 566, 383, 4);
   await expect(page.locator('.interaction-prompt')).toContainText('ПРОВЕРИТЬ СНАРЯЖЕНИЕ');
   await page.keyboard.press('e');
   const loadout = page.getByRole('dialog', { name: 'ДИСПЕТЧЕРСКАЯ / НОЧНАЯ СМЕНА' });

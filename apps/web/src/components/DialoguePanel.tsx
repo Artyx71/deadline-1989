@@ -46,8 +46,12 @@ export function DialoguePanel({
     if (!revealed) {
       if (typingTimer.current !== null) window.clearInterval(typingTimer.current);
       setCharacters(line.length);
-    } else if (lineIndex < lines.length - 1) setLineIndex((index) => index + 1);
-    else onComplete();
+    } else if (lineIndex < lines.length - 1) {
+      // Reset in the same render as the new line. Waiting for the passive
+      // effect briefly exposes the next line using the previous line's count.
+      setCharacters(0);
+      setLineIndex((index) => index + 1);
+    } else onComplete();
   };
   return (
     <Modal

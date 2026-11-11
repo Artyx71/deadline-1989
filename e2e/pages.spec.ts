@@ -43,11 +43,43 @@ async function terminal(page: Page) {
 async function call(page: Page) {
   const dialogue = page.getByRole('dialog', { name: 'ВХОДЯЩИЙ ВЫЗОВ' });
   await expect(dialogue).toBeVisible();
-  for (let i = 0; i < 20 && (await dialogue.isVisible()); i++) {
-    await page.getByTestId('dialogue-advance').click();
-    await page.waitForTimeout(60);
+  const readLine = () =>
+    dialogue.evaluateAll((elements) => {
+      const element = elements[0];
+      if (!element) return null;
+      return {
+        text: element.querySelector('.dialogue-text .sr-only')?.textContent ?? '',
+        progress: element.querySelector('.dialogue-actions > span')?.textContent?.trim() ?? '',
+        advance:
+          element.querySelector('[data-testid="dialogue-advance"]')?.textContent?.trim() ?? '',
+      };
+    });
+  let finalLineClicked = false;
+  for (let action = 0; action < 20; action++) {
+    const current = await readLine();
+    if (!current && finalLineClicked) {
+      await expect(dialogue).toBeHidden();
+      return;
+    }
+    expect(current, 'Dialogue disappeared before its final acknowledgement').not.toBeNull();
+    if (!current) throw new Error('Dialogue disappeared unexpectedly');
+    expect(current.text).not.toBe('');
+    const progress = /^(\d+)\s*\/\s*(\d+)$/.exec(current.progress);
+    if (!progress) throw new Error(`Invalid dialogue progress: ${current.progress}`);
+    finalLineClicked = progress[1] === progress[2];
+    await dialogue.getByTestId('dialogue-advance').click();
+    if (progress[1] === progress[2] && current.advance.includes('ДАЛЕЕ')) {
+      await expect(dialogue).toBeHidden();
+      return;
+    }
+    await expect.poll(readLine).not.toEqual(current);
+    if ((await readLine()) === null) {
+      expect(progress[1]).toBe(progress[2]);
+      await expect(dialogue).toBeHidden();
+      return;
+    }
   }
-  await expect(dialogue).toBeHidden();
+  throw new Error('Dialogue exceeded its bounded reveal/advance sequence');
 }
 
 test('Pages subpath: real task UI persists in IndexedDB without an API server', async ({
