@@ -7,17 +7,17 @@ import { TaskEditor } from './TaskEditor';
 import { TaskDetails } from './TaskDetails';
 import { DIFFICULTY_LABELS, FILTER_LABELS } from './labels';
 
-interface TaskTerminalProps { onClose: () => void; onTaskCreated?: () => void; onReward?: (reward: RewardClaim) => void }
+interface TaskTerminalProps { onClose: () => void; onTaskCreated?: () => void; onReward?: (reward: RewardClaim) => void; initialCreate?: boolean }
 type Command = { type: 'create'; input: TaskInput } | { type: 'edit'; id: string; input: TaskInput } | { type: 'complete' | 'reopen' | 'delete'; id: string };
 type Filter = 'active' | 'completed' | 'all';
 
-export function TaskTerminal({ onClose, onTaskCreated, onReward }: TaskTerminalProps) {
+export function TaskTerminal({ onClose, onTaskCreated, onReward, initialCreate = false }: TaskTerminalProps) {
   const queryClient = useQueryClient();
   const stateQuery = useQuery({ queryKey: ['state'], queryFn: api.state });
   const [filter, setFilter] = useState<Filter>('active');
   const [tab, setTab] = useState<'tasks' | 'receipts'>('tasks');
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [editor, setEditor] = useState<'new' | 'edit' | null>(null);
+  const [editor, setEditor] = useState<'new' | 'edit' | null>(initialCreate ? 'new' : null);
   const [reward, setReward] = useState<RewardClaim | null>(null);
   const [notice, setNotice] = useState('');
   const shownRewards = useRef(new Set<string>());

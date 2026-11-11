@@ -125,6 +125,7 @@ export interface GameController {
   enter(scene: SceneId, ammunition?: number): void;
   setEffects(reducedMotion: boolean): void;
   setPhoneRinging?(ringing: boolean): void;
+  setObjective?(id: 'telephone' | 'computer' | 'training' | 'exit' | null): void;
   destroy(): void;
 }
 export interface WorldRect { x: number; y: number; width: number; height: number }

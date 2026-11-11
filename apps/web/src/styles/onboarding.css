@@ -1,0 +1,135 @@
+.main-menu .menu-eyebrow { color: #e3bfd5; font-size: 12px; letter-spacing: .17em; }
+.main-menu .menu-tagline { color: #f1ccdf; font-size: 12px; letter-spacing: .13em; text-align: center; line-height: 1.7; }
+
+.tutorial-guide.onboarding-guide {
+  width: 360px;
+  padding: 19px;
+  background: linear-gradient(135deg, #17101ff5, #0c111bf5);
+  border-color: #975b8c;
+  border-left: 3px solid #e177ae;
+  box-shadow: 0 7px 35px #0009;
+}
+.onboarding-guide > header { padding-bottom: 13px; margin-bottom: 15px; }
+.onboarding-guide > header span { color: #f6b3d4; font-size: 11px; }
+.onboarding-guide > header button { color: #b9a6c2; font-size: 9px; }
+.tutorial-route { display: flex; align-items: flex-start; justify-content: space-between; gap: 5px; list-style: none; padding: 0; margin: 0 0 23px; }
+.tutorial-route li { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; color: #988aab; font-size: 10px; line-height: 1.4; }
+.tutorial-route li > span { display: grid; place-items: center; width: 24px; height: 24px; font-size: 12px; border: 1px solid #65516f; background: #191222; }
+.tutorial-route .is-current { color: #ffcae5; }
+.tutorial-route .is-current > span { color: #140b18; border-color: #f5b3d5; background: #e58ab9; box-shadow: 0 0 16px #c84d9026; }
+.tutorial-route .is-complete { color: #82b6ad; }
+.tutorial-route .is-complete > span { color: #94d4c5; border-color: #4b796f; }
+.tutorial-objective > p { color: #b586a8; font-size: 9px; letter-spacing: .1em; margin-bottom: 7px; }
+.tutorial-objective h2 { font-size: 19px; line-height: 1.4; color: #f8e3ef; font-weight: bold; letter-spacing: -.025em; }
+.onboarding-guide > .tutorial-instruction { margin-top: 12px; color: #dccce2; font-size: 13px; line-height: 1.75; }
+.onboarding-guide > .tutorial-honesty-note { margin-top: 13px; padding-top: 12px; border-top: 1px solid #413349; color: #a8c9c3; font-size: 11px; line-height: 1.7; }
+.onboarding-guide .tutorial-action { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 17px; padding: 12px; border-color: #5da79b; color: #c7f1e4; background: #163830b0; font-size: 11px; line-height: 1.5; text-align: left; }
+.onboarding-guide .tutorial-action:hover:not(:disabled) { background: #245347; border-color: #a4dcc8; }
+
+.task-brief {
+  position: absolute;
+  left: 30px;
+  bottom: 76px;
+  z-index: 14;
+  width: 292px;
+  padding: 21px 20px 24px;
+  color: #30272c;
+  background: repeating-linear-gradient(0deg, #8e765b08 0 1px, transparent 1px 4px), linear-gradient(125deg, #e1d5bc, #c9b998);
+  box-shadow: 3px 8px 25px #0009;
+  clip-path: polygon(0 0, 100% 0, 100% 97%, 96% 98%, 91% 96%, 86% 99%, 80% 97%, 74% 100%, 67% 97%, 61% 99%, 55% 97%, 48% 100%, 42% 97%, 35% 99%, 29% 97%, 22% 100%, 16% 98%, 9% 99%, 4% 97%, 0 99%);
+}
+.task-brief-staple { position: absolute; top: 8px; right: 37px; width: 26px; height: 3px; border: 1px solid #5f5b50; background: #a09c8e; box-shadow: 1px 2px 0 #77644f; transform: rotate(2deg); }
+.task-brief > header { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-bottom: 13px; border-bottom: 1px solid #77634c78; }
+.task-brief-dateline { color: #705d50; font-size: 9px; letter-spacing: .12em; margin-bottom: 7px; }
+.task-brief h2 { color: #40313b; font-size: 21px; line-height: 1.1; font-weight: bold; letter-spacing: -.04em; }
+.task-brief header button { padding: 3px 0; background: transparent; color: #4c535c; font-size: 9px; white-space: nowrap; border-bottom: 1px solid #68707880; }
+.task-brief button:focus-visible { outline-color: #463c76; outline-offset: 3px; }
+.task-brief-count { margin: 14px 0 8px; color: #655344; font-size: 10px; }
+.task-brief-count strong { font-weight: bold; color: #473638; }
+.task-brief ul { margin: 0; padding: 0; list-style: none; }
+.task-brief li { display: flex; gap: 10px; align-items: flex-start; border-bottom: 1px solid #76654930; padding: 9px 0; }
+.task-brief-checkbox { flex-shrink: 0; width: 11px; height: 11px; border: 1px solid #69564f; margin-top: 3px; }
+.task-brief li button { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; padding: 0; text-align: left; color: #38323b; font-size: 13px; line-height: 1.5; background: transparent; overflow-wrap: anywhere; }
+.task-brief-more { color: #685e55; font-size: 10px; margin-top: 9px; }
+.task-brief-empty { margin: 16px 0 19px; }
+.task-brief-empty > p { color: #45373e; font-size: 16px; line-height: 1.5; font-weight: bold; }
+.task-brief-empty > span { display: block; margin-top: 9px; color: #74604e; font-size: 11px; line-height: 1.7; }
+.task-brief-add { display: block; margin-top: 16px; padding: 10px 8px; width: 100%; border: 1px solid #4b4a5c; color: #ebdfc8; background: #4d485b; font-size: 11px; font-weight: bold; letter-spacing: .02em; }
+.task-brief-add:hover { background: #60566c; }
+.task-brief-reward { margin-top: 12px; color: #62564e; font-size: 9px; line-height: 1.7; text-align: center; }
+.task-brief-reward span { color: #594c6e; }
+
+@media (max-width: 1000px) {
+  .tutorial-guide.onboarding-guide { width: 310px; padding: 16px; }
+  .onboarding-guide > .tutorial-instruction { font-size: 12px; }
+  .task-brief { width: 245px; padding-left: 17px; padding-right: 17px; }
+}
+@media (max-width: 720px) {
+  .main-menu .menu-eyebrow { font-size: 9px; letter-spacing: .08em; }
+  .main-menu .menu-tagline { font-size: 10px; letter-spacing: .04em; }
+  .tutorial-guide.onboarding-guide { right: 12px; bottom: 55px; width: 265px; padding: 14px; }
+  .tutorial-route { margin-bottom: 17px; }
+  .tutorial-route li { font-size: 9px; }
+  .tutorial-objective h2 { font-size: 17px; }
+  .onboarding-guide > .tutorial-instruction { font-size: 11px; line-height: 1.65; }
+  .task-brief { left: 12px; bottom: auto; top: 165px; width: 225px; }
+  .task-brief-empty > p { font-size: 14px; }
+}
+@media (max-width: 520px) {
+  .task-brief { top: 163px; width: calc(100% - 24px); padding: 14px 17px 17px; }
+  .task-brief header { padding-bottom: 9px; }
+  .task-brief h2 { font-size: 17px; }
+  .task-brief-dateline, .task-brief-empty > span, .task-brief-more { display: none; }
+  .task-brief-empty { margin: 10px 0; }
+  .task-brief-count { margin-top: 10px; }
+  .task-brief li { padding: 5px 0; }
+  .task-brief li button { font-size: 12px; -webkit-line-clamp: 1; }
+  .task-brief-add { margin-top: 10px; padding: 8px; }
+  .task-brief-reward { margin-top: 8px; }
+}
+
+/* The first call is staged over the room as an opening sequence. */
+.modal-backdrop:has(.dialogue-intro) { align-items: end; padding: 7vh max(28px, 8vw); backdrop-filter: none; background: linear-gradient(0deg, #030208e6, #03020822 85%); }
+.modal.dialogue-intro { width: min(1080px, 100%); margin: 0 auto; border: 1px solid #c64c8e; background: #08060ef2; box-shadow: 0 0 0 7px #08060eaa, 0 25px 90px #000; }
+.dialogue-intro .dialogue-layout { padding: 26px 32px; align-items: center; }
+.dialogue-intro .dialogue-text { min-height: 140px; font-size: clamp(18px, 2vw, 26px); line-height: 1.6; color: #ffe8b8; }
+.dialogue-intro .dialogue-copy h3 { color: #ff88ba; }
+@media (max-width: 720px) { .modal-backdrop:has(.dialogue-intro) { padding: 24px; } .dialogue-intro .dialogue-layout { padding: 18px; } .dialogue-intro .dialogue-portrait { display: none; } .dialogue-intro .dialogue-text { font-size: 16px; } }
+/* Keep the practice area and its entrance visible while explaining the route. */
+@media (min-width: 1001px) { .tutorial-guide.onboarding-guide { top: 170px; right: 22px; bottom: auto; width: 292px; padding: 16px; } .onboarding-guide > .tutorial-instruction { font-size: 12px; line-height: 1.65; } .tutorial-route { margin-bottom: 15px; } }
+
+/* Explicit new-game choices keep real task deletion separate from a story restart. */
+.modal.newgame-panel { width: min(650px, 100%); border-color: #79475f; }
+.newgame-body { padding: 25px 28px; }
+.newgame-kicker { color: #b18aab; font-size: 9px; letter-spacing: .1em; }
+.newgame-body > h3 { margin: 12px 0 23px; font-size: 24px; font-weight: normal; line-height: 1.4; color: #f5dbe8; }
+.newgame-choice { margin-top: 15px; padding: 17px; border: 1px solid #3a4b50; background: #12252b35; }
+.newgame-choice h4 { color: #b7ded4; font-size: 16px; font-weight: normal; margin: 0; }
+.newgame-choice p { color: #b8b1c0; font-size: 12px; line-height: 1.8; margin: 9px 0 15px; }
+.newgame-choice button { display: block; width: 100%; font-size: 11px; }
+.newgame-choice-clean { border-color: #653446; background: #3d142226; }
+.newgame-choice-clean h4 { color: #f4a3b9; }
+.newgame-settings-note { margin-top: 17px; color: #a398aa; font-size: 10px; line-height: 1.8; }
+.newgame-confirmation > h3 { color: #ffb0c9; margin-bottom: 15px; }
+.newgame-confirm-intro { color: #d6bccb; font-size: 12px; line-height: 1.8; }
+.newgame-confirmation ul { padding-left: 18px; margin: 12px 0 18px; color: #cfb9c8; font-size: 12px; line-height: 1.9; }
+.newgame-consent { display: flex; align-items: flex-start; gap: 12px; padding: 17px 0; margin: 15px 0 5px; border-top: 1px solid #603748; color: #f6d2e0; font-size: 12px; line-height: 1.8; }
+.newgame-consent input { flex-shrink: 0; width: 17px; height: 17px; margin-top: 3px; accent-color: #dd699a; }
+.newgame-confirmation > .button-danger { width: 100%; font-size: 11px; line-height: 1.5; }
+.newgame-back { display: block; padding: 12px 0 4px; margin-top: 7px; background: transparent; color: #a59aad; font-size: 10px; }
+.newgame-back:hover:not(:disabled) { color: #e3cbdc; }
+
+/* A dispatch note below the HUD makes the combat destination visible. */
+.night-contract { position: absolute; top: 175px; left: 30px; z-index: 14; width: 292px; padding: 16px; color: #decedc; background: linear-gradient(125deg, #16131fee, #0b111bee); border: 1px solid #4b6670; border-left: 3px solid #6bbdb6; box-shadow: 0 8px 35px #0007; }
+.night-contract-status { display: flex; align-items: center; gap: 7px; color: #86d6c7; font-size: 9px; line-height: 1.4; letter-spacing: .02em; }
+.night-contract-status > span { width: 4px; height: 4px; flex-shrink: 0; background: #86d6c7; box-shadow: 0 0 7px #86d6c755; }
+.night-contract h2 { margin: 10px 0 9px; color: #f4dce9; font-size: 17px; font-weight: normal; line-height: 1.4; }
+.night-contract-description { color: #b6acbf; font-size: 11px; line-height: 1.7; }
+.night-contract button { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; margin-top: 14px; padding: 10px 8px; color: #ccf1e8; background: #173a36; border: 1px solid #52958a; font-size: 10px; line-height: 1.5; text-align: left; }
+.night-contract button:hover { background: #25554b; border-color: #9ad6c8; }
+.night-contract-tip { margin-top: 10px; color: #8da49f; font-size: 9px; line-height: 1.6; }
+@media (max-width: 1000px) { .night-contract { width: 245px; padding: 13px; } .night-contract h2 { font-size: 16px; } }
+@media (max-width: 720px) { .night-contract { top: 163px; left: 12px; width: 250px; } .app-shell:has(.night-contract) .task-brief { top: auto; bottom: 55px; } .newgame-body { padding: 20px; } .newgame-body > h3 { font-size: 21px; } }
+@media (max-height: 780px) and (min-width: 721px) { .night-contract { top: 158px; padding: 12px; } .night-contract h2 { margin: 7px 0; font-size: 15px; } .night-contract-description { font-size: 10px; line-height: 1.6; } .night-contract-tip { margin-top: 7px; font-size: 8px; } .night-contract button { margin-top: 10px; padding: 8px; } }
+
+.menu-profile-note { max-width: 390px; color: #b0a6bd; font-size: 11px; line-height: 1.6; margin: 18px 0 0; }

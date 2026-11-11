@@ -10,7 +10,7 @@ export function addTrainingRange(scene: Phaser.Scene) {
   markings.lineBetween(604, 263, 604, 317);
   for (let x = 506; x < 560; x += 8) markings.lineBetween(x, 309, x + 4, 309);
   const style = { fontFamily: 'monospace', fontSize: '7px', color: '#9ce9dc', backgroundColor: '#091a22', padding: { x: 4, y: 3 }, resolution: 1 };
-  scene.add.text(490, 325, 'ТРЕНИРОВКА / УЧЕБНЫЕ ПАТРОНЫ', style).setDepth(25);
+  scene.add.text(500, 335, 'БЕСПЛАТНАЯ ТРЕНИРОВКА', style).setDepth(25);
   scene.add.text(580, 260, 'МИШЕНЬ', style).setDepth(25);
-  scene.add.text(490, 445, 'ПРИЦЕЛ: МЫШЬ  ОГОНЬ: ЛКМ  ЗАРЯДИТЬ: R  УДАР: F / ПКМ', { ...style, fontSize: '6px' }).setDepth(25);
+  scene.add.text(500, 350, 'ЛКМ: ВЫСТРЕЛ · F: УДАР НОЖОМ · R: ЗАРЯДИТЬ', { ...style, fontSize: '6px' }).setDepth(25);
 }

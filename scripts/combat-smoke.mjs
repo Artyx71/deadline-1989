@@ -63,13 +63,21 @@ async function walkTo(x,y,{combat=false,deadline=15000,attacking=true}={}) {
 }
 async function enterMission(ammo) {
  await ready('apartment');
- for(const [x,y] of [[176,220],[270,220],[270,300],[401,300],[401,415]]) await walkTo(x,y);
+ for(const [x,y] of [[248,232],[248,390],[216,390]]) await walkTo(x,y);
  await page.keyboard.press('e');
  await page.getByRole('slider',{name:'Патроны с собой'}).fill(String(ammo));
  await page.getByTestId('mission-launch').click();await ready('combat');
  const state=await diagnostic();assert.equal(state.enemies.filter(e=>e.hp>0).length,6);report.events.push({type:'mission-enter',diagnostic:state});console.log('Entered combat',JSON.stringify(state));
 }
-async function boot() {if(await page.getByTestId('recover-mission').isVisible())await page.getByTestId('recover-mission').click();await page.getByTestId('boot-continue').click();await page.getByTestId('menu-continue').click();await ready('apartment');}
+async function dismissIntro() {
+ const tutorial=(await snapshot()).tutorial;
+ if(tutorial.completed||tutorial.skipped)return;
+ const panel=page.getByRole('dialog',{name:'ВХОДЯЩИЙ ВЫЗОВ'});
+ await panel.waitFor();
+ for(let line=0;line<20&&await panel.isVisible();line++) {await panel.getByTestId('dialogue-advance').click();await page.waitForTimeout(60);}
+ await page.getByTestId('tutorial-skip').click();
+}
+async function boot() {if(await page.getByTestId('recover-mission').isVisible())await page.getByTestId('recover-mission').click();await page.getByTestId('boot-continue').click();await page.getByTestId('menu-continue').click();await ready('apartment');await dismissIntro();}
 try {
  report.beforeRecovery=await snapshot();
  await page.goto(origin);
@@ -110,7 +118,7 @@ try {
  const death=await snapshot();report.death=death;const deathOutcome=report.outcomes.at(-1);report.deathOutcome=deathOutcome;assert.equal(deathOutcome?.outcome,'dead');assert.equal(death.attempt,null);assert.equal(death.player.deaths,beforeDeath.player.deaths+1);assert.equal(death.player.ammo,beforeDeath.player.ammo);assert.equal(death.player.xp,report.baseline.player.xp);assert.deepEqual(death.tasks,report.baseline.tasks);
  await screenshot('death-initial.png');report.checks.push({name:'enemy-caused-one-hit-death-with-zero-ammo-and-task-preservation',status:'PASS',stats:deathOutcome.stats});
  await page.getByTestId('outcome-return').click();await ready('apartment');
- const returnPosition=await diagnostic();await walkTo(176,220);assert.notEqual((await diagnostic()).y,returnPosition.y);
+ const returnPosition=await diagnostic();await walkTo(248,232);assert.notEqual((await diagnostic()).x,returnPosition.x);
  await page.waitForLoadState('networkidle');await page.reload();await page.getByTestId('boot-continue').click();await page.getByTestId('menu-continue').click();await ready('apartment');
  const afterReload=await snapshot();assert.deepEqual(afterReload.tasks,report.baseline.tasks);assert.equal(afterReload.player.ammo,death.player.ammo);assert.equal(afterReload.player.xp,death.player.xp);report.afterReload=afterReload;
  report.finalMemory=await page.evaluate(()=>({heap:performance.memory?.usedJSHeapSize??null,canvases:document.querySelectorAll('canvas').length}));assert.equal(report.finalMemory.canvases,1);

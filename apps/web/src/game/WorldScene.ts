@@ -42,6 +42,8 @@ export class WorldScene extends Phaser.Scene {
   private doors: { sprite: Phaser.GameObjects.Sprite; open: boolean }[] = [];
   private actions = new InputLatch();
   private firePoint: { x: number; y: number } | null = null;
+  private objective: 'telephone' | 'computer' | 'training' | 'exit' | null = null;
+  private objectiveMarker: Phaser.GameObjects.Container | null = null;
 
   constructor(port: GamePort, private desiredPause: () => boolean = () => false) { super('world'); this.port = port; }
   init(data: SceneData) {
@@ -52,19 +54,21 @@ export class WorldScene extends Phaser.Scene {
     this.frameCount = 0; this.maxDelta = 0; this.frameTotal = 0;
     this.actions.clear();
     this.firePoint = null;
+    this.objectiveMarker = null;
   }
   preload() {
-    const mapId = this.sceneId === 'combat' ? 'combat' : 'apartment';
-    this.load.image(`${mapId}-art`, `/assets/${mapId}.png`);
-    this.load.json(`${mapId}-data`, `/assets/${mapId}.json`);
-    this.load.tilemapTiledJSON(`${mapId}-tiled`, `/assets/${mapId}.tiled.json`);
-    for (const key of ['player', 'enemy', 'enemy-gunner']) this.load.spritesheet(key, `/assets/${key}.png`, { frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('phone-ring', '/assets/phone-ring.png', { frameWidth: 40, frameHeight: 44 });
-    this.load.spritesheet('computer-screen', '/assets/computer-screen.png', { frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('tv-static', '/assets/tv-static.png', { frameWidth: 32, frameHeight: 32 });
-    this.load.spritesheet('neon-flicker', '/assets/neon-flicker.png', { frameWidth: 32, frameHeight: 16 });
-    this.load.spritesheet('doors', '/assets/doors.png', { frameWidth: 48, frameHeight: 48 });
-    this.load.spritesheet('effects', '/assets/effects.png', { frameWidth: 16, frameHeight: 16 });
+    const mapId = this.sceneId;
+    this.load.setPath(`${import.meta.env.BASE_URL}assets/`);
+    this.load.image(`${mapId}-art`, `${mapId}.png`);
+    this.load.json(`${mapId}-data`, `${mapId}.json`);
+    this.load.tilemapTiledJSON(`${mapId}-tiled`, `${mapId}.tiled.json`);
+    for (const key of ['player', 'enemy', 'enemy-gunner']) this.load.spritesheet(key, `${key}.png`, { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('phone-ring', 'phone-ring.png', { frameWidth: 40, frameHeight: 44 });
+    this.load.spritesheet('computer-screen', 'computer-screen.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('tv-static', 'tv-static.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('neon-flicker', 'neon-flicker.png', { frameWidth: 32, frameHeight: 16 });
+    this.load.spritesheet('doors', 'doors.png', { frameWidth: 48, frameHeight: 48 });
+    this.load.spritesheet('effects', 'effects.png', { frameWidth: 16, frameHeight: 16 });
     const onProgress = (progress: number) => this.port.emit({ type: 'loading', progress });
     const onError = (file: Phaser.Loader.File) => this.port.emit({ type: 'error', message: `Не удалось загрузить ${file.key}. Терминал задач доступен.` });
     this.load.on('progress', onProgress); this.load.on('loaderror', onError);
@@ -72,7 +76,7 @@ export class WorldScene extends Phaser.Scene {
     this.load.once('complete', cleanup); this.events.once('shutdown', cleanup);
   }
   create() {
-    const mapId = this.sceneId === 'combat' ? 'combat' : 'apartment';
+    const mapId = this.sceneId;
     try { this.worldData = readWorldMap(this.cache.json.get(`${mapId}-data`)); }
     catch { this.port.emit({ type: 'error', message: 'Не удалось прочитать данные локации. Продолжайте работу в терминале задач.' }); return; }
     if (!this.textures.exists(`${mapId}-art`)) { this.port.emit({ type: 'error', message: 'Графика локации недоступна. Терминал задач продолжает работать.' }); return; }
@@ -93,7 +97,7 @@ export class WorldScene extends Phaser.Scene {
       const graphic = this.add.graphics(); graphic.fillStyle(0xffffff); graphic.fillRect(0, 0, 10, 2); graphic.generateTexture('bullet', 10, 2); graphic.destroy();
       const casing = this.add.graphics(); casing.fillStyle(0xc39962); casing.fillRect(0, 0, 3, 2); casing.generateTexture('casing', 3, 2); casing.destroy();
     }
-    const position = this.sceneId === 'training' ? { x: 530, y: 290 } : spawn;
+    const position = spawn;
     this.player = this.physics.add.sprite(position.x, position.y, 'player', 0).setDepth(16).setCollideWorldBounds(true);
     this.player.setSize(14, 14).setOffset(9, 9);
     this.physics.add.collider(this.player, this.solids);
@@ -124,7 +128,8 @@ export class WorldScene extends Phaser.Scene {
       this.player.play('player-wake'); this.wakeUntil = 650;
       this.port.emit({ type: 'hud', hud: { scene: 'apartment', magazine: 0, reserve: 0, kills: 0, enemies: 0, reloading: false, weapon: 'pistol' } });
     }
-    if (this.sceneId !== 'combat') this.addEnvironment();
+    if (this.sceneId === 'apartment') this.addEnvironment();
+    this.setObjective(this.objective);
     if (this.sceneId === 'training') addTrainingRange(this);
     this.setInputPaused(this.desiredPause());
     this.port.emit({ type: 'ready', scene: this.sceneId });
@@ -143,6 +148,7 @@ export class WorldScene extends Phaser.Scene {
     });
     // Read-only diagnostic data supports reproducible browser smoke checks.
     this.game.canvas.dataset.scene = this.sceneId;
+    this.game.canvas.dataset.layoutVersion = 'studio-v3';
   }
   private createAnimations() {
     for (const key of ['player', 'enemy', 'enemy-gunner']) {
@@ -161,17 +167,20 @@ export class WorldScene extends Phaser.Scene {
     }
   }
   private addEnvironment() {
-    this.phoneSprite = this.add.sprite(689, 314, 'phone-ring').setDepth(7);
+    const at = (id: string) => this.worldData.interactions.find(item => item.id === id)!;
+    const phone = at('telephone'), computer = at('computer'), television = at('television');
+    this.phoneSprite = this.add.sprite(phone.x + 3, phone.y - 4, 'phone-ring').setDepth(7);
     this.setPhoneRinging(this.phoneRinging);
     this.environmentSprites.push(this.phoneSprite,
-      this.add.sprite(595, 363, 'computer-screen').play('computer-screen').setDepth(7),
-      this.add.sprite(323, 100, 'tv-static').play('tv-static').setDepth(7).setAlpha(.5));
-    this.environmentSprites.push(this.add.sprite(693, 281, 'neon-flicker').play('neon-flicker').setDepth(8).setAlpha(.65));
-    for (const [x, y] of [[384, 444], [704, 424]]) {
+      this.add.sprite(computer.x - 12, computer.y - 12, 'computer-screen').setCrop(0, 5, 32, 21).play('computer-screen').setDepth(7),
+      this.add.sprite(television.x - 3.5, television.y - 26.5, 'tv-static').setDisplaySize(44, 24).play('tv-static').setDepth(7).setAlpha(.55));
+    this.environmentSprites.push(this.add.sprite(phone.x + 7, phone.y - 37, 'neon-flicker').play('neon-flicker').setDepth(8).setAlpha(.65));
+    const exit = at('exit'), training = at('training');
+    for (const [x, y] of [[exit.x, exit.y - 1], [training.x + 3, training.y + 3]]) {
       const sprite = this.add.sprite(x!, y!, 'doors', 0).setDepth(7);
       this.doors.push({ sprite, open: false }); this.environmentSprites.push(sprite);
     }
-    for (const [x, y, color] of [[620, 360, 0x3ce5df], [695, 312, 0xff246f], [108, 75, 0xf34197], [643, 65, 0x4b87be]]) {
+    for (const [x, y, color] of [[computer.x, computer.y, 0xe8d770], [phone.x, phone.y, 0xff246f], [136, 130, 0x48e1a0], [643, 65, 0xf34197]]) {
       const light = this.add.ellipse(x!, y!, 90, 66, color!, .035).setDepth(8).setBlendMode(Phaser.BlendModes.ADD);
       this.tweens.add({ targets: light, alpha: .075, duration: 1300 + x!, yoyo: true, repeat: -1 });
     }
@@ -186,6 +195,18 @@ export class WorldScene extends Phaser.Scene {
     if (ringing) this.phoneSprite.play('phone-ring', true);
     else this.phoneSprite.stop().setFrame(0);
     if (this.simulationPaused) this.phoneSprite.anims.pause();
+  }
+  setObjective(id: 'telephone' | 'computer' | 'training' | 'exit' | null) {
+    this.objective = id;
+    for (const child of this.objectiveMarker?.list ?? []) this.tweens.killTweensOf(child);
+    this.objectiveMarker?.destroy(); this.objectiveMarker = null;
+    if (!id || this.sceneId !== 'apartment' || !this.worldData || !this.player?.active) return;
+    const target = this.worldData.interactions.find(item => item.id === id);
+    if (!target) return;
+    const ring = this.add.circle(0, 0, 27).setStrokeStyle(1, 0xffe28e, .8);
+    const label = this.add.text(0, -39, id === 'computer' ? 'СПИСОК ДЕЛ' : id === 'training' ? 'E · НАЧАТЬ ТРЕНИРОВКУ' : id === 'exit' ? 'E · НОЧНОЙ КОНТРАКТ' : 'ВХОДЯЩИЙ ЗВОНОК', { fontFamily: 'monospace', fontSize: '8px', color: '#ffe5a4', backgroundColor: '#11101a', padding: { x: 5, y: 3 } }).setOrigin(.5);
+    this.objectiveMarker = this.add.container(target.x, target.y, [ring, label]).setDepth(28);
+    if (!this.reducedMotion) this.tweens.add({ targets: ring, alpha: .3, scale: 1.12, duration: 850, yoyo: true, repeat: -1 });
   }
   private setSimulationPaused(paused: boolean) {
     if (!this.player?.active || this.simulationPaused === paused) return;

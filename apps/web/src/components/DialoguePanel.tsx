@@ -4,9 +4,10 @@ import { Modal } from './Modal';
 interface DialoguePanelProps {
   speaker: string; lines: string[]; portrait?: number; onComplete: () => void; onClose: () => void;
   onTextSound?: () => void; reducedMotion?: boolean;
+  cinematic?: boolean;
 }
 
-export function DialoguePanel({ speaker, lines, portrait = 0, onComplete, onClose, onTextSound, reducedMotion = false }: DialoguePanelProps) {
+export function DialoguePanel({ speaker, lines, portrait = 0, onComplete, onClose, onTextSound, reducedMotion = false, cinematic = false }: DialoguePanelProps) {
   const [lineIndex, setLineIndex] = useState(0);
   const [characters, setCharacters] = useState(0);
   const typingTimer = useRef<number | null>(null);
@@ -31,7 +32,7 @@ export function DialoguePanel({ speaker, lines, portrait = 0, onComplete, onClos
     else if (lineIndex < lines.length - 1) setLineIndex((index) => index + 1);
     else onComplete();
   };
-  return <Modal title="ВХОДЯЩИЙ ВЫЗОВ" onClose={onClose} className="dialogue-panel">
+  return <Modal title="ВХОДЯЩИЙ ВЫЗОВ" onClose={onClose} className={`dialogue-panel ${cinematic ? 'dialogue-intro' : ''}`}>
     <div className="dialogue-layout">
       <div className="dialogue-portrait" aria-hidden="true" style={{ backgroundPosition: `${portrait === 0 ? '0%' : '100%'} 0` }} />
       <div className="dialogue-copy"><h3>{speaker}</h3>

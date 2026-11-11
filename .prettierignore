@@ -1,0 +1,23 @@
+# Dependencies and generated build/test output.
+**/node_modules/
+**/dist/
+**/dist-pages/
+coverage/
+test-results/
+playwright-report/
+docs/evidence/
+
+# Generated image/audio/map assets are maintained through their generators.
+apps/web/public/assets/
+
+# Generated dependency resolution and local persistent data.
+pnpm-lock.yaml
+data/
+**/*.sqlite
+**/*.sqlite-*
+**/*.db
+**/*.db-*
+
+# Repository metadata and local credentials are outside formatting scope.
+.git/
+.aws/

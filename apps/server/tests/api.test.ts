@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto';
 import type { FastifyInstance } from 'fastify';
 import type { MissionStats, MutationResult, StateSnapshot } from '@deadline/shared';
 import { createApp, type AppOptions } from '../src/app.js';
+import { openDatabase } from '../src/database.js';
 
 const apps: FastifyInstance[] = [];
 const directories: string[] = [];
@@ -260,5 +261,103 @@ describe('tutorial, dialogue, and gameplay reset', () => {
     expect(reset.state.settings).toEqual(before.settings);
     expect(reset.state.tutorial).toEqual({ step: 'wake', completed: false, skipped: false });
     expect(reset.state.progress.unlocked).toBe(false);
+  });
+});
+
+describe('explicit confirmed profile reset', () => {
+  it('rejects missing, incorrect, extra, or unkeyed confirmation without changing the profile', async () => {
+    const server = app({ dbPath: temporaryDatabase() });
+    await earn(server, 'hard');
+    const before = await state(server);
+    for (const payload of [{}, { confirmation: 'DELETE' }, { confirmation: 'удалить' }, { confirmation: 'УДАЛИТЬ', extra: true }]) {
+      expect((await mutate(server, 'POST', '/api/profile/reset', payload)).statusCode).toBe(400);
+      expect(await state(server)).toEqual(before);
+    }
+    expect((await server.inject({ method: 'POST', url: '/api/profile/reset', payload: { confirmation: 'УДАЛИТЬ' } })).statusCode).toBe(400);
+    expect(await state(server)).toEqual(before);
+    const normalReplay = await successful(server, 'POST', '/api/game/reset');
+    expect(normalReplay.state.tasks).toEqual(before.tasks);
+    expect(normalReplay.state.rewards).toEqual(before.rewards);
+    expect(normalReplay.state.player).toEqual(before.player);
+  });
+
+  it('refuses a clean reset while a durable mission reservation is active', async () => {
+    const server = app({ dbPath: temporaryDatabase() });
+    await earn(server);
+    await start(server, 4);
+    const before = await state(server);
+    const response = await mutate(server, 'POST', '/api/profile/reset', { confirmation: 'УДАЛИТЬ' });
+    expect(response.statusCode).toBe(409);
+    expect(response.json<{ error: { code: string } }>().error.code).toBe('ACTIVE_ATTEMPT');
+    expect(await state(server)).toEqual(before);
+  });
+
+  it('clears the confirmed profile transactionally while retaining settings and retry history', async () => {
+    const dbPath = temporaryDatabase();
+    const server = app({ dbPath });
+    await earn(server, 'hard');
+    await successful(server, 'POST', '/api/tasks', { title: 'An unfinished isolated fixture' });
+    const attempt = await start(server, 3);
+    await successful(server, 'POST', `/api/missions/${attempt.id}/shots`, { count: 1 });
+    await successful(server, 'POST', `/api/missions/${attempt.id}/finish`, { outcome: 'dead', stats: stats(1) });
+    await successful(server, 'POST', '/api/dialogue/first-death/acknowledge', { ignored: true });
+    await successful(server, 'PATCH', '/api/settings', { muted: true, musicVolume: 0.25, reducedMotion: true });
+    const before = await state(server);
+    const result = await successful(server, 'POST', '/api/profile/reset', { confirmation: 'УДАЛИТЬ' });
+    expect(result.state).toEqual({
+      revision: before.revision + 1,
+      tasks: [], rewards: [], player: { ammo: 0, xp: 0, deaths: 0, consecutiveDeaths: 0 },
+      attempt: null, progress: { missionId: 'first-shift', unlocked: false, completions: 0, bestTimeMs: null },
+      tutorial: { step: 'wake', completed: false, skipped: false }, dialogueHistory: [], settings: before.settings,
+    });
+    const database = openDatabase(dbPath);
+    try {
+      for (const table of ['tasks', 'reward_claims', 'resource_ledger', 'mission_attempts', 'dialogue_history']) {
+        expect(database.sqlite.prepare(`SELECT COUNT(*) AS count FROM ${table}`).get()).toEqual({ count: 0 });
+      }
+      const operations = database.sqlite.prepare('SELECT COUNT(*) AS count FROM idempotency_operations').get() as { count: number };
+      expect(operations.count).toBeGreaterThan(0);
+    } finally { database.sqlite.close(); }
+    await server.close();
+    const restarted = app({ dbPath });
+    expect(await state(restarted)).toEqual(result.state);
+  });
+
+  it('does not purge newly created tasks or restore old resources when old request keys replay after restart', async () => {
+    const dbPath = temporaryDatabase();
+    const server = app({ dbPath });
+    const oldCreateKey = randomUUID();
+    const oldCreated = await successful(server, 'POST', '/api/tasks', { title: 'Before clean reset' }, oldCreateKey);
+    const oldId = oldCreated.state.tasks[0]?.id;
+    const oldCompleteKey = randomUUID();
+    await successful(server, 'POST', `/api/tasks/${oldId}/complete`, {}, oldCompleteKey);
+    const resetKey = randomUUID();
+    const reset = await successful(server, 'POST', '/api/profile/reset', { confirmation: 'УДАЛИТЬ' }, resetKey);
+    const newCreated = await successful(server, 'POST', '/api/tasks', { title: 'Keep after clean reset' });
+    expect(newCreated.state.revision).toBeGreaterThan(reset.state.revision);
+    await server.close();
+    const restarted = app({ dbPath });
+    expect(await successful(restarted, 'POST', '/api/profile/reset', { confirmation: 'УДАЛИТЬ' }, resetKey)).toEqual(reset);
+    expect(await successful(restarted, 'POST', '/api/tasks', { title: 'Before clean reset' }, oldCreateKey)).toEqual(oldCreated);
+    await successful(restarted, 'POST', `/api/tasks/${oldId}/complete`, {}, oldCompleteKey);
+    expect(await state(restarted)).toEqual(newCreated.state);
+    expect((await state(restarted)).player).toMatchObject({ ammo: 0, xp: 0 });
+  });
+
+  it('rolls a failed clean reset back completely and permits safe retry with the same key', async () => {
+    let fail = false;
+    const server = app({ dbPath: temporaryDatabase(), failpoint: point => { if (fail && point === 'mutation-before-commit') throw new Error('Reset commit failure'); } });
+    await earn(server);
+    const before = await state(server);
+    const key = randomUUID();
+    fail = true;
+    expect((await mutate(server, 'POST', '/api/profile/reset', { confirmation: 'УДАЛИТЬ' }, key)).statusCode).toBe(500);
+    expect(await state(server)).toEqual(before);
+    fail = false;
+    const result = await successful(server, 'POST', '/api/profile/reset', { confirmation: 'УДАЛИТЬ' }, key);
+    expect(result.state.tasks).toHaveLength(0);
+    expect(result.state.rewards).toHaveLength(0);
+    expect(result.state.player.ammo).toBe(0);
+    expect(result.state.revision).toBe(before.revision + 1);
   });
 });

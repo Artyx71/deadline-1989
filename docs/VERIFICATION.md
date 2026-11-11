@@ -2,7 +2,7 @@
 
 Acceptance run: 2026-11-11. Scope: the complete FINAL MASTER IMPLEMENTATION PROMPT (sections 0–35), two supplied visual references, and subsequent requests for Russian text, a dark cluttered apartment, and a stable terminal window.
 
-## Final checks
+## Original acceptance checks (before the follow-up changes)
 
 | Check | Actual result |
 | --- | --- |
@@ -70,6 +70,34 @@ Specific third-party candidates were researched in [ASSET_CREDITS](ASSET_CREDITS
 
 ## Publication and practical limits
 
-Private repository: `Artyx71/deadline-1989`; branch `feat/deadline-1989`. Conventional milestone commits include foundation `576e52d`, API `cd6e2f7`, initial UI `18910b1`, production/Russian API `36847d4`, original art `d2b3192`, audio `e7bde38`, game `e4a2aab`, narrative `5a5395d`, integration `a4b9023`, stable terminal `76189ac`, and regression evidence `ccad064`. Milestone pushes are verified with `git ls-remote`; no force push or automatic merge is used. Final documentation is published after this report.
+Originally private, now public repository: `Artyx71/deadline-1989`; branch `feat/deadline-1989`. Conventional milestone commits include foundation `576e52d`, API `cd6e2f7`, initial UI `18910b1`, production/Russian API `36847d4`, original art `d2b3192`, audio `e7bde38`, game `e4a2aab`, narrative `5a5395d`, integration `a4b9023`, stable terminal `76189ac`, and regression evidence `ccad064`. Milestone pushes are verified with `git ls-remote`; no force push or automatic merge is used. Final documentation is published after this report.
 
 This is one local profile on loopback. Public multi-user hosting requires authentication/profile isolation. Offline mutations are not claimed. Browser acceptance is desktop Chromium; other browsers, touch devices and long-duration stress sessions are not certified. Original programmatic art and synthesized music are coherent MVP production assets, without claiming the illustrative detail or mastered recordings of the references. Bootstrap's historical custom-agent loader limitations remain recorded in BOOTSTRAP.md; actual development used the available delegation tools with explicit role instructions and file ownership.
+
+
+## Follow-up acceptance — studio and free Pages edition
+
+2026-11-11, Chromium 152, Linux, isolated temporary native databases and fresh browser contexts. These results supersede the original counts for the current changes.
+
+| Check | Actual result |
+| --- | --- |
+| `pnpm test` | PASS — 55 tests: 21 native SQLite API, 20 gameplay, seven narrative, seven SQL.js persistence tests |
+| `pnpm typecheck`, `pnpm lint` | PASS |
+| `pnpm build`, `pnpm build:pages` | PASS — separate native and static bundles, bundled Worker/WASM and `/deadline-1989/` asset base |
+| `pnpm test:e2e` | PASS — 10 native Chromium scenarios, 1.6 minutes, including confirmed clean New Game and story-only preservation |
+| `pnpm test:pages` | PASS — three production-static Chromium scenarios, 14.9 seconds, with no Fastify server |
+| Studio input smoke | PASS — actual E interactions at computer, phone, TV, cabinet, training door and exit; separate training return; tasks/resources preserved |
+| Studio sound signal | PASS — actual gunshot/melee/reload/impact source starts and effect-bus RMS peak 0.560142, no audio error |
+| Art review | PASS for the captured studio and separate training; minor paper-note overlap with exit caption, central prompt readable |
+
+Static-browser scenarios prove UI create/edit/complete/reopen/delete/reload, once-only rewards, concurrent tabs and duplicate request keys, confirmed clean reset observed across tabs and reload, real Phaser asset loading, separate training, dispatch, actual committed gunshot and sound signal, refresh recovery with spent ammunition retained. They use the shipped Worker protocol and normal validated routes, without resource edits or hidden test endpoints. IndexedDB writes complete before successful mutation responses. Adapter tests additionally force failed writes and rollback before safe retry.
+
+Current captured evidence: [studio objects](evidence/studio-objects-verified.png), [separate training](evidence/studio-separate-training.png), [input report](evidence/studio-smoke.json), [TV restriction fallback](evidence/studio-television-network.png). Input-only checks do not establish human listening quality.
+
+### External TV limitation
+
+The official YouTube trailer returned error 150 and an explicit age restriction; its video stayed paused at time zero, muted, volume zero. A public creator Vimeo alternative also returned a connection-security restriction. No successful external playback is claimed. The real fallback, close, resumed game input and temporary game-audio silence are verified. No restricted media was downloaded or bundled.
+
+### Pages publication
+
+Repository visibility is PUBLIC and Pages uses GitHub Actions. The browser edition stores one profile in SQLite/WASM inside an origin-wide Worker lock and IndexedDB; it does not synchronize devices or share the native profile. Removing browser site data removes this profile. Live deployment verification is pending publication.

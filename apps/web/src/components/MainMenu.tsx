@@ -32,9 +32,9 @@ export function MainMenu({ onStart, onContinue, onSettings, onCredits, canContin
     <div className="menu-horizon" aria-hidden="true" />
     <div className="vcr-label"><span className="recording-dot" /> ВОСПР. <span aria-hidden="true">▸</span><span className="vcr-channel">КАНАЛ 03 / СТЕРЕО</span></div>
     <div className="menu-content">
-      <p className="menu-eyebrow">КРИМИНАЛЬНЫЙ ТРИЛЛЕР О ВАШИХ ДЕЛАХ</p>
+      <p className="menu-eyebrow">СПИСОК ДЕЛ × НОЧНОЙ ЭКШЕН</p>
       <h1 className="game-logo"><span>DEADLINE</span><small>1989</small></h1>
-      <p className="menu-tagline">ВАШИ ДЕЛА. ВАШИ ПАТРОНЫ.</p>
+      <p className="menu-tagline">ВЫПОЛНЯЙ ДЕЛА. ПОЛУЧАЙ ПАТРОНЫ.</p>
       <nav className="menu-options" aria-label="Действия в меню">
         {options.map((option, index) => <button key={option.label} ref={(node) => { buttons.current[index] = node; }}
           disabled={option.disabled} className={selected === index ? 'selected' : ''}
@@ -43,6 +43,7 @@ export function MainMenu({ onStart, onContinue, onSettings, onCredits, canContin
           <span className="menu-arrow" aria-hidden="true">›</span>{option.label}<span className="menu-option-index">0{index + 1}</span>
         </button>)}
       </nav>
+      {import.meta.env.VITE_STATIC_PROFILE === '1' && <p className="menu-profile-note">Прогресс сохраняется в этом браузере. Синхронизации между устройствами нет.</p>}
       <p className="menu-hint"><kbd>↑</kbd><kbd>↓</kbd> ВЫБОР <span>·</span> <kbd>ENTER</kbd> ПОДТВЕРДИТЬ</p>
     </div>
     <footer className="menu-footer"><div>23:47<br />26 ОКТЯБРЯ 1989</div><p>У ГОРОДА ВСЕГДА ЕСТЬ ДЕЛА.<br /><span>У ВАС ТОЖЕ.</span></p><span className="tape-counter">ВОСПР. ▸ 00:00:01</span></footer>

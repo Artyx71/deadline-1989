@@ -28,6 +28,7 @@ export function createGame(parent: HTMLElement, port: GamePort): GameController 
     },
     setEffects(reducedMotion) { world.reducedMotion = reducedMotion; },
     setPhoneRinging(ringing) { world.setPhoneRinging(ringing); },
+    setObjective(id) { world.setObjective(id); },
     destroy() { if (disposed) return; disposed = true; game.destroy(true); },
   };
 }

@@ -277,6 +277,7 @@ export class CombatSystem {
     }
   }
   private hitEnemy(enemy: Enemy, melee: boolean) {
+    if (melee) this.options.port.emit({ type: 'sound', name: 'impact' });
     enemy.hp -= melee ? 2 : 1;
     if (enemy.hp > 0) {
       enemy.sprite.setTint(0xff3e69); this.animate(enemy.sprite, 'hit', 'enemy-gunner');

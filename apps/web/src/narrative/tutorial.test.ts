@@ -40,8 +40,10 @@ describe('FIRST CALL guided progression', () => {
   });
   it('provides a usable hint at every cursor, including isolated training and task honesty', () => {
     expect(Object.keys(TUTORIAL_HINTS).sort()).toEqual([...tutorialSteps].sort());
-    expect(TUTORIAL_HINTS['create-task']).toContain('только после настоящей работы');
-    expect(TUTORIAL_HINTS.training).toContain('сохранённый запас хранится отдельно');
+    expect(TUTORIAL_HINTS['create-task']).toContain('дело из своей жизни');
+    expect(TUTORIAL_HINTS['create-task']).toContain('отмечать выполненным для обучения не нужно');
+    expect(TUTORIAL_HINTS.computer).toContain('список задач клавишей Tab');
+    expect(TUTORIAL_HINTS.training).toContain('настоящие патроны и XP не меняются');
   });
 });
 
@@ -59,11 +61,19 @@ describe('original caller content contracts', () => {
     }
   });
   it('explains product invariants and optional training without reading private task text', () => {
+    expect(DIALOGUES['first-call']?.lines).toHaveLength(4);
+    expect(DIALOGUES['first-call']?.lines[0]).toBe('У тебя осталось одно незавершённое дело.');
+    expect(DIALOGUES['first-call']?.lines.every(line => line.length < 200)).toBe(true);
     const briefing = DIALOGUES['first-call']?.lines.join(' ') ?? '';
-    expect(briefing).toContain('патроны и XP — один раз за задачу');
-    expect(briefing).toContain('Смерть тоже не отменяет сделанного');
-    expect(briefing).toContain('пропусти');
-    expect(briefing).toContain('твой запас они не затрагивают');
+    expect(briefing).toContain('список реальных дел');
+    expect(briefing).toContain('Открой компьютер и запиши настоящее дело из своей жизни');
+    expect(briefing).toContain('патроны и XP — один раз');
+    expect(briefing).toContain('только после реальной работы');
+    expect(briefing).toContain('Бой не выполняет задачи, смерть не отменяет сделанного');
+    expect(briefing).toContain('выполнять её ради обучения не нужно');
+    expect(briefing).toContain('бесплатная тренировка');
+    expect(briefing).toContain('не затрагивают твой запас');
+    expect(briefing).toContain('Обучение можно пропустить');
     expect(DIALOGUES['second-call']?.lines.join(' ')).toContain('ПЕРВАЯ СМЕНА открыта');
   });
 });

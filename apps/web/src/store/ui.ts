@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { GameHud, SceneId } from '@deadline/shared';
 
-export type Overlay = 'none' | 'terminal' | 'pause' | 'settings' | 'credits' | 'loadout' | 'dialogue' | 'outcome' | 'recovery';
+export type Overlay = 'none' | 'terminal' | 'pause' | 'settings' | 'credits' | 'loadout' | 'dialogue' | 'outcome' | 'recovery' | 'television' | 'newgame';
 interface UiState {
   screen: 'boot' | 'menu' | 'game';
   overlay: Overlay;

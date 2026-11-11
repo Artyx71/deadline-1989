@@ -10,12 +10,12 @@
   "tileheight": 16,
   "infinite": false,
   "nextlayerid": 4,
-  "nextobjectid": 41,
+  "nextobjectid": 29,
   "tilesets": [],
   "layers": [
     {
       "id": 1,
-      "name": "Apartment artwork",
+      "name": "Studio artwork",
       "type": "imagelayer",
       "image": "apartment.png",
       "x": 0,
@@ -36,9 +36,9 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 24,
-          "y": 24,
-          "width": 720,
+          "x": 64,
+          "y": 48,
+          "width": 640,
           "height": 16
         },
         {
@@ -47,10 +47,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 24,
-          "y": 40,
+          "x": 64,
+          "y": 64,
           "width": 16,
-          "height": 408
+          "height": 368
         },
         {
           "id": 3,
@@ -58,10 +58,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 728,
-          "y": 40,
+          "x": 688,
+          "y": 64,
           "width": 16,
-          "height": 408
+          "height": 368
         },
         {
           "id": 4,
@@ -69,9 +69,9 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 40,
-          "y": 432,
-          "width": 316,
+          "x": 80,
+          "y": 416,
+          "width": 112,
           "height": 16
         },
         {
@@ -80,9 +80,9 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 412,
-          "y": 432,
-          "width": 316,
+          "x": 240,
+          "y": 416,
+          "width": 400,
           "height": 16
         },
         {
@@ -91,10 +91,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 240,
-          "y": 40,
+          "x": 256,
+          "y": 64,
           "width": 16,
-          "height": 160
+          "height": 144
         },
         {
           "id": 7,
@@ -102,10 +102,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 240,
-          "y": 240,
-          "width": 16,
-          "height": 40
+          "x": 115,
+          "y": 99,
+          "width": 74,
+          "height": 106
         },
         {
           "id": 8,
@@ -113,10 +113,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 480,
-          "y": 40,
-          "width": 16,
-          "height": 168
+          "x": 203,
+          "y": 91,
+          "width": 42,
+          "height": 74
         },
         {
           "id": 9,
@@ -124,10 +124,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 40,
-          "y": 256,
-          "width": 128,
-          "height": 16
+          "x": 387,
+          "y": 95,
+          "width": 90,
+          "height": 58
         },
         {
           "id": 10,
@@ -135,10 +135,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 216,
-          "y": 256,
-          "width": 24,
-          "height": 16
+          "x": 291,
+          "y": 234,
+          "width": 106,
+          "height": 38
         },
         {
           "id": 11,
@@ -146,10 +146,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 496,
-          "y": 248,
-          "width": 16,
-          "height": 16
+          "x": 325,
+          "y": 289,
+          "width": 58,
+          "height": 42
         },
         {
           "id": 12,
@@ -157,10 +157,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 576,
-          "y": 248,
-          "width": 152,
-          "height": 16
+          "x": 307,
+          "y": 336,
+          "width": 74,
+          "height": 58
         },
         {
           "id": 13,
@@ -168,10 +168,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 66,
-          "y": 93,
-          "width": 74,
-          "height": 106
+          "x": 539,
+          "y": 87,
+          "width": 122,
+          "height": 42
         },
         {
           "id": 14,
@@ -179,10 +179,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 179,
-          "y": 96,
+          "x": 639,
+          "y": 142,
           "width": 42,
-          "height": 74
+          "height": 66
         },
         {
           "id": 15,
@@ -190,10 +190,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 52,
-          "y": 195,
-          "width": 42,
-          "height": 58
+          "x": 465,
+          "y": 204,
+          "width": 34,
+          "height": 38
         },
         {
           "id": 16,
@@ -201,10 +201,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 288,
-          "y": 76,
-          "width": 74,
-          "height": 58
+          "x": 599,
+          "y": 347,
+          "width": 42,
+          "height": 74
         },
         {
           "id": 17,
@@ -212,9 +212,9 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 400,
-          "y": 90,
-          "width": 58,
+          "x": 90,
+          "y": 227,
+          "width": 42,
           "height": 58
         },
         {
@@ -223,10 +223,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 303,
-          "y": 210,
-          "width": 106,
-          "height": 38
+          "x": 542,
+          "y": 183,
+          "width": 43,
+          "height": 31
         },
         {
           "id": 19,
@@ -234,10 +234,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 353,
-          "y": 155,
-          "width": 58,
-          "height": 42
+          "x": 601,
+          "y": 188,
+          "width": 26,
+          "height": 26
         },
         {
           "id": 20,
@@ -245,10 +245,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 523,
-          "y": 80,
-          "width": 122,
-          "height": 42
+          "x": 103,
+          "y": 323,
+          "width": 53,
+          "height": 34
         },
         {
           "id": 21,
@@ -256,10 +256,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 669,
-          "y": 77,
-          "width": 42,
-          "height": 66
+          "x": 201,
+          "y": 294,
+          "width": 22,
+          "height": 40
         },
         {
           "id": 22,
@@ -267,142 +267,10 @@
           "type": "solid",
           "rotation": 0,
           "visible": true,
-          "x": 615,
-          "y": 183,
-          "width": 26,
-          "height": 26
-        },
-        {
-          "id": 23,
-          "name": "solid-22",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 569,
-          "y": 343,
-          "width": 90,
-          "height": 58
-        },
-        {
-          "id": 24,
-          "name": "solid-23",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 672,
-          "y": 295,
-          "width": 34,
-          "height": 38
-        },
-        {
-          "id": 25,
-          "name": "solid-24",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 48,
+          "x": 175,
           "y": 366,
-          "width": 42,
-          "height": 58
-        },
-        {
-          "id": 26,
-          "name": "solid-25",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 343,
-          "y": 343,
-          "width": 42,
-          "height": 74
-        },
-        {
-          "id": 27,
-          "name": "solid-26",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 94,
-          "y": 347,
-          "width": 43,
-          "height": 36
-        },
-        {
-          "id": 28,
-          "name": "solid-27",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 135,
-          "y": 370,
-          "width": 35,
-          "height": 29
-        },
-        {
-          "id": 29,
-          "name": "solid-28",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 209,
-          "y": 350,
-          "width": 31,
+          "width": 32,
           "height": 27
-        },
-        {
-          "id": 30,
-          "name": "solid-29",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 445,
-          "y": 359,
-          "width": 41,
-          "height": 35
-        },
-        {
-          "id": 31,
-          "name": "solid-30",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 465,
-          "y": 387,
-          "width": 29,
-          "height": 23
-        },
-        {
-          "id": 32,
-          "name": "solid-31",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 668,
-          "y": 166,
-          "width": 41,
-          "height": 37
-        },
-        {
-          "id": 33,
-          "name": "solid-32",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 658,
-          "y": 209,
-          "width": 30,
-          "height": 25
-        },
-        {
-          "id": 34,
-          "name": "solid-33",
-          "type": "solid",
-          "rotation": 0,
-          "visible": true,
-          "x": 560,
-          "y": 176,
-          "width": 43,
-          "height": 29
         }
       ]
     },
@@ -414,11 +282,11 @@
       "visible": true,
       "objects": [
         {
-          "id": 35,
+          "id": 23,
           "name": "computer",
           "type": "interaction",
-          "x": 610,
-          "y": 374,
+          "x": 428,
+          "y": 126,
           "width": 0,
           "height": 0,
           "point": true,
@@ -428,7 +296,7 @@
             {
               "name": "label",
               "type": "string",
-              "value": "USE COMPUTER"
+              "value": "ОТКРЫТЬ СПИСОК ДЕЛ"
             },
             {
               "name": "radius",
@@ -438,11 +306,11 @@
           ]
         },
         {
-          "id": 36,
+          "id": 24,
           "name": "telephone",
           "type": "interaction",
-          "x": 686,
-          "y": 318,
+          "x": 479,
+          "y": 227,
           "width": 0,
           "height": 0,
           "point": true,
@@ -452,7 +320,7 @@
             {
               "name": "label",
               "type": "string",
-              "value": "ANSWER TELEPHONE"
+              "value": "ОТВЕТИТЬ НА ЗВОНОК"
             },
             {
               "name": "radius",
@@ -462,11 +330,11 @@
           ]
         },
         {
-          "id": 37,
+          "id": 25,
           "name": "cabinet",
           "type": "interaction",
-          "x": 362,
-          "y": 379,
+          "x": 618,
+          "y": 383,
           "width": 0,
           "height": 0,
           "point": true,
@@ -476,7 +344,7 @@
             {
               "name": "label",
               "type": "string",
-              "value": "CHECK EQUIPMENT"
+              "value": "ПРОВЕРИТЬ СНАРЯЖЕНИЕ"
             },
             {
               "name": "radius",
@@ -486,11 +354,11 @@
           ]
         },
         {
-          "id": 38,
+          "id": 26,
           "name": "television",
           "type": "interaction",
-          "x": 325,
-          "y": 124,
+          "x": 344,
+          "y": 384,
           "width": 0,
           "height": 0,
           "point": true,
@@ -500,7 +368,7 @@
             {
               "name": "label",
               "type": "string",
-              "value": "WATCH TELEVISION"
+              "value": "ПОСМОТРЕТЬ ТЕЛЕВИЗОР"
             },
             {
               "name": "radius",
@@ -510,11 +378,11 @@
           ]
         },
         {
-          "id": 39,
+          "id": 27,
           "name": "exit",
           "type": "interaction",
-          "x": 385,
-          "y": 421,
+          "x": 216,
+          "y": 409,
           "width": 0,
           "height": 0,
           "point": true,
@@ -524,7 +392,7 @@
             {
               "name": "label",
               "type": "string",
-              "value": "LEAVE APARTMENT"
+              "value": "ВЫЙТИ ИЗ КВАРТИРЫ"
             },
             {
               "name": "radius",
@@ -534,11 +402,11 @@
           ]
         },
         {
-          "id": 40,
+          "id": 28,
           "name": "training",
           "type": "interaction",
-          "x": 701,
-          "y": 413,
+          "x": 661,
+          "y": 405,
           "width": 0,
           "height": 0,
           "point": true,
@@ -548,7 +416,7 @@
             {
               "name": "label",
               "type": "string",
-              "value": "ENTER TRAINING"
+              "value": "НАЧАТЬ ТРЕНИРОВКУ"
             },
             {
               "name": "radius",
@@ -564,12 +432,12 @@
     {
       "name": "spawnX",
       "type": "int",
-      "value": 176
+      "value": 204
     },
     {
       "name": "spawnY",
       "type": "int",
-      "value": 239
+      "value": 232
     }
   ]
 }

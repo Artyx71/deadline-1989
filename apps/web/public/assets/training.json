@@ -1,0 +1,204 @@
+{
+  "id": "training",
+  "name": "ТИР / УЧЕБНЫЕ ПАТРОНЫ",
+  "width": 768,
+  "height": 480,
+  "tileSize": 16,
+  "spawn": {
+    "x": 530,
+    "y": 290
+  },
+  "colliders": [
+    {
+      "x": 64,
+      "y": 48,
+      "width": 640,
+      "height": 16
+    },
+    {
+      "x": 64,
+      "y": 64,
+      "width": 16,
+      "height": 368
+    },
+    {
+      "x": 688,
+      "y": 64,
+      "width": 16,
+      "height": 368
+    },
+    {
+      "x": 80,
+      "y": 416,
+      "width": 608,
+      "height": 16
+    },
+    {
+      "x": 288,
+      "y": 64,
+      "width": 16,
+      "height": 136
+    },
+    {
+      "x": 103,
+      "y": 190,
+      "width": 160,
+      "height": 44
+    },
+    {
+      "x": 104,
+      "y": 318,
+      "width": 37,
+      "height": 78
+    },
+    {
+      "x": 146,
+      "y": 318,
+      "width": 37,
+      "height": 78
+    },
+    {
+      "x": 188,
+      "y": 318,
+      "width": 37,
+      "height": 78
+    },
+    {
+      "x": 651,
+      "y": 228,
+      "width": 28,
+      "height": 123
+    },
+    {
+      "x": 340,
+      "y": 224,
+      "width": 91,
+      "height": 14
+    },
+    {
+      "x": 340,
+      "y": 342,
+      "width": 91,
+      "height": 14
+    },
+    {
+      "x": 465,
+      "y": 160,
+      "width": 154,
+      "height": 14
+    }
+  ],
+  "interactions": [
+    {
+      "id": "training",
+      "x": 500,
+      "y": 390,
+      "label": "ВЕРНУТЬСЯ В КВАРТИРУ",
+      "radius": 65
+    }
+  ],
+  "enemies": [
+    {
+      "id": "practice-dummy",
+      "type": "grunt",
+      "x": 604,
+      "y": 290
+    }
+  ],
+  "placements": [
+    {
+      "name": "wall",
+      "x": 64,
+      "y": 48,
+      "width": 640,
+      "height": 16
+    },
+    {
+      "name": "wall",
+      "x": 64,
+      "y": 64,
+      "width": 16,
+      "height": 368
+    },
+    {
+      "name": "wall",
+      "x": 688,
+      "y": 64,
+      "width": 16,
+      "height": 368
+    },
+    {
+      "name": "wall",
+      "x": 80,
+      "y": 416,
+      "width": 608,
+      "height": 16
+    },
+    {
+      "name": "wall",
+      "x": 288,
+      "y": 64,
+      "width": 16,
+      "height": 136
+    },
+    {
+      "name": "safety-bench",
+      "x": 103,
+      "y": 190,
+      "width": 160,
+      "height": 44
+    },
+    {
+      "name": "equipment-locker",
+      "x": 104,
+      "y": 318,
+      "width": 37,
+      "height": 78
+    },
+    {
+      "name": "equipment-locker",
+      "x": 146,
+      "y": 318,
+      "width": 37,
+      "height": 78
+    },
+    {
+      "name": "equipment-locker",
+      "x": 188,
+      "y": 318,
+      "width": 37,
+      "height": 78
+    },
+    {
+      "name": "bullet-catcher",
+      "x": 651,
+      "y": 228,
+      "width": 28,
+      "height": 123
+    },
+    {
+      "name": "safety-baffle",
+      "x": 340,
+      "y": 224,
+      "width": 91,
+      "height": 14
+    },
+    {
+      "name": "safety-baffle",
+      "x": 340,
+      "y": 342,
+      "width": 91,
+      "height": 14
+    },
+    {
+      "name": "safety-baffle",
+      "x": 465,
+      "y": 160,
+      "width": 154,
+      "height": 14
+    }
+  ],
+  "art": "training.png",
+  "coordinateSystem": "top-left pixel; absolute collider rectangles; center spawn/interaction points",
+  "design": "Separate original safe industrial firing range; one reusable live shooting/melee dummy; temporary ammunition only"
+}

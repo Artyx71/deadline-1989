@@ -14,6 +14,7 @@ const fieldNames: Record<string, string> = {
   skipped: 'Пропуск обучения', ignored: 'Пропуск звонка', masterVolume: 'Общая громкость',
   musicVolume: 'Громкость музыки', sfxVolume: 'Громкость эффектов', muted: 'Выключение звука',
   streamerMode: 'Режим стримера', reducedMotion: 'Уменьшение анимации', crt: 'Эффект ЭЛТ',
+  confirmation: 'Подтверждение',
 };
 function validationMessage(issue: ZodError['issues'][number]): string {
   switch (issue.code) {
@@ -122,6 +123,10 @@ export function createApp(options: AppOptions = {}): FastifyInstance {
   app.post('/api/game/reset', async request => {
     const input = emptyBody.parse(request.body ?? {});
     return mutate(request, input, () => service.resetGame());
+  });
+  app.post('/api/profile/reset', async request => {
+    const input = z.object({ confirmation: z.literal('УДАЛИТЬ') }).strict().parse(request.body);
+    return mutate(request, input, () => service.resetProfile());
   });
   app.get('/api/dialogue/next', async () => service.nextDialogue());
   app.post('/api/dialogue/:id/acknowledge', async request => {

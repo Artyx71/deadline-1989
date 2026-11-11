@@ -471,7 +471,9 @@
       "geometry": "apartment.json",
       "tiled": "apartment.tiled.json",
       "width": 768,
-      "height": 480
+      "height": 480,
+      "layout": "open-studio",
+      "lighting": "emerald-amber-crimson"
     },
     "combat": {
       "file": "combat.png",
@@ -484,6 +486,14 @@
       "file": "skyline.png",
       "width": 768,
       "height": 480
+    },
+    "training": {
+      "file": "training.png",
+      "geometry": "training.json",
+      "tiled": "training.tiled.json",
+      "width": 768,
+      "height": 480,
+      "layout": "separate-industrial-range"
     }
   },
   "environment": {

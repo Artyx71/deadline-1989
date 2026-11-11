@@ -175,6 +175,9 @@ importers:
       eslint:
         specifier: 10.14.0
         version: 10.14.0(jiti@2.7.0)
+      prettier:
+        specifier: 3.10.0
+        version: 3.10.0
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -187,6 +190,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@deadline/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@deadline/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -198,7 +204,7 @@ importers:
         version: 13.0.3
       drizzle-orm:
         specifier: 0.45.4
-        version: 0.45.4(@types/better-sqlite3@9.6.0)(better-sqlite3@13.0.3)
+        version: 0.45.4(@types/better-sqlite3@9.6.0)(@types/sql.js@1.4.11)(better-sqlite3@13.0.3)(sql.js@1.16.0)
       fastify:
         specifier: 5.12.8
         version: 5.12.8
@@ -218,12 +224,18 @@ importers:
 
   apps/web:
     dependencies:
+      '@deadline/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@deadline/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@tanstack/react-query':
         specifier: 5.107.1
         version: 5.107.1(@types/react@19.3.0)(react@19.3.1)
+      drizzle-orm:
+        specifier: 0.45.4
+        version: 0.45.4(@types/better-sqlite3@9.6.0)(@types/sql.js@1.4.11)(better-sqlite3@13.0.3)(sql.js@1.16.0)
       phaser:
         specifier: 3.90.0
         version: 3.90.0
@@ -233,6 +245,9 @@ importers:
       react-dom:
         specifier: 19.3.1
         version: 19.3.1(react@19.3.1)
+      sql.js:
+        specifier: 1.16.0
+        version: 1.16.0
       zod:
         specifier: 4.6.7
         version: 4.6.7
@@ -249,6 +264,9 @@ importers:
       '@types/react-dom':
         specifier: 19.3.0
         version: 19.3.0(@types/react@19.3.0)
+      '@types/sql.js':
+        specifier: 1.4.11
+        version: 1.4.11
       '@vitejs/plugin-react':
         specifier: 6.3.0
         version: 6.3.0(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
@@ -258,6 +276,18 @@ importers:
       vite:
         specifier: 8.3.8
         version: 8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)
+
+  packages/domain:
+    dependencies:
+      '@deadline/shared':
+        specifier: workspace:*
+        version: link:../shared
+      drizzle-orm:
+        specifier: 0.45.4
+        version: 0.45.4(@types/better-sqlite3@9.6.0)(@types/sql.js@1.4.11)(better-sqlite3@13.0.3)(sql.js@1.16.0)
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
 
   packages/shared:
     dependencies:
@@ -1064,6 +1094,9 @@ packages:
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
 
+  '@types/emscripten@1.41.6':
+    resolution: {integrity: sha512-uN+9i8bFT5CUcZfyIEYDrSueACEyKGbUs5kC/72DGlZZoinh84sJfVV0i8UOJD1asdzkvLPBRrKs41kZ8MdEXg==}
+
   '@types/esrecurse@4.3.1':
     resolution: {integrity: sha512-xJBAbDifo5hpffDBuHl0Y8ywswbiAp/Wi7Y/GtAgSlZyIABppyurxVueOPE8LUQOxdlgi6Zqce7uoEpqNTeiUw==}
 
@@ -1083,6 +1116,9 @@ packages:
 
   '@types/react@19.3.0':
     resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
+
+  '@types/sql.js@1.4.11':
+    resolution: {integrity: sha512-QXIx38p2ZThJaK9vP5ZdqdlRe1FG9I8SmCZOS7FHfB/2qPAjZwkL7/vlfPg6N/oWHuuOaGg/P/IRwfP2W0kWVQ==}
 
   '@typescript-eslint/eslint-plugin@8.72.2':
     resolution: {integrity: sha512-222PKFXKihmFpi/pS5njoBgdAqsPhj2/GBmFbrNw8Tq8gEG9Sv+kSlKFy4u2q+mJv9ZzJgM2Gkv/bUzRZwZw5g==}
@@ -1787,6 +1823,11 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
+  prettier@3.10.0:
+    resolution: {integrity: sha512-mBi4765LgjO1PFjlEs7pUeK0nb1bw71c+N4/ItfeUWNdY5cV2pRKaFpbbFRYmDJMO+5ZwzGxHRqHxFZna7iv5w==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   process-warning@5.1.1:
     resolution: {integrity: sha512-oCkNVj4OKnKEcocVBcDfiIugN1/cE6rgfT3nCtzeqZPA8+rIxMaQ0xXzIkGP8Gj2qUaP1UR7uhJ1VD8lUCpzCg==}
 
@@ -1886,6 +1927,9 @@ packages:
   split2@4.2.0:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
     engines: {node: '>= 10.x'}
+
+  sql.js@1.16.0:
+    resolution: {integrity: sha512-q/JOZuJfmVh8Zf8Eo+cMJvtxAWeWBqTfJ6AQYGXZmcaLGHMwhA2niH3fQYHrBtPeOss1ttzHec07K5+rHaMRMw==}
 
   statuses@2.0.2:
     resolution: {integrity: sha512-DvEy55V3DB7uknRo+4iOGT5fP1slR8wQohVdknigZPMpMstaKJQWhwiYBACJE3Ul2pTnATihhBYnRhZQHGBiRw==}
@@ -2594,6 +2638,8 @@ snapshots:
 
   '@types/deep-eql@4.0.2': {}
 
+  '@types/emscripten@1.41.6': {}
+
   '@types/esrecurse@4.3.1': {}
 
   '@types/estree@1.0.10': {}
@@ -2611,6 +2657,11 @@ snapshots:
   '@types/react@19.3.0':
     dependencies:
       csstype: 3.2.3
+
+  '@types/sql.js@1.4.11':
+    dependencies:
+      '@types/emscripten': 1.41.6
+      '@types/node': 26.6.6
 
   '@typescript-eslint/eslint-plugin@8.72.2(@typescript-eslint/parser@8.72.2(eslint@10.14.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.14.0(jiti@2.7.0))(typescript@6.0.3)':
     dependencies:
@@ -2807,10 +2858,12 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.23.15
 
-  drizzle-orm@0.45.4(@types/better-sqlite3@9.6.0)(better-sqlite3@13.0.3):
+  drizzle-orm@0.45.4(@types/better-sqlite3@9.6.0)(@types/sql.js@1.4.11)(better-sqlite3@13.0.3)(sql.js@1.16.0):
     optionalDependencies:
       '@types/better-sqlite3': 9.6.0
+      '@types/sql.js': 1.4.11
       better-sqlite3: 13.0.3
+      sql.js: 1.16.0
 
   enhanced-resolve@5.26.1:
     dependencies:
@@ -3289,6 +3342,8 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
+  prettier@3.10.0: {}
+
   process-warning@5.1.1: {}
 
   punycode@2.3.1: {}
@@ -3375,6 +3430,8 @@ snapshots:
   source-map@0.6.1: {}
 
   split2@4.2.0: {}
+
+  sql.js@1.16.0: {}
 
   statuses@2.0.2: {}
 

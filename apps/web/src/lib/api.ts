@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { settingsSchema, taskInputSchema, tutorialSteps } from '@deadline/shared';
 import type { ApiErrorBody, Difficulty, MissionStats, MutationResult, Settings, StateSnapshot, TaskInput, TutorialProgress } from '@deadline/shared';
+const apiRoot = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '');
 
 const taskSchema = taskInputSchema.extend({
   id: z.string(), status: z.enum(['active', 'completed']), createdAt: z.string(), updatedAt: z.string(),
@@ -38,21 +39,29 @@ async function request(path: string, method = 'GET', body?: unknown): Promise<un
   const key = method === 'GET' ? undefined : operationKey(fingerprint);
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const response = await fetch(`/api${path}`, {
-        method,
-        headers: { ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...(key ? { 'Idempotency-Key': key } : {}) },
-        body: body === undefined ? undefined : JSON.stringify(body), signal: AbortSignal.timeout(8000),
-      });
-      const data: unknown = await response.json();
-      if (!response.ok) {
+      let status: number;
+      let data: unknown;
+      if (import.meta.env.VITE_STATIC_PROFILE === '1') {
+        const { browserApi } = await import('../persistence/client');
+        ({ status, body: data } = await browserApi.request(path, method, body, key));
+      } else {
+        const response = await fetch(`${apiRoot}${path}`, {
+          method,
+          headers: { ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...(key ? { 'Idempotency-Key': key } : {}) },
+          body: body === undefined ? undefined : JSON.stringify(body), signal: AbortSignal.timeout(8000),
+        });
+        status = response.status;
+        data = await response.json();
+      }
+      if (status < 200 || status >= 300) {
         const error = data as ApiErrorBody;
-        throw new ApiError(error.error?.message ?? `Ошибка запроса (${response.status})`, response.status, error.error?.code ?? 'REQUEST_FAILED');
+        throw new ApiError(error.error?.message ?? `Ошибка запроса (${status})`, status, error.error?.code ?? 'REQUEST_FAILED');
       }
       if (key) clearOperation(fingerprint);
       return data;
     } catch (error) {
       if (error instanceof ApiError && error.status < 500) { if (key) clearOperation(fingerprint); throw error; }
-      if (attempt === 2) throw error instanceof ApiError ? error : new ApiError('Нет связи с сервером. Запрос сохранён для безопасного повтора. Подключитесь и попробуйте снова.', 0, 'NETWORK_ERROR');
+      if (attempt === 2) throw error instanceof ApiError ? error : new ApiError(import.meta.env.VITE_STATIC_PROFILE === '1' ? (error instanceof Error ? error.message : 'Локальный профиль недоступен. Повторите запрос; данные не удалялись.') : 'Нет связи с сервером. Запрос сохранён для безопасного повтора. Подключитесь и попробуйте снова.', 0, 'NETWORK_ERROR');
       await new Promise(resolve => setTimeout(resolve, 200 * (attempt + 1)));
     }
   }
@@ -77,6 +86,7 @@ export const api = {
   settings: (patch: Partial<Settings>) => mutation('/settings', 'PATCH', patch),
   tutorial: (patch: Partial<TutorialProgress>) => mutation('/tutorial', 'PATCH', patch),
   resetGame: () => mutation('/game/reset', 'POST'),
+  resetProfile: () => mutation('/profile/reset', 'POST', { confirmation: 'УДАЛИТЬ' }),
   startMission: (ammo: number) => mutation('/missions/start', 'POST', { ammo, missionId: 'first-shift' }),
   shot: (id: string) => mutation(`/missions/${id}/shots`, 'POST', { count: 1 }),
   finishMission: (id: string, outcome: 'dead' | 'cleared' | 'abandoned', stats: MissionStats) => mutation(`/missions/${id}/finish`, 'POST', { outcome, stats }),

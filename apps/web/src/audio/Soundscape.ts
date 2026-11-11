@@ -14,6 +14,10 @@ class Soundscape {
   private master: GainNode | null = null;
   private music: GainNode | null = null;
   private effects: GainNode | null = null;
+  private effectMeter: AnalyserNode | null = null;
+  private playedSfx: Record<string, number> = {};
+  private effectRmsPeak = 0;
+  private meterTimers = new Set<number>();
   private settings: Settings = DEFAULT_SETTINGS;
   private buffers = new Map<string, Promise<AudioBuffer>>();
   private active = new Set<PlayingTrack>();
@@ -22,6 +26,7 @@ class Soundscape {
   private stateSerial = 0;
   private lastSfx = new Map<string, number>();
   private paused = false;
+  private silenced = false;
   private unlocked = false;
   private error = '';
 
@@ -29,17 +34,23 @@ class Soundscape {
     if (!this.context) {
       this.context = new AudioContext();
       this.master = this.context.createGain(); this.music = this.context.createGain(); this.effects = this.context.createGain();
-      this.music.connect(this.master); this.effects.connect(this.master); this.master.connect(this.context.destination);
+      this.effectMeter = this.context.createAnalyser(); this.effectMeter.fftSize = 1024;
+      this.music.connect(this.master); this.effects.connect(this.effectMeter); this.effectMeter.connect(this.master); this.master.connect(this.context.destination);
       this.applyVolumes();
     }
     try {
       await this.context.resume();
-      if (!this.unlocked) { this.unlocked = true; await this.playState(this.currentState); }
+      if (!this.unlocked) {
+        this.unlocked = true;
+        for (const name of ['gunshot', 'melee', 'impact', 'reload']) void this.load(`sfx-${name}`).catch(error => this.audioError(error));
+        await this.playState(this.currentState);
+      }
       this.report();
     } catch (error) { this.audioError(error); }
   }
   setSettings(settings: Settings) { this.settings = settings; this.applyVolumes(); }
   setPaused(paused: boolean) { this.paused = paused; this.applyVolumes(); }
+  setSilenced(silenced: boolean) { this.silenced = silenced; this.applyVolumes(); }
   setState(state: MusicState) {
     if (state === this.currentState && this.current) return;
     this.currentState = state;
@@ -51,7 +62,7 @@ class Soundscape {
     if (!context) throw new Error('Audio requires a user gesture');
     let promise = this.buffers.get(name);
     if (!promise) {
-      promise = fetch(`/assets/audio/${name}.wav`).then(async response => {
+      promise = fetch(`${import.meta.env.BASE_URL}assets/audio/${name}.wav`).then(async response => {
         if (!response.ok) throw new Error(`Audio ${name}: HTTP ${response.status}`);
         return context.decodeAudioData(await response.arrayBuffer());
       });
@@ -95,7 +106,12 @@ class Soundscape {
     track.source.stop(now + duration + .015);
   }
   sfx(name: string) {
-    if (!this.unlocked || !this.context || !this.effects || this.settings.muted) return;
+    if (this.settings.muted || this.silenced) return;
+    if (!this.unlocked || !this.context || this.context.state !== 'running') {
+      void this.unlock().then(() => { if (this.unlocked && this.context?.state === 'running') this.sfx(name); });
+      return;
+    }
+    if (!this.effects) return;
     const now = performance.now();
     const interval = name === 'text' ? 55 : name === 'footstep' ? 180 : 35;
     if (now - (this.lastSfx.get(name) ?? -Infinity) < interval) return;
@@ -104,15 +120,24 @@ class Soundscape {
     void this.load(`sfx-${sound}`).then(buffer => {
       if (!this.context || !this.effects) return;
       const source = this.context.createBufferSource(); const gain = this.context.createGain();
-      source.buffer = buffer; gain.gain.value = name === 'text' ? .08 : name === 'footstep' ? .28 : .75;
+      source.buffer = buffer; gain.gain.value = name === 'text' ? .08 : name === 'footstep' ? .28 : ['gunshot', 'melee', 'impact'].includes(name) ? 1 : .75;
       source.connect(gain); gain.connect(this.effects); source.start();
+      this.playedSfx[name] = (this.playedSfx[name] ?? 0) + 1; this.report();
+      for (const delay of [16, 48, 96]) {
+        const timer = window.setTimeout(() => {
+          this.meterTimers.delete(timer);
+          this.effectRmsPeak = Math.max(this.effectRmsPeak, this.inspect().effectRms);
+          this.report();
+        }, delay);
+        this.meterTimers.add(timer);
+      }
       source.onended = () => { source.disconnect(); gain.disconnect(); };
     }).catch(error => this.audioError(error));
   }
   private applyVolumes() {
     if (!this.context || !this.master || !this.music || !this.effects) return;
     const now = this.context.currentTime;
-    this.master.gain.setTargetAtTime(this.settings.muted ? 0 : this.settings.masterVolume, now, .04);
+    this.master.gain.setTargetAtTime(this.settings.muted || this.silenced ? 0 : this.settings.masterVolume, now, .04);
     const dialogueDuck = this.currentState === 'PHONE_DIALOGUE' ? .45 : 1;
     this.music.gain.setTargetAtTime(this.settings.musicVolume * dialogueDuck * (this.paused ? .35 : 1), now, .1);
     this.effects.gain.setTargetAtTime(this.settings.sfxVolume, now, .04);
@@ -130,14 +155,23 @@ class Soundscape {
     document.documentElement.dataset.audioContext = this.context?.state ?? 'locked';
     document.documentElement.dataset.audioTracks = String(this.active.size);
     document.documentElement.dataset.audioError = this.error;
+    document.documentElement.dataset.playedSfx = JSON.stringify(this.playedSfx);
+    document.documentElement.dataset.audioSilenced = String(this.silenced);
+    document.documentElement.dataset.effectRmsPeak = this.effectRmsPeak.toFixed(6);
   }
-  inspect() { return { state: this.currentState, context: this.context?.state ?? 'locked', tracks: this.active.size, error: this.error,
+  inspect() {
+    const samples = new Float32Array(this.effectMeter?.fftSize ?? 1024);
+    this.effectMeter?.getFloatTimeDomainData(samples);
+    const effectRms = Math.sqrt(samples.reduce((sum, value) => sum + value * value, 0) / samples.length);
+    return { state: this.currentState, context: this.context?.state ?? 'locked', tracks: this.active.size, error: this.error, silenced: this.silenced, playedSfx: { ...this.playedSfx }, effectRms,
     gain: { master: this.master?.gain.value ?? 0, music: this.music?.gain.value ?? 0, sfx: this.effects?.gain.value ?? 0 } }; }
   destroy() {
     this.stateSerial++;
+    for (const timer of this.meterTimers) window.clearTimeout(timer);
+    this.meterTimers.clear();
     for (const playing of this.active) this.stop(playing, .02);
-    this.buffers.clear(); this.unlocked = false; this.current = null;
-    void this.context?.close(); this.context = null;
+    this.active.clear(); this.buffers.clear(); this.unlocked = false; this.current = null; this.silenced = false;
+    void this.context?.close(); this.context = null; this.master = null; this.music = null; this.effects = null; this.effectMeter = null;
   }
 }
 export const soundscape = new Soundscape();

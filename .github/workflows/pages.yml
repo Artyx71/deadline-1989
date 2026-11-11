@@ -1,0 +1,64 @@
+name: Verify and publish DEADLINE 1989
+
+on:
+  push:
+    branches: [feat/deadline-1989]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '26'
+      - name: Install pnpm
+        run: npm install --global pnpm@12.18.0
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check formatting, types and lint
+        run: |
+          pnpm format:check
+          pnpm typecheck
+          pnpm lint
+      - name: Verify domain and SQLite adapters
+        run: pnpm test
+      - name: Build native and browser editions
+        run: |
+          pnpm build
+          pnpm build:pages
+      - name: Install Chromium
+        run: node node_modules/@playwright/test/cli.js install --with-deps chromium
+      - name: Verify real browser editions
+        env:
+          PLAYWRIGHT_USE_BUNDLED: '1'
+        run: |
+          pnpm test:e2e
+          pnpm test:pages
+      - name: Save browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: browser-failures
+          path: test-results/
+          retention-days: 7
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: apps/web/dist-pages
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5

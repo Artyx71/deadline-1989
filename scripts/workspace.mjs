@@ -11,6 +11,7 @@ const bins = {
   playwright: 'node_modules/@playwright/test/cli.js',
   vite: 'apps/web/node_modules/vite/bin/vite.js',
   tsx: 'apps/server/node_modules/tsx/dist/cli.mjs',
+  prettier: 'node_modules/prettier/bin/prettier.cjs',
 };
 function launch(tool, args = [], cwd = root, env = {}) {
   const executable = bins[tool] ? resolve(root, bins[tool]) : resolve(root, tool);
@@ -23,7 +24,10 @@ async function run(tool, args = [], cwd = root, env = {}) {
 }
 const mode = process.argv[2];
 const extra = process.argv.slice(3);
-const shared = () => run('tsc', ['-p', 'packages/shared/tsconfig.json']);
+const shared = async () => {
+  await run('tsc', ['-p', 'packages/shared/tsconfig.json']);
+  await run('tsc', ['-p', 'packages/domain/tsconfig.json']);
+};
 switch (mode) {
   case 'shared': await shared(); break;
   case 'typecheck':
@@ -33,6 +37,15 @@ switch (mode) {
   case 'lint': await run('eslint', ['apps', 'packages', 'tests', 'e2e', '--no-error-on-unmatched-pattern', ...extra]); break;
   case 'test': await shared(); await run('vitest', ['run', ...extra]); break;
   case 'e2e': await run('playwright', ['test', ...extra]); break;
+  case 'pages:e2e': await run('playwright', ['test', '--config', 'playwright.pages.config.ts', ...extra]); break;
+  case 'build:pages':
+    await shared();
+    await run('tsc', ['--noEmit', '-p', 'apps/web/tsconfig.json']);
+    await run('vite', ['build'], resolve(root, 'apps/web'), { VITE_BASE_PATH: '/deadline-1989/', VITE_STATIC_PROFILE: '1', VITE_OUT_DIR: 'dist-pages' });
+    break;
+  case 'preview:pages':
+    await run('vite', ['preview', '--host', '127.0.0.1', '--port', '5176', '--strictPort'], resolve(root, 'apps/web'), { VITE_BASE_PATH: '/deadline-1989/', VITE_STATIC_PROFILE: '1', VITE_OUT_DIR: 'dist-pages' });
+    break;
   case 'build':
     await shared();
     await run('tsc', ['-p', 'apps/server/tsconfig.build.json']);
@@ -48,5 +61,9 @@ switch (mode) {
     break;
   }
   case 'start': await run('apps/server/dist/index.js'); break;
+  case 'format':
+  case 'format:check':
+    await run('prettier', [mode === 'format' ? '--write' : '--check', ...(extra.length ? extra : ['**/*.{ts,tsx,js,mjs,cjs,json,css,md,yaml,yml}'])]);
+    break;
   default: throw new Error(`Unknown workspace command: ${mode}`);
 }

@@ -1,453 +1,354 @@
 {
   "id": "apartment",
+  "name": "СТУДИЯ / ПОСЛЕ ПОЛУНОЧИ",
   "width": 768,
   "height": 480,
   "tileSize": 16,
   "spawn": {
-    "x": 176,
-    "y": 239
+    "x": 204,
+    "y": 232
   },
   "colliders": [
     {
-      "x": 24,
-      "y": 24,
-      "width": 720,
+      "x": 64,
+      "y": 48,
+      "width": 640,
       "height": 16
     },
     {
-      "x": 24,
-      "y": 40,
+      "x": 64,
+      "y": 64,
       "width": 16,
-      "height": 408
+      "height": 368
     },
     {
-      "x": 728,
-      "y": 40,
+      "x": 688,
+      "y": 64,
       "width": 16,
-      "height": 408
+      "height": 368
     },
     {
-      "x": 40,
-      "y": 432,
-      "width": 316,
-      "height": 16
-    },
-    {
-      "x": 412,
-      "y": 432,
-      "width": 316,
+      "x": 80,
+      "y": 416,
+      "width": 112,
       "height": 16
     },
     {
       "x": 240,
-      "y": 40,
-      "width": 16,
-      "height": 160
-    },
-    {
-      "x": 240,
-      "y": 240,
-      "width": 16,
-      "height": 40
-    },
-    {
-      "x": 480,
-      "y": 40,
-      "width": 16,
-      "height": 168
-    },
-    {
-      "x": 40,
-      "y": 256,
-      "width": 128,
+      "y": 416,
+      "width": 400,
       "height": 16
     },
     {
-      "x": 216,
-      "y": 256,
-      "width": 24,
-      "height": 16
-    },
-    {
-      "x": 496,
-      "y": 248,
+      "x": 256,
+      "y": 64,
       "width": 16,
-      "height": 16
+      "height": 144
     },
     {
-      "x": 576,
-      "y": 248,
-      "width": 152,
-      "height": 16
-    },
-    {
-      "x": 66,
-      "y": 93,
+      "x": 115,
+      "y": 99,
       "width": 74,
       "height": 106
     },
     {
-      "x": 179,
-      "y": 96,
+      "x": 203,
+      "y": 91,
       "width": 42,
       "height": 74
     },
     {
-      "x": 52,
-      "y": 195,
-      "width": 42,
-      "height": 58
-    },
-    {
-      "x": 288,
-      "y": 76,
-      "width": 74,
-      "height": 58
-    },
-    {
-      "x": 400,
-      "y": 90,
-      "width": 58,
-      "height": 58
-    },
-    {
-      "x": 303,
-      "y": 210,
-      "width": 106,
-      "height": 38
-    },
-    {
-      "x": 353,
-      "y": 155,
-      "width": 58,
-      "height": 42
-    },
-    {
-      "x": 523,
-      "y": 80,
-      "width": 122,
-      "height": 42
-    },
-    {
-      "x": 669,
-      "y": 77,
-      "width": 42,
-      "height": 66
-    },
-    {
-      "x": 615,
-      "y": 183,
-      "width": 26,
-      "height": 26
-    },
-    {
-      "x": 569,
-      "y": 343,
+      "x": 387,
+      "y": 95,
       "width": 90,
       "height": 58
     },
     {
-      "x": 672,
-      "y": 295,
+      "x": 291,
+      "y": 234,
+      "width": 106,
+      "height": 38
+    },
+    {
+      "x": 325,
+      "y": 289,
+      "width": 58,
+      "height": 42
+    },
+    {
+      "x": 307,
+      "y": 336,
+      "width": 74,
+      "height": 58
+    },
+    {
+      "x": 539,
+      "y": 87,
+      "width": 122,
+      "height": 42
+    },
+    {
+      "x": 639,
+      "y": 142,
+      "width": 42,
+      "height": 66
+    },
+    {
+      "x": 465,
+      "y": 204,
       "width": 34,
       "height": 38
     },
     {
-      "x": 48,
-      "y": 366,
-      "width": 42,
-      "height": 58
-    },
-    {
-      "x": 343,
-      "y": 343,
+      "x": 599,
+      "y": 347,
       "width": 42,
       "height": 74
     },
     {
-      "x": 94,
-      "y": 347,
+      "x": 90,
+      "y": 227,
+      "width": 42,
+      "height": 58
+    },
+    {
+      "x": 542,
+      "y": 183,
       "width": 43,
-      "height": 36
+      "height": 31
     },
     {
-      "x": 135,
-      "y": 370,
-      "width": 35,
-      "height": 29
+      "x": 601,
+      "y": 188,
+      "width": 26,
+      "height": 26
     },
     {
-      "x": 209,
-      "y": 350,
-      "width": 31,
+      "x": 103,
+      "y": 323,
+      "width": 53,
+      "height": 34
+    },
+    {
+      "x": 201,
+      "y": 294,
+      "width": 22,
+      "height": 40
+    },
+    {
+      "x": 175,
+      "y": 366,
+      "width": 32,
       "height": 27
-    },
-    {
-      "x": 445,
-      "y": 359,
-      "width": 41,
-      "height": 35
-    },
-    {
-      "x": 465,
-      "y": 387,
-      "width": 29,
-      "height": 23
-    },
-    {
-      "x": 668,
-      "y": 166,
-      "width": 41,
-      "height": 37
-    },
-    {
-      "x": 658,
-      "y": 209,
-      "width": 30,
-      "height": 25
-    },
-    {
-      "x": 560,
-      "y": 176,
-      "width": 43,
-      "height": 29
     }
   ],
   "interactions": [
     {
       "id": "computer",
-      "x": 610,
-      "y": 374,
-      "label": "USE COMPUTER",
+      "x": 428,
+      "y": 126,
+      "label": "ОТКРЫТЬ СПИСОК ДЕЛ",
       "radius": 66
     },
     {
       "id": "telephone",
-      "x": 686,
-      "y": 318,
-      "label": "ANSWER TELEPHONE",
+      "x": 479,
+      "y": 227,
+      "label": "ОТВЕТИТЬ НА ЗВОНОК",
       "radius": 58
     },
     {
       "id": "cabinet",
-      "x": 362,
-      "y": 379,
-      "label": "CHECK EQUIPMENT",
+      "x": 618,
+      "y": 383,
+      "label": "ПРОВЕРИТЬ СНАРЯЖЕНИЕ",
       "radius": 56
     },
     {
       "id": "television",
-      "x": 325,
-      "y": 124,
-      "label": "WATCH TELEVISION",
+      "x": 344,
+      "y": 384,
+      "label": "ПОСМОТРЕТЬ ТЕЛЕВИЗОР",
       "radius": 58
     },
     {
       "id": "exit",
-      "x": 385,
-      "y": 421,
-      "label": "LEAVE APARTMENT",
+      "x": 216,
+      "y": 409,
+      "label": "ВЫЙТИ ИЗ КВАРТИРЫ",
       "radius": 53
     },
     {
       "id": "training",
-      "x": 701,
-      "y": 413,
-      "label": "ENTER TRAINING",
+      "x": 661,
+      "y": 405,
+      "label": "НАЧАТЬ ТРЕНИРОВКУ",
       "radius": 53
     }
   ],
   "placements": [
     {
       "name": "bed",
-      "x": 63,
-      "y": 90,
+      "x": 112,
+      "y": 96,
       "width": 80,
       "height": 112
     },
     {
       "name": "cabinet",
-      "x": 176,
-      "y": 93,
+      "x": 200,
+      "y": 88,
       "width": 48,
       "height": 80
     },
     {
-      "name": "plant",
-      "x": 49,
-      "y": 192,
-      "width": 48,
-      "height": 64
-    },
-    {
       "name": "window",
-      "x": 69,
-      "y": 51,
+      "x": 116,
+      "y": 67,
       "width": 80,
       "height": 24
-    },
-    {
-      "name": "window",
-      "x": 598,
-      "y": 51,
-      "width": 80,
-      "height": 24
-    },
-    {
-      "name": "tv",
-      "x": 285,
-      "y": 73,
-      "width": 80,
-      "height": 64
-    },
-    {
-      "name": "bookshelf",
-      "x": 397,
-      "y": 87,
-      "width": 64,
-      "height": 64
-    },
-    {
-      "name": "sofa",
-      "x": 300,
-      "y": 207,
-      "width": 112,
-      "height": 44
-    },
-    {
-      "name": "table",
-      "x": 350,
-      "y": 152,
-      "width": 64,
-      "height": 48
-    },
-    {
-      "name": "counter",
-      "x": 520,
-      "y": 77,
-      "width": 128,
-      "height": 48
-    },
-    {
-      "name": "fridge",
-      "x": 666,
-      "y": 74,
-      "width": 48,
-      "height": 72
-    },
-    {
-      "name": "chair",
-      "x": 612,
-      "y": 180,
-      "width": 32,
-      "height": 32
     },
     {
       "name": "desk",
-      "x": 566,
-      "y": 340,
+      "x": 384,
+      "y": 92,
       "width": 96,
       "height": 64
     },
     {
       "name": "chair",
-      "x": 597,
-      "y": 402,
+      "x": 412,
+      "y": 161,
       "width": 32,
       "height": 32
     },
     {
+      "name": "sofa",
+      "x": 288,
+      "y": 231,
+      "width": 112,
+      "height": 44
+    },
+    {
+      "name": "table",
+      "x": 322,
+      "y": 286,
+      "width": 64,
+      "height": 48
+    },
+    {
+      "name": "tv",
+      "x": 304,
+      "y": 333,
+      "width": 80,
+      "height": 64
+    },
+    {
+      "name": "counter",
+      "x": 536,
+      "y": 84,
+      "width": 128,
+      "height": 48
+    },
+    {
+      "name": "fridge",
+      "x": 636,
+      "y": 139,
+      "width": 48,
+      "height": 72
+    },
+    {
+      "name": "window",
+      "x": 556,
+      "y": 67,
+      "width": 80,
+      "height": 24
+    },
+    {
+      "name": "telephone-side-table",
+      "x": 454,
+      "y": 195,
+      "width": 56,
+      "height": 52
+    },
+    {
       "name": "phone",
-      "x": 669,
-      "y": 292,
+      "x": 462,
+      "y": 201,
       "width": 40,
       "height": 44
     },
     {
-      "name": "plant",
-      "x": 45,
-      "y": 363,
-      "width": 48,
-      "height": 64
-    },
-    {
       "name": "cabinet",
-      "x": 340,
-      "y": 340,
+      "x": 596,
+      "y": 344,
       "width": 48,
       "height": 80
     },
     {
+      "name": "plant",
+      "x": 87,
+      "y": 224,
+      "width": 48,
+      "height": 64
+    },
+    {
       "name": "door",
-      "x": 360,
-      "y": 420,
+      "x": 192,
+      "y": 384,
       "width": 48,
       "height": 48
     },
     {
       "name": "door",
-      "x": 680,
-      "y": 400,
+      "x": 640,
+      "y": 384,
       "width": 48,
       "height": 48
     },
     {
-      "name": "storage-box",
-      "x": 92,
-      "y": 345,
+      "name": "breakfast-table",
+      "x": 540,
+      "y": 181,
       "width": 47,
-      "height": 40
+      "height": 36
     },
     {
-      "name": "storage-box",
-      "x": 133,
-      "y": 368,
-      "width": 39,
-      "height": 33
+      "name": "chair",
+      "x": 598,
+      "y": 185,
+      "width": 32,
+      "height": 32
     },
     {
-      "name": "storage-box",
-      "x": 207,
-      "y": 348,
-      "width": 35,
-      "height": 31
-    },
-    {
-      "name": "storage-box",
-      "x": 443,
-      "y": 357,
-      "width": 45,
+      "name": "record-console",
+      "x": 101,
+      "y": 321,
+      "width": 57,
       "height": 39
     },
     {
-      "name": "storage-box",
-      "x": 463,
-      "y": 385,
-      "width": 33,
-      "height": 27
+      "name": "coat-stand",
+      "x": 194,
+      "y": 286,
+      "width": 32,
+      "height": 49
     },
     {
-      "name": "storage-box",
-      "x": 666,
-      "y": 164,
-      "width": 45,
+      "name": "unpacked-box",
+      "x": 168,
+      "y": 355,
+      "width": 50,
       "height": 41
-    },
-    {
-      "name": "storage-box",
-      "x": 656,
-      "y": 207,
-      "width": 34,
-      "height": 29
-    },
-    {
-      "name": "kitchen-table",
-      "x": 558,
-      "y": 174,
-      "width": 47,
-      "height": 34
     }
   ],
   "art": "apartment.png",
-  "coordinateSystem": "top-left pixel; colliders absolute; spawn/interactions center points"
+  "coordinateSystem": "top-left pixel; colliders absolute; spawn/interactions center points",
+  "trainingArea": {
+    "x": 500,
+    "y": 260,
+    "width": 145,
+    "height": 70
+  },
+  "design": "Original compact open studio; sleeping alcove and shared living/work/kitchen space; emerald/amber/crimson light"
 }

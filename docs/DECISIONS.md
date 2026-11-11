@@ -1,6 +1,6 @@
 # DEADLINE: 1989 — Architectural decisions
 
-Bootstrap records constraints and proposed implementation choices. **Accepted** means agreed direction, not implemented code. **Proposed** requires resolution before dependent implementation. Consult [architecture](ARCHITECTURE.md), [backlog](TASKS.md), and [AGENTS.md](../AGENTS.md).
+This log retains the bootstrap history and subsequent implementation decisions. **Accepted** records an agreed direction; current implementation/test/deployment evidence belongs in [VERIFICATION.md](VERIFICATION.md). Later decisions explicitly supersede earlier scope choices where noted. Public Pages deployment and browser-mode acceptance are pending. Consult [architecture](ARCHITECTURE.md), [backlog](TASKS.md), and [AGENTS.md](../AGENTS.md).
 
 ## ADR-001 — Product independence and priority
 
@@ -8,7 +8,7 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Options considered:** Require a running game to access tasks; expose the terminal independently of simulation.
 
-**Decision:** React provides independent task management. Creation, completion, deletion, and reload persistence are P0 gates. Editing/reopening/filtering are planned terminal capabilities. Gameplay cannot complete tasks, and death cannot modify task status.
+**Decision:** React provides independent task management. Creation, completion, deletion, and reload persistence are P0 gates. Editing/reopening/filtering support the terminal. Gameplay cannot complete tasks, and death cannot modify task status.
 
 **Consequences:** Phaser loading/error/pause cannot block terminal access. Optional apartment exploration in the requested phase order stays bounded; it cannot delay the P0 gate. Verify task behavior with the game unavailable.
 
@@ -20,11 +20,11 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Options considered:** One global game manager/store; separate modules connected through explicit contracts.
 
-**Decision:** React owns interfaces; Phaser owns simulation; Fastify owns business rules; SQLite owns durable state. Shared Zod schemas/DTOs and a typed React/Phaser bridge reside in `packages/shared/` under orchestrator ownership. TanStack Query owns server state, Zustand client UI state, and Phaser transient simulation.
+**Decision:** React owns interfaces; Phaser owns simulation; SQLite owns durable state. Under ADR-013, `@deadline/domain` owns the business rules and Fastify/browser workers adapt their transports. Shared Zod schemas/DTOs and a typed React/Phaser bridge reside in `packages/shared/` under orchestrator ownership. TanStack Query owns server state, Zustand client UI state, and Phaser transient simulation.
 
-**Consequences:** No frontend database access or per-frame React simulation updates. Shared code cannot import app internals. Scenes and the React host must remove subscriptions on teardown and respect UI focus.
+**Consequences:** No database access from React/Phaser or per-frame React simulation updates; browser database access is confined to the dedicated worker under ADR-013. Shared code cannot import app internals. Scenes and the React host must remove subscriptions on teardown and respect UI focus.
 
-**Status:** Accepted.
+**Status:** Accepted; domain/adapter ownership refined by ADR-013.
 
 ## ADR-003 — Atomic rewards and durable receipts
 
@@ -32,11 +32,11 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Options considered:** Infer rewards only from current task status; keep durable reward receipts with transactional task/resource changes.
 
-**Decision:** Use SQLite transactions, unique task reward receipts, server-defined reward values, and persisted idempotency results. Completion and first reward are atomic. Reopening never resets reward history; deletion never rewards and preserves proof of previous issuance. Conditional debits prevent negative ammunition.
+**Decision:** Use SQLite transactions, unique task reward receipts, domain-defined reward values, and persisted idempotency results. Completion and first reward are atomic. Reopening never resets reward history; deletion never rewards and preserves proof of previous issuance. Conditional debits prevent negative ammunition.
 
 **Consequences:** Schema needs durable identity/history beyond mutable task state. Request payload conflicts must be detectable. Test rollback, duplicate/concurrent completion, reopen/recomplete, deletion, and concurrent spending at the API/database level.
 
-**Status:** Accepted and implemented: durable receipts and idempotency records are retained; current contracts and verification are documented in ARCHITECTURE.md and VERIFICATION.md.
+**Status:** Accepted for ordinary CRUD/reopen: durable receipts and idempotency records are retained. Explicit clean-profile deletion is the separate consent-based exception in ADR-014. Current contracts and evidence are in ARCHITECTURE.md and VERIFICATION.md.
 
 ## ADR-004 — Authoritative ammunition consumption
 
@@ -72,7 +72,7 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Consequences:** No runnable application or test suite exists after bootstrap. Inspection found pnpm unavailable and no initialized Git repository; recheck and resolve during future setup. Choose compatible verified versions at that time rather than inventing version pins now.
 
-**Status:** Accepted.
+**Status:** Historical bootstrap decision completed. The implemented workspace now also contains `packages/domain`; see ADR-013.
 
 ## ADR-007 — Agent ownership and verification
 
@@ -96,7 +96,7 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Consequences:** Do not invent an authentication system or imply a public deployment is secure. UI must report unavailable persistence honestly. All recovery options must preserve tasks/reward history and committed ammunition spend.
 
-**Status:** Superseded by ADR-010: one local loopback profile, no offline mutation queue, interrupted attempts explicitly abandoned with durable settlement.
+**Status:** Superseded by ADR-010 for native recovery and ADR-013 for public Pages/browser-local persistence. Neither mode introduces cross-device synchronization.
 
 ## ADR-009 — Isolated training ammunition
 
@@ -116,11 +116,11 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 
 **Options considered:** Debit inventory per shot; durable mission allocation with idempotent per-shot consumption; unsafe eventual client persistence.
 
-**Decision:** Starting an attempt atomically reserves selected inventory rounds. Each shot commits one spent round before becoming effective. Finishing or abandoning refunds reserved minus spent exactly once. A refresh detects the active attempt and asks the player to settle its recorded unused rounds; it cannot restore spent rounds. Mission attempts, resource ledger and request receipts survive restart. Gameplay reset preserves tasks, reward history, ammunition and XP. Use one loopback-only local profile; hosted multi-user use requires authentication and isolation.
+**Decision:** Starting an attempt atomically reserves selected inventory rounds. Each shot commits one spent round before becoming effective. Finishing or abandoning refunds reserved minus spent exactly once. A refresh detects the active attempt and asks the player to settle its recorded unused rounds; it cannot restore spent rounds. Mission attempts, resource ledger and request receipts survive restart. Gameplay reset preserves tasks, reward history, ammunition and XP. The native mode uses one loopback-only local profile; hosted multi-user server use requires authentication and isolation. ADR-013 adds a separate browser-local profile for public static hosting.
 
-**Consequences:** Local network round-trip latency is part of firing; errors retain the same shot operation key. Finish waits for pending shots. Client game observations cannot mint resources. Branch is `feat/deadline-1989`; private GitHub synchronization is authorized without merging.
+**Consequences:** Local network round-trip latency is part of firing; errors retain the same shot operation key. Finish waits for pending shots. Client game observations cannot mint resources. Branch is `feat/deadline-1989`. Initial private GitHub synchronization was authorized without merging; the later public-repository/Pages decision is ADR-013.
 
-**Status:** Accepted and implemented; API rollback/concurrency/restart tests, browser interrupted-mission recovery, and actual combat death/victory settlement pass.
+**Status:** Accepted for resource semantics; current native evidence is in VERIFICATION.md. Shared-domain/browser adaptation is ADR-013; no Pages test/deployment pass is implied. Confirmed clean reset is the separate explicit exception in ADR-014.
 
 ## ADR-011 — Tool execution in a path containing a colon
 
@@ -145,3 +145,39 @@ Bootstrap records constraints and proposed implementation choices. **Accepted** 
 **Consequences:** No translation dependency or database migration is needed. Existing tasks and resource history stay intact. Original English diegetic room signs remain part of the 1989 setting; they are not interface instructions. Repeat layout and browser acceptance with Cyrillic text.
 
 **Status:** Accepted; implementation and current verification recorded in VERIFICATION.md.
+
+## ADR-013 — Public Pages and shared SQLite domain
+
+**Context:** The user authorized changing the repository to public and publishing the full application on free GitHub Pages. Static Pages hosting cannot run the retained Fastify/SQLite server.
+
+**Options considered:** Publish an interface requiring a separately paid backend; duplicate business rules in browser code; share the existing domain rules between native SQLite and a browser SQLite worker.
+
+**Decision:** Make the repository public and configure GitHub Actions Pages deployment from `feat/deadline-1989` at `https://artyx71.github.io/deadline-1989/`. Extract the sole task/reward/mission implementation, Drizzle schema, errors, and exact initial migration into `@deadline/domain`. Retain native Fastify/better-sqlite3 mode. Pages uses SQL.js/Drizzle inside a Web Worker and persists its SQLite image in IndexedDB. Hold an origin-wide exclusive Web Lock through loading the latest image, the domain transaction, and the IndexedDB commit; acknowledge mutations only after durable storage completes. Select the transport explicitly rather than treating native failure as permission to open a fresh browser profile.
+
+**Consequences:** Full task/game/resource behavior does not require a remote API on Pages. Browser data belongs to that browser/device/origin; it does not synchronize with other devices, GitHub, or native profiles. Clearing site data loses it. Multiple tabs must coordinate through the lock. Storage/WASM/lock failures remain visible and must not overwrite a damaged/unavailable profile. Native idempotency retains SHA-256 fingerprints; browser mode uses canonical request fingerprints, with the same scope/replay/revision guarantees. Assets, workers, and WASM honor the repository base path. Public static hosting adds neither authentication nor a shared multi-user database.
+
+**Status:** Accepted; repository visibility and Pages configuration applied. Domain extraction and browser adapter integration are in progress/under acceptance. Deployment and Pages test results remain pending in VERIFICATION.md. This supersedes private-only publication, native-only persistence, and Fastify-only business-rule ownership in ADR-002/006/008/010; resource invariants remain unchanged.
+
+## ADR-014 — Explicit clean profile and separate story replay
+
+**Context:** The user expected a genuinely empty profile when choosing a new game, while normal replay must never accidentally erase real tasks.
+
+**Options considered:** Silently erase on menu selection; preserve everything under an ambiguous new-game label; present a clearly confirmed clean profile and a separate preserving story replay.
+
+**Decision:** Opening the new-game choices performs no deletion. The primary clean-profile choice shows a destructive warning, requires explicit consent, and invokes the strict `POST /api/profile/reset` operation with `{ confirmation: 'УДАЛИТЬ' }` and a durable request key. It rejects an active mission, resets gameplay/tutorial, deletes tasks/claims/resource ledger/attempts, and zeros ammunition/XP atomically. Keep settings, idempotency receipts, and the monotonic revision. The secondary story replay calls `/api/game/reset` and preserves real tasks, earned rewards, ammunition, and XP.
+
+**Consequences:** Users can intentionally start empty without turning ordinary death, replay, or task deletion into a data-loss mechanism. Old reset retries cannot purge newly created tasks; old creation/reward retries cannot restore deleted effects. Retained retry responses may be older than current state, so clients must keep revision guards. This is an explicit user-selected profile operation in both persistence modes; it is not a routine database repair or automatic reset on storage failure.
+
+**Status:** Accepted and implemented in the shared domain/native operation; UI/browser-mode acceptance is tracked in VERIFICATION.md. This supersedes the prior ambiguity that every new-game choice necessarily preserves all real data. Story replay preservation remains mandatory.
+
+## ADR-015 — Reproducible formatting
+
+**Context:** The user requested project formatting alongside incremental commits and publication. This checkout contains a colon, which affects PATH-based tool execution.
+
+**Options considered:** Ad hoc editor styles; unpinned formatter tools; a pinned formatter through the existing direct Node runner.
+
+**Decision:** Pin Prettier 3.10.0 with single quotes, semicolons, trailing commas, and print width 100. Expose `pnpm format` and `pnpm format:check` through `scripts/workspace.mjs`. Ignore generated assets, evidence, dependencies, build output, SQLite files, and the generated lockfile. Keep functional changes and the broad style pass reviewable in separate commits.
+
+**Consequences:** Formatting is repeatable without relying on `pnpm exec` in the colon-containing path. Formatter setup does not establish that the whole repository is formatted, tested, committed, or deployed; those operations require their own evidence.
+
+**Status:** Configured. Current formatting/check and publication results are recorded in VERIFICATION.md and the orchestrator's milestone report.

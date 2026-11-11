@@ -131,7 +131,7 @@ export function useSession() {
       if (event.id === 'computer') { soundscape.sfx('computer'); void advanceTutorial('computer'); ui.setOverlay('terminal'); }
       else if (event.id === 'telephone') { soundscape.sfx('phone'); void answerPhone(); }
       else if (event.id === 'training') { if (ui.scene === 'training') enter('apartment'); else void enterTraining(); }
-      else if (event.id === 'television') setNotice('КАНАЛ 03 / НЕТ СИГНАЛА. ГОРОДУ НЕЧЕГО СКАЗАТЬ.');
+      else if (event.id === 'television') ui.setOverlay('television');
       else ui.setOverlay('loadout');
     }
   };
@@ -148,6 +148,11 @@ export function useSession() {
 
   const start = () => perform(async () => {
     apply(await api.resetGame());
+    apply(await api.tutorial({ step: 'movement' }));
+    setOutcome(null); useUi.getState().setScreen('game'); useUi.getState().setOverlay('none'); enter('apartment');
+  });
+  const cleanStart = () => perform(async () => {
+    apply(await api.resetProfile());
     apply(await api.tutorial({ step: 'movement' }));
     setOutcome(null); useUi.getState().setScreen('game'); useUi.getState().setOverlay('none'); enter('apartment');
   });
@@ -197,7 +202,7 @@ export function useSession() {
   };
 
   return { query, state, settings: state?.settings ?? DEFAULT_SETTINGS, controller, port: port.current, busy, loading, gameReady, readyVersion,
-    conversation, outcome, notice, apply, reportError, start, resume, close, finishDialogue, recover, launchMission, skipTutorial,
+    conversation, outcome, notice, apply, reportError, start, cleanStart, resume, close, finishDialogue, recover, launchMission, skipTutorial,
     updateSettings, enterTraining, advanceTutorial, enter, answerPhone,
     settleOutcome: () => { if (outcome) void settleOutcome(outcome); },
     returnApartment: () => { setOutcome(null); close(); enter('apartment'); },

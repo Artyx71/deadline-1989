@@ -8,3 +8,4 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - vite@8.3.8
+  - prettier@3.10.0

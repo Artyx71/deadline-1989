@@ -2,28 +2,30 @@
 
 ## Current scope
 
-Bootstrap is complete. The user supplied the full master implementation goal on 2026-11-11, ending the bootstrap hold and authorizing application development, dependencies, original assets, testing, and private GitHub publication. Current implementation and acceptance evidence are tracked in `docs/TASKS.md` and `docs/VERIFICATION.md`. The user subsequently requested Russian application text: interface, tutorial, dialogue, accessibility labels, and user-facing errors are Russian; keep the DEADLINE: 1989 identity and technical contract identifiers.
+Bootstrap is complete. The user supplied the full master implementation goal on 2026-11-11, ending the bootstrap hold and authorizing application development, dependencies, original assets, testing, and GitHub publication. The user subsequently authorized a public repository and full-featured free GitHub Pages hosting. The repository is public; Pages is configured at `https://artyx71.github.io/deadline-1989/`, with deployment and browser-mode acceptance still pending. Current implementation and acceptance evidence are tracked in `docs/TASKS.md` and `docs/VERIFICATION.md`. The user subsequently requested Russian application text: interface, tutorial, dialogue, accessibility labels, and user-facing errors are Russian; keep the DEADLINE: 1989 identity and technical contract identifiers.
 
-Use this directory as the project root; do not create a nested `deadline-1989/` checkout. The intended layout is `apps/web`, `apps/server`, and `packages/shared`, using pnpm workspaces when implementation starts.
+Use this directory as the project root; do not create a nested `deadline-1989/` checkout. The pnpm workspace contains `apps/web`, `apps/server`, `packages/shared`, and `packages/domain`. The native Fastify mode and the Pages browser mode share the same domain implementation.
 
 ## Product first
 
-The product is fundamentally a To-Do List. Creating, completing, deleting, and persisting tasks across reloads are P0. Editing, filtering, and reopening are planned supporting features. The game, tutorial, loading screens, and game failures must never prevent task management. Combat never completes real tasks; death never changes their completion status.
+The product is fundamentally a To-Do List. Creating, completing, deleting, and persisting tasks across reloads are P0. Editing, filtering, and reopening are implemented supporting features. The game, tutorial, loading screens, and game failures must never prevent task management. Combat never completes real tasks; death never changes their completion status.
 
 ## Architecture and code quality
 
-- React owns interfaces; Phaser owns game simulation; Fastify owns business logic; SQLite owns persistent state. Use explicit typed contracts between them.
+- React owns interfaces; Phaser owns game simulation; `@deadline/domain` owns task/reward/mission rules and SQLite schema. Fastify adapts the native API; a browser worker adapts Pages requests. SQLite owns persistent state in either mode. Use explicit typed contracts between them.
 - Use strict TypeScript, validate external inputs, and avoid unnecessary `any`, dependencies, giant components, and giant game manager classes.
-- Never swallow errors silently, duplicate business logic, or access the database from the frontend. Handle loading and error states. Clean up event listeners, timers, scenes, and bridge subscriptions.
-- Zustand holds transient client state; TanStack Query handles server state. Keep frame updates inside Phaser.
+- Never swallow errors silently, duplicate business logic, or access SQLite from React components or Phaser. Browser database access is confined to the dedicated persistence worker/adapter. Handle loading and error states. Clean up event listeners, timers, scenes, and bridge subscriptions.
+- Zustand holds transient client state; TanStack Query caches authoritative snapshots from the selected native/browser persistence adapter. Keep frame updates inside Phaser.
 - The orchestrator owns shared contracts, dependency integration, architectural decisions, and final verification.
 
 ## Gameplay and persistence
 
 - Deliver responsive top-down combat with one-hit death for MVP. Death returns to the apartment; real tasks remain unchanged.
-- Completed real tasks earn ammunition and XP through server-defined rewards. Melee is available without ammunition. Training must not require false task completion.
-- SQLite is the source of truth. Issue each task reward at most once, including after reopening. Deleting tasks never rewards the player.
+- Completed real tasks earn ammunition and XP through definitions in `@deadline/domain`, shared by native and browser adapters. Melee is available without ammunition. Training must not require false task completion.
+- SQLite is the source of truth. Native mode uses a server file; Pages uses SQL.js in a Web Worker and stores its SQLite bytes in IndexedDB under an origin-wide Web Lock. Browser mutations are confirmed only after durable IndexedDB completion. Issue each task reward at most once, including after reopening. Ordinary task deletion never rewards the player.
 - Make task completion plus rewards atomic. Use transactions and durable idempotency for resource changes. Prevent negative ammunition and duplicate rewards. Reloads and restarts cannot restore spent ammunition.
+- Pages profiles are local to that browser/device and do not synchronize with other devices or native profiles. Clearing site data removes the browser profile. Never silently switch a failed native connection to an empty browser profile.
+- Starting a clean profile requires an explicit warning and consent before `POST /api/profile/reset` with `{confirmation: 'УДАЛИТЬ'}`. It clears tasks/resources/history while preserving settings, idempotency receipts, and monotonic revisions. The separate story/tutorial replay uses `/api/game/reset` and preserves real tasks, rewards, ammunition, and XP. Never erase data merely by opening the new-game choices.
 
 ## Art direction and quality
 
@@ -56,7 +58,7 @@ The main agent owns integration. Before delegation, give a narrow task, dependen
 | pixel-art-director | `apps/web/public/assets/`, `docs/ART_BIBLE.md`, `docs/ASSET_CREDITS.md` |
 | narrative-designer | `apps/web/src/narrative/`, assigned narrative sections of `docs/GDD.md` |
 | qa-engineer | `tests/`, `e2e/`, explicitly assigned test configuration |
-| orchestrator | `packages/shared/`, root configuration, dependency integration, architectural decisions |
+| orchestrator | `packages/shared/`, `packages/domain/`, persistence adapter integration, root configuration, dependency integration, architectural decisions |
 
 Adapt paths through an explicit assignment. Whole-file ownership is preferred; serialize any shared document changes. Request a contract change from the orchestrator rather than changing another agent's files. Review every report and diff before integration, then run verification appropriate to the integrated change. An incomplete report is not success.
 
@@ -70,6 +72,10 @@ Every subagent reports these sections:
 6. **Status** — `DONE`, `BLOCKED`, or `NEEDS REVIEW`.
 
 `DONE` requires assigned acceptance criteria and verification to pass. Use `NEEDS REVIEW` for missing verification or unresolved design assumptions; use `BLOCKED` for a dependency preventing the assigned work. Never mark untested features verified.
+
+## Tooling and publication
+
+Use `pnpm format` and `pnpm format:check` through `scripts/workspace.mjs`; the colon in this checkout path makes ordinary PATH-based tool execution unreliable. Prettier ignores generated assets, evidence, dependencies, builds, and SQLite files. Keep functional and formatting commits reviewable. Pages build/test commands are `pnpm build:pages` and `pnpm test:pages`; their existence is not a passing check. GitHub Actions deploys the public repository from `feat/deadline-1989` without automatically merging into main. Report deployment success only after the workflow and live application have been verified; record evidence in `docs/VERIFICATION.md`.
 
 ## Reusable skills and execution order
 

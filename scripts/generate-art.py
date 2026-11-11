@@ -8,6 +8,7 @@ from pathlib import Path
 import json
 import math
 import random
+import sys
 from PIL import Image, ImageDraw
 
 OUT = Path(__file__).resolve().parents[1] / 'apps/web/public/assets'
@@ -31,6 +32,17 @@ PIXEL_LETTERS={
     '4':['101','101','111','001','001'],'5':['111','100','110','001','110'],'6':['011','100','111','101','111'],
     '7':['111','001','010','010','010'],'8':['111','101','111','101','111'],'9':['111','101','111','001','110'],
     '-':['000','000','111','000','000'],'/':['001','001','010','100','100']}
+PIXEL_LETTERS.update({
+    'А':PIXEL_LETTERS['A'],'Б':['111','100','110','101','110'],'В':PIXEL_LETTERS['B'],
+    'Г':['111','100','100','100','100'],'Д':['011','101','101','111','101'],'Е':PIXEL_LETTERS['E'],
+    'Ж':['101','111','010','111','101'],'З':PIXEL_LETTERS['3'],'И':['101','101','111','111','101'],
+    'Й':['010','101','111','111','101'],'К':PIXEL_LETTERS['K'],'Л':['011','101','101','101','101'],
+    'М':PIXEL_LETTERS['M'],'Н':PIXEL_LETTERS['H'],'О':PIXEL_LETTERS['O'],'П':['111','101','101','101','101'],
+    'Р':PIXEL_LETTERS['P'],'С':PIXEL_LETTERS['C'],'Т':PIXEL_LETTERS['T'],'У':['101','101','011','001','110'],
+    'Ф':['010','111','111','010','010'],'Х':PIXEL_LETTERS['X'],'Ц':['101','101','101','111','001'],
+    'Ч':['101','101','111','001','001'],'Ш':['101','101','111','111','111'],'Щ':['101','101','111','111','001'],
+    'Ы':['101','101','111','111','111'],'Ь':['100','100','110','101','110'],'Э':['110','001','011','001','110'],
+    'Ю':['101','111','111','111','101'],'Я':['111','101','111','011','101']})
 
 
 def lettering(d,text,x,y,color,scale=1):
@@ -217,165 +229,127 @@ PROP_IMAGES={key:prop(key,*size) for key,size in PROPS.items()}
 
 
 def make_apartment():
-    im=Image.new('RGBA',(768,480),'#0b0d18');d=ImageDraw.Draw(im)
-    # Exterior alley, broken paving and wet reflections, entirely outside playable walls.
-    for y in range(0,480,16):
-        for x in range(0,768,16):
-            d.rectangle((x,y,x+15,y+15),fill=['#171824','#1b1c29','#181b29'][(x//16+y//16)%3])
-            d.line((x,y,x+15,y),fill='#242331')
+    """Original open studio: sleeping alcove, living group, work desk and kitchen."""
+    im=Image.new('RGBA',(768,480),'#090e16');d=ImageDraw.Draw(im);rr=random.Random(198911)
+    # Preserve the other asset family's established deterministic RNG sequence.
     for _ in range(500):
-        x=RNG.randrange(768);y=RNG.randrange(480)
-        d.line((x,y,x+RNG.randrange(1,9),y),fill=RNG.choice(['#22202f','#2b2036','#1c2f3e']))
-    # One connected apartment. Different floor materials identify its rooms.
-    for y in range(40,432,16):
-        for x in range(40,728,16):
-            kind='tile' if x>=496 and y<248 else ('carpet' if x<240 and y<256 else 'wood')
-            im.alpha_composite(floor_tile(kind,(x//16*3+y//16)%4),(x,y))
-    d=ImageDraw.Draw(im)
-    # Woven central rug, irregular zigzag motifs and fringe.
-    box(d,(277,146,454,249),'#563047',edge='#201d2e',highlight='#91576e')
-    for inset in (4,8,13):d.rectangle((277+inset,146+inset,454-inset,249-inset),outline=['#c08686','#8d526b','#9f6273'][inset%3])
-    for yy in range(166,234,12):
-        for xx in range(298,440,16):d.line((xx-5,yy,xx,yy-4,xx+5,yy,xx,yy+4,xx-5,yy),fill='#9b6379')
-    grain(d,(289,159,443,239),['#684057','#7d455f','#4d2d43'],400,13)
-    for xx in range(278,454,4):d.line((xx,251,xx,254),fill='#9b737d')
-    # A frayed dust sheet replaces the showroom-like second lounge rug.
-    d.polygon([(75,337),(249,331),(268,396),(82,406),(86,379),(70,370)],fill='#343440',outline='#585363')
-    for xx in (91,136,192,239):d.line((xx,342,xx+12,396),fill='#45434f')
-    for xx in range(86,261,7):d.line((xx,401,xx-1,405+(xx%3)),fill='#625766')
-    colliders=[]
+        x=RNG.randrange(768);y=RNG.randrange(480);length=RNG.randrange(1,9);c=RNG.choice(['#22202f','#2b2036','#1c2f3e'])
+        d.line((x,y,x+length,y),fill=c)
+    # Deep city exterior, power conduits and window reflections.
+    for y in range(38,448,16):
+        d.line((55,y,712,y),fill='#17212a')
+    for x in (62,708):d.line((x,48,x,434),fill='#2c3a3c',width=3)
+    # Quiet wood planks replace the old repeating brick-grid floor.
+    for y in range(64,416,16):
+        for x in range(80,688,32):
+            c=rr.choice(['#554e3a','#514834','#5b4d37','#504734'])
+            d.rectangle((x,y,x+31,y+15),fill=c)
+            d.line((x,y+15,x+31,y+15),fill='#34382b')
+            grain(d,(x+2,y+2,x+29,y+13),['#66573e','#5c523a','#49442e'],8,x+y)
+            if (x//32+y//16)%3==0:d.line((x+11,y+6,x+25,y+6),fill='#67573d')
+    # Soft floor zoning: cloth beneath the bed; small kitchen tile inset.
+    d.rectangle((84,68,254,223),fill='#363b33')
+    grain(d,(87,71,251,220),['#44473b','#2f382f','#535045'],1000,81)
+    for y in range(80,233,16):
+        for x in range(528,688,16):
+            box(d,(x,y,x+15,y+15),rr.choice(['#62634f','#6d6753','#5b614e']),edge='#434e40',highlight='#87846a')
+    # Worn central living rug, oval-ish corners, one coherent furniture group.
+    d.polygon([(286,217),(451,217),(463,230),(463,391),(449,402),(285,402),(276,388),(276,230)],fill='#384a3b',outline='#938b5a')
+    for inset in (5,10):d.rectangle((282+inset,222+inset,457-inset,396-inset),outline='#556247' if inset==5 else '#7b7950')
+    for yy in range(243,385,17):
+        for xx in range(303,445,18):d.line((xx-4,yy,xx,yy-3,xx+4,yy,xx,yy+3,xx-4,yy),fill='#4c5b40')
+    colliders=[];placements=[]
     def wall(x,y,w,h):
         colliders.append({'x':x,'y':y,'width':w,'height':h})
-        d.rectangle((x+3,y+5,x+w+4,y+h+6),fill='#161521')
-        box(d,(x,y,x+w-1,y+h-1),'#5a3b52',highlight='#9b6978')
-        d.line((x+2,y+h-4,x+w-3,y+h-4),fill='#bf7a86')
-        d.line((x+2,y+h-2,x+w-3,y+h-2),fill='#302638')
-        for xx in range(x+5,x+w-4,16):d.line((xx,y+3,xx,y+h-6),fill='#694459')
-    wall(24,24,720,16);wall(24,40,16,408);wall(728,40,16,408)
-    wall(40,432,316,16);wall(412,432,316,16)
-    wall(240,40,16,160);wall(240,240,16,40)
-    wall(480,40,16,168)
-    wall(40,256,128,16);wall(216,256,24,16)
-    wall(496,248,16,16);wall(576,248,152,16)
-    # Low outer wall trim, conduit and wallpaper ornament.
-    d.line((42,44,725,44),fill='#372b3f');d.line((42,46,725,46),fill='#a16d7f')
-    for xx in range(48,727,24):d.rectangle((xx,48,xx+3,52),fill='#755061')
-    # Picture frames and a noticeboard along the north wall.
-    for xx,colour in ((154,'#80546e'),(274,'#497b82'),(416,'#9a655b')):
-        box(d,(xx,55,xx+31,80),'#94716f',highlight='#c39386')
-        d.rectangle((xx+4,59,xx+27,76),fill='#29283a')
-        d.polygon([(xx+5,74),(xx+15,63),(xx+26,74)],fill=colour)
-        d.ellipse((xx+20,61,xx+23,64),fill='#d2ada0')
-    placements=[]
-    def put(name,x,y,solid=True,bounds=None):
+        d.rectangle((x+4,y+5,x+w+4,y+h+5),fill='#111c23')
+        box(d,(x,y,x+w-1,y+h-1),'#3f493e',highlight='#b9ab7c')
+        d.line((x+1,y+h-4,x+w-2,y+h-4),fill='#7f8060')
+        d.line((x+1,y+h-2,x+w-2,y+h-2),fill='#273b30')
+    wall(64,48,640,16);wall(64,64,16,368);wall(688,64,16,368)
+    wall(80,416,112,16);wall(240,416,400,16);wall(256,64,16,144)
+    # Cloth curtain on the alcove divider, with a visible opening below it.
+    for x in range(257,270,3):d.line((x,69,x,199),fill='#667a54' if x%2 else '#344f3e')
+    def put(name,x,y,solid=True):
         p=PROP_IMAGES[name];w,h=p.size
-        # Doors are scene-owned animated sprites; retain their placement contract.
         if name!='door':
-            shadow=Image.new('RGBA',p.size,(8,10,22,0))
-            shadow.putalpha(p.getchannel('A').point(lambda a:a*2//5))
-            im.alpha_composite(shadow,(x+4,y+5))
-            im.alpha_composite(p,(x,y))
+            sh=Image.new('RGBA',p.size,(4,12,17,0));sh.putalpha(p.getchannel('A').point(lambda a:a*2//5));im.alpha_composite(sh,(x+4,y+5));im.alpha_composite(p,(x,y))
         placements.append({'name':name,'x':x,'y':y,'width':w,'height':h})
-        if solid:
-            bx,by,bw,bh=bounds or (3,3,w-6,h-6)
-            colliders.append({'x':x+bx,'y':y+by,'width':bw,'height':bh})
-    put('bed',63,90);put('cabinet',176,93);put('plant',49,192)
-    put('window',69,51,False);put('window',598,51,False)
-    put('tv',285,73);put('bookshelf',397,87)
-    put('sofa',300,207);put('table',350,152)
-    put('counter',520,77);put('fridge',666,74)
-    put('chair',612,180)
-    put('desk',566,340);put('chair',597,402,False)
-    put('phone',669,292);put('plant',45,363)
-    put('cabinet',340,340)
-    put('door',360,420,False);put('door',680,400,False)
-    # Uneven moving/storage boxes replace duplicate sofas, tables and shelving.
-    def storage(x,y,w,h,variant=0):
-        colors=['#6d5a51','#68545b','#615a4b'];fill=colors[variant%3]
-        d.rectangle((x+4,y+5,x+w+3,y+h+4),fill='#22202c')
-        box(d,(x,y,x+w-1,y+h-1),fill,highlight='#ad9681')
-        d.line((x+2,y+6,x+w-3,y+6),fill='#8d766a')
-        d.line((x+w//2,y+1,x+w//2,h+y-2),fill='#ac927b',width=4)
-        d.line((x+w//2-2,y+h//2,x+w//2+3,y+h//2+2),fill='#4e424d')
-        grain(d,(x+3,y+9,x+w-4,y+h-4),['#7c665d','#554951','#917667'],45,x+y)
-        box(d,(x+5,y+h-16,x+24,y+h-5),'#b8a794',edge='#76626a')
-        for xx in range(x+8,x+21,3):d.line((xx,y+h-13,xx,y+h-8),fill='#625460')
-        if variant%2:d.line((x+4,y+3,x+w-5,y+h-4),fill='#8b7267')
-        placements.append({'name':'storage-box','x':x,'y':y,'width':w,'height':h})
-        colliders.append({'x':x+2,'y':y+2,'width':w-4,'height':h-4})
-    for args in [(92,345,47,40,0),(133,368,39,33,1),(207,348,35,31,2),(443,357,45,39,1),(463,385,33,27,0),(666,164,45,41,2),(656,207,34,29,1)]:storage(*args)
-    # A compact, stained kitchen table and a single chair feel less symmetrical.
-    box(d,(558,174,604,207),'#706765',highlight='#c0aaa0')
-    box(d,(561,177,601,201),'#a59886',highlight='#d4c2a5')
-    d.line((564,197,596,197),fill='#7c7470');d.line((588,179,590,201),fill='#8a7b75')
-    colliders.append({'x':560,'y':176,'width':43,'height':29});placements.append({'name':'kitchen-table','x':558,'y':174,'width':47,'height':34})
-    for x,y in [(568,181),(587,187),(581,183)]:
-        d.ellipse((x,y,x+10,y+7),fill='#c6bbab',outline='#73656c');d.ellipse((x+2,y+2,x+7,y+5),outline='#9e8f84')
-    # Original domestic debris: jacket, laundry, taped cartons and abandoned records.
-    d.polygon([(117,126),(127,126),(134,134),(130,140),(126,136),(126,151),(114,151),(114,136),(108,141),(104,136)],fill='#56516a',outline='#302c3f')
-    d.line((119,131,119,148),fill='#82748a');d.line((111,133,115,137),fill='#8a7a8d')
-    for x,y,col in [(171,216,'#8a6a78'),(184,220,'#64757a'),(191,209,'#5d4d67')]:d.ellipse((x,y,x+12,y+7),fill=col,outline='#302936')
-    box(d,(266,351,291,374),'#4e414f',highlight='#a48483')
-    for xx in range(269,288,4):d.line((xx,354,xx+1,370),fill='#b2a08e')
-    for x,y in [(298,393),(424,408),(518,378)]:
-        d.ellipse((x,y,x+16,y+16),fill='#181d2b',outline='#64606f');d.ellipse((x+6,y+6,x+10,y+10),fill='#bd6486')
-    for x,y in [(78,306),(152,315),(251,292),(400,303),(499,316),(546,330),(629,309),(712,343),(287,190),(439,185),(641,225)]:
-        d.polygon([(x,y+2),(x+11,y),(x+14,y+9),(x+2,y+12)],fill='#ac9c93',outline='#5d4c60')
-        d.line((x+3,y+4,x+9,y+3),fill='#826876');d.line((x+4,y+7,x+11,y+6),fill='#826876')
-    # Along-wall wiring and stains add disorder without changing walking geometry.
-    for points in [[(57,313),(76,321),(143,319),(157,312),(208,314),(225,309)],[(258,420),(282,424),(324,421),(331,414)],[(485,338),(497,342),(520,340),(542,348),(565,347)],[(647,151),(650,161),(713,156),(719,173)]]:
-        d.line([xy for pt in points for xy in pt],fill='#171c2b',width=2)
-        d.line([xy for pt in points for xy in (pt[0],pt[1]-1)],fill='#5c455c')
-    for x,y in [(228,410),(428,326),(641,155),(309,148),(80,230)]:
-        d.ellipse((x-8,y-4,x+11,y+6),fill='#342738');grain(d,(x-5,y-2,x+6,y+4),['#493647','#51404b'],18,x+y)
-    # Personal clutter: wall calendar, slippers, tapes, ashtray, records, cables.
-    box(d,(184,190,217,224),'#b5a6a5',highlight='#ded0bf');d.rectangle((186,192,215,198),fill='#a74367')
-    for yy in range(203,220,5):
-        for xx in range(189,213,5):d.rectangle((xx,yy,xx+2,yy+2),fill='#68546c')
-    for x,y in ((144,212),(153,215)):
-        d.ellipse((x,y,x+5,y+12),fill='#775d72',outline='#c091a4')
-    for x,y in ((326,119),(393,294),(77,295),(492,338)):
-        box(d,(x,y,x+12,y+8),'#b1a493',highlight='#e0c5ac');d.line((x+2,y+3,x+9,y+4),fill='#69566a')
-    for x,y in ((457,301),(551,298),(110,306)):
-        d.ellipse((x,y,x+9,y+9),fill='#242233',outline='#927287');d.ellipse((x+3,y+3,x+6,y+6),fill='#c37a91')
-    d.line((620,404,625,417,670,417,670,330,689,330),fill='#141b27',width=2)
-    d.line((302,139,280,139,280,122),fill='#1b1b28',width=2)
-    # Distinct training entrance hazard strip, and yellow apartment threshold.
-    for xx in range(682,724,8):d.polygon([(xx,397),(xx+4,397),(xx+8,401),(xx+4,401)],fill='#c39e70')
-    for xx in range(359,410,8):d.line((xx,430,xx+4,433),fill='#a58372',width=2)
-    # Local color spill: discrete pixels, no blur, maintaining source pixel density.
-    px=im.load()
-    lights=[(48,122,205,(224,32,124),.34),(609,358,150,(38,222,230),.33),(687,309,125,(245,37,91),.36),(648,54,140,(86,101,215),.20)]
-    for y in range(40,432):
-        for x in range(40,728):
-            c=tuple(int(v*.90) for v in px[x,y][:3])+(255,)
-            for lx,ly,r,col,strength in lights:
-                dist=math.hypot(x-lx,y-ly)
-                if dist<r:
-                    factor=round((1-dist/r)*8)/8*strength
-                    c=tuple(min(255,int(c[k]*(1-factor)+col[k]*factor)) for k in range(3))+(255,)
-            px[x,y]=c
-    # Neon tubes stay sharp above the color wash.
-    d=ImageDraw.Draw(im);d.line((29,65,29,192),fill='#e958a1',width=2);d.line((31,65,31,192),fill='#ff9bbc')
-    d.line((574,44,647,44),fill='#79e0df',width=2);d.line((673,280,712,280),fill='#ff5f83',width=2)
-    d.line((746,28,746,448),fill='#572340');d.line((748,28,748,448),fill='#222137')
+        if solid:colliders.append({'x':x+3,'y':y+3,'width':w-6,'height':h-6})
+    put('bed',112,96);put('cabinet',200,88);put('window',116,67,False)
+    put('desk',384,92);put('chair',412,161,False)
+    put('sofa',288,231);put('table',322,286);put('tv',304,333)
+    put('counter',536,84);put('fridge',636,139);put('window',556,67,False)
+    # A compact wooden side table grounds the telephone without extra collision.
+    box(d,(454,195,509,246),'#62503d',highlight='#b39b70')
+    box(d,(457,198,506,237),'#85724f',highlight='#c1a574')
+    for xx in (461,481,500):d.line((xx,201,xx,235),fill='#927e57')
+    d.line((458,241,505,241),fill='#b29a6a');d.line((461,245,469,245),fill='#2d372d');d.line((496,245,504,245),fill='#2d372d')
+    placements.append({'name':'telephone-side-table','x':454,'y':195,'width':56,'height':52})
+    put('phone',462,201);put('cabinet',596,344)
+    put('plant',87,224)
+    put('door',192,384,False);put('door',640,384,False)
+    # Compact square breakfast table, one chair, recognisable used dishes.
+    box(d,(540,181,586,216),'#746b4c',highlight='#c9b47d')
+    box(d,(543,184,583,210),'#aa9c70',highlight='#dfc893')
+    for x,y in [(550,189),(566,196)]:d.ellipse((x,y,x+11,y+8),fill='#d0c6a1',outline='#81775e');d.ellipse((x+3,y+2,x+8,y+6),outline='#aaa184')
+    colliders.append({'x':542,'y':183,'width':43,'height':31});placements.append({'name':'breakfast-table','x':540,'y':181,'width':47,'height':36})
+    put('chair',598,185)
+    # Personal studio props: coat stand, record console and one unpacked carton.
+    box(d,(101,321,157,359),'#584d3b',highlight='#a79166')
+    box(d,(106,325,152,350),'#333b32',highlight='#7f8465')
+    d.ellipse((110,329,134,347),fill='#101f22',outline='#657368');d.ellipse((119,335,125,341),fill='#bf9871')
+    d.line((145,329,143,340,133,340),fill='#b6ac8b',width=2)
+    for x in range(107,153,5):d.line((x,354,x+2,354),fill='#9d8967')
+    colliders.append({'x':103,'y':323,'width':53,'height':34});placements.append({'name':'record-console','x':101,'y':321,'width':57,'height':39})
+    d.line((213,286,213,332),fill='#9b8e65',width=3);d.line((201,296,224,296),fill='#827856',width=2)
+    d.polygon([(203,294),(215,294),(223,302),(219,307),(216,305),(216,324),(204,324),(204,305),(199,309),(194,303)],fill='#3f5261',outline='#203a3d')
+    d.line((207,300,207,321),fill='#76817b');d.ellipse((202,330,225,334),fill='#304033',outline='#8e8662')
+    colliders.append({'x':201,'y':294,'width':22,'height':40});placements.append({'name':'coat-stand','x':194,'y':286,'width':32,'height':49})
+    box(d,(173,364,209,395),'#6d6246',highlight='#b4a070');d.line((190,365,190,394),fill='#b5a075',width=4)
+    d.polygon([(173,364),(168,356),(187,359),(190,365)],fill='#8f7b53',outline='#4b513a')
+    d.polygon([(191,364),(208,355),(217,361),(209,370)],fill='#947b55',outline='#4b513a')
+    colliders.append({'x':175,'y':366,'width':32,'height':27});placements.append({'name':'unpacked-box','x':168,'y':355,'width':50,'height':41})
+    # Desk focal point: task papers, pin board, lamp, tumbler and visible cord.
+    box(d,(350,69,382,104),'#615b3e',highlight='#c4b179')
+    for x,y in [(354,74),(367,77),(360,90)]:
+        d.rectangle((x,y,x+10,y+10),fill='#c6bf98');d.line((x+2,y+4,x+8,y+4),fill='#8e8667');d.point((x+5,y+1),fill='#b45752')
+    d.ellipse((484,103,500,111),fill='#a49a6e',outline='#2e4634');d.line((491,108,491,130),fill='#596448',width=2);d.ellipse((484,129,499,134),fill='#3d5039',outline='#9c9d6e')
+    d.polygon([(480,101),(484,91),(499,91),(504,101)],fill='#bdbb7d',outline='#445b3e')
+    d.line((479,150,493,151,497,172,485,185),fill='#24392f',width=2)
+    # Phone-side ashtray, folded contract and spilled coffee create a story path.
+    for x,y in [(447,209),(435,197),(386,315),(161,226),(216,245),(251,367)]:
+        d.polygon([(x,y+1),(x+12,y),(x+14,y+10),(x+2,y+12)],fill='#bbb794',outline='#67684b')
+        d.line((x+3,y+4,x+10,y+4),fill='#868568');d.line((x+4,y+7,x+11,y+7),fill='#868568')
+    d.ellipse((445,239,456,247),fill='#273e32',outline='#a7aa83');d.line((451,239,456,237),fill='#d0bc8e')
+    for x,y in [(397,322),(224,368),(571,165)]:d.ellipse((x-7,y-3,x+9,y+4),fill='#3c4030')
+    for x,y in [(132,214),(142,218)]:d.ellipse((x,y,x+6,y+12),fill='#7b7961',outline='#aaa48c')
+    # Kitchen dishes, kettle, hanging utensil rail and a modest runner.
+    for x,y in [(580,96),(587,100),(573,102)]:d.ellipse((x,y,x+8,y+5),fill='#c5c6a6',outline='#7e8a70')
+    d.ellipse((609,103,622,116),fill='#a9aaa0',outline='#526a64');d.arc((620,105,628,114),270,90,fill='#a2aa96',width=2);d.rectangle((612,101,618,103),fill='#525f4d')
+    d.line((600,75,651,75),fill='#b1ae88',width=2)
+    for x in (607,620,634,645):d.line((x,76,x,85),fill='#9f9f84');d.ellipse((x-2,84,x+2,89),fill='#536b61',outline='#aab39a')
+    d.rectangle((541,224,629,236),fill='#6f5642');d.line((543,228,627,228),fill='#a68d62');d.line((543,232,627,232),fill='#937553')
+    # A few quiet wall accents; no duplicate furniture or arbitrary box fields.
+    for x,y,col in [(298,83,'#677c55'),(300,142,'#8c6e48'),(92,282,'#577364')]:
+        box(d,(x,y,x+29,y+23),'#9d8f67',highlight='#c7b281');d.rectangle((x+4,y+4,x+25,y+19),fill='#253a32');d.polygon([(x+5,y+17),(x+12,y+7),(x+24,y+17)],fill=col)
+    # Broad emerald-to-amber-to-crimson illumination, hand-built original geometry.
+    px=im.load();lights=[(108,151,285,(53,222,130),.62),(415,155,260,(232,182,65),.54),(678,199,280,(225,45,66),.57),(596,386,150,(125,47,109),.28)]
+    for y in range(64,416):
+        for x in range(80,688):
+            col=px[x,y]
+            for lx,ly,r,c,power in lights:
+                distance=math.hypot(x-lx,y-ly)
+                if distance<r:
+                    alpha=(1-distance/r)*power;col=tuple(int(col[k]*(1-alpha)+c[k]*alpha) for k in range(3))+(255,)
+            px[x,y]=col
+    d=ImageDraw.Draw(im)
+    d.line((85,78,85,193),fill='#88e4ad',width=2);d.line((282,58,484,58),fill='#e1cd85',width=2);d.line((691,99,691,247),fill='#ed6876',width=2)
     save(im,'apartment.png')
-    data={'id':'apartment','width':768,'height':480,'tileSize':16,'spawn':{'x':176,'y':239},'colliders':colliders,'interactions':[
-        {'id':'computer','x':610,'y':374,'label':'USE COMPUTER','radius':66},
-        {'id':'telephone','x':686,'y':318,'label':'ANSWER TELEPHONE','radius':58},
-        {'id':'cabinet','x':362,'y':379,'label':'CHECK EQUIPMENT','radius':56},
-        {'id':'television','x':325,'y':124,'label':'WATCH TELEVISION','radius':58},
-        {'id':'exit','x':385,'y':421,'label':'LEAVE APARTMENT','radius':53},
-        {'id':'training','x':701,'y':413,'label':'ENTER TRAINING','radius':53}],
-        'placements':placements,'art':'apartment.png','coordinateSystem':'top-left pixel; colliders absolute; spawn/interactions center points'}
-    (OUT/'apartment.json').write_text(json.dumps(data,indent=2)+'\n')
-    tiled={'type':'map','version':'1.10','tiledversion':'1.11.2','orientation':'orthogonal','renderorder':'right-down','width':48,'height':30,'tilewidth':16,'tileheight':16,'infinite':False,'nextlayerid':4,'nextobjectid':len(colliders)+len(data['interactions'])+1,'tilesets':[],
-      'layers':[{'id':1,'name':'Apartment artwork','type':'imagelayer','image':'apartment.png','x':0,'y':0,'opacity':1,'visible':True},
-      {'id':2,'name':'Collisions','type':'objectgroup','opacity':1,'visible':False,'objects':[{'id':i+1,'name':f'solid-{i}','type':'solid','rotation':0,'visible':True,**rect} for i,rect in enumerate(colliders)]},
-      {'id':3,'name':'Interactions','type':'objectgroup','opacity':1,'visible':True,'objects':[{'id':len(colliders)+i+1,'name':v['id'],'type':'interaction','x':v['x'],'y':v['y'],'width':0,'height':0,'point':True,'rotation':0,'visible':True,'properties':[{'name':'label','type':'string','value':v['label']},{'name':'radius','type':'int','value':v['radius']}]} for i,v in enumerate(data['interactions'])]}],
-      'properties':[{'name':'spawnX','type':'int','value':176},{'name':'spawnY','type':'int','value':239}]}
-    (OUT/'apartment.tiled.json').write_text(json.dumps(tiled,indent=2)+'\n')
-
+    interactions=[{'id':'computer','x':428,'y':126,'label':'ОТКРЫТЬ СПИСОК ДЕЛ','radius':66},{'id':'telephone','x':479,'y':227,'label':'ОТВЕТИТЬ НА ЗВОНОК','radius':58},{'id':'cabinet','x':618,'y':383,'label':'ПРОВЕРИТЬ СНАРЯЖЕНИЕ','radius':56},{'id':'television','x':344,'y':384,'label':'ПОСМОТРЕТЬ ТЕЛЕВИЗОР','radius':58},{'id':'exit','x':216,'y':409,'label':'ВЫЙТИ ИЗ КВАРТИРЫ','radius':53},{'id':'training','x':661,'y':405,'label':'НАЧАТЬ ТРЕНИРОВКУ','radius':53}]
+    data={'id':'apartment','name':'СТУДИЯ / ПОСЛЕ ПОЛУНОЧИ','width':768,'height':480,'tileSize':16,'spawn':{'x':204,'y':232},'colliders':colliders,'interactions':interactions,'placements':placements,'art':'apartment.png','coordinateSystem':'top-left pixel; colliders absolute; spawn/interactions center points','trainingArea':{'x':500,'y':260,'width':145,'height':70},'design':'Original compact open studio; sleeping alcove and shared living/work/kitchen space; emerald/amber/crimson light'}
+    (OUT/'apartment.json').write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n')
+    tiled={'type':'map','version':'1.10','tiledversion':'1.11.2','orientation':'orthogonal','renderorder':'right-down','width':48,'height':30,'tilewidth':16,'tileheight':16,'infinite':False,'nextlayerid':4,'nextobjectid':len(colliders)+7,'tilesets':[],'layers':[{'id':1,'name':'Studio artwork','type':'imagelayer','image':'apartment.png','x':0,'y':0,'opacity':1,'visible':True},{'id':2,'name':'Collisions','type':'objectgroup','opacity':1,'visible':False,'objects':[{'id':i+1,'name':f'solid-{i}','type':'solid','rotation':0,'visible':True,**c} for i,c in enumerate(colliders)]},{'id':3,'name':'Interactions','type':'objectgroup','opacity':1,'visible':True,'objects':[{'id':len(colliders)+i+1,'name':v['id'],'type':'interaction','x':v['x'],'y':v['y'],'width':0,'height':0,'point':True,'rotation':0,'visible':True,'properties':[{'name':'label','type':'string','value':v['label']},{'name':'radius','type':'int','value':v['radius']}]} for i,v in enumerate(interactions)]}],'properties':[{'name':'spawnX','type':'int','value':204},{'name':'spawnY','type':'int','value':232}]}
+    (OUT/'apartment.tiled.json').write_text(json.dumps(tiled,indent=2,ensure_ascii=False)+'\n')
 
 ACTIONS=['idle','walk','run','aim','shoot','reload','melee','hit','death','wake']
 
@@ -721,21 +695,130 @@ def make_skyline():
     save(im,'skyline.png')
 
 
+def make_training():
+    """Separate original industrial practice room; no apartment pixels reused."""
+    im=Image.new('RGBA',(768,480),'#08151d');d=ImageDraw.Draw(im);rr=random.Random(198931)
+    for y in range(64,416,16):
+        for x in range(80,688,16):
+            c=rr.choice(['#3f5555','#435858','#465b59','#3e5254'])
+            d.rectangle((x,y,x+15,y+15),fill=c)
+            d.line((x,y+15,x+15,y+15),fill='#35494d')
+            if (x+y)%48==0:d.line((x,y,x,y+15),fill='#35494d')
+            grain(d,(x+2,y+2,x+13,y+13),['#536765','#344b4e','#5b6d67'],7,x+y)
+    colliders=[];placements=[]
+    def solid(name,x,y,w,h):
+        colliders.append({'x':x,'y':y,'width':w,'height':h});placements.append({'name':name,'x':x,'y':y,'width':w,'height':h})
+    def wall(x,y,w,h):
+        solid('wall',x,y,w,h)
+        d.rectangle((x+4,y+5,x+w+4,y+h+5),fill='#152832')
+        box(d,(x,y,x+w-1,y+h-1),'#425a5b',highlight='#97b3a8')
+        d.line((x+1,y+h-4,x+w-2,y+h-4),fill='#6e9089')
+        for xx in range(x+5,x+w-4,16):d.line((xx,y+3,xx,y+h-6),fill='#4e6e6d')
+    wall(64,48,640,16);wall(64,64,16,368);wall(688,64,16,368);wall(80,416,608,16)
+    wall(288,64,16,136)
+    # Large original illuminated room title and safety narrative poster.
+    box(d,(329,76,653,121),'#172e38',highlight='#72aaa5')
+    lettering(d,'ТРЕНИРОВКА / 1989',354,88,'#b6e3ce',3)
+    d.line((334,115,647,115),fill='#ac9f68')
+    box(d,(102,82,266,163),'#18333a',highlight='#a8bc9c')
+    lettering(d,'ПРАВИЛА ТИРА',115,93,'#ddd09b',2)
+    for text,y in [('1 НЕ ЦЕЛЬСЯ В ЛЮДЕЙ',116),('2 ПАТРОНЫ УЧЕБНЫЕ',130),('3 БЛИЖНИЙ БОЙ РЯДОМ',144)]:lettering(d,text,113,y,'#9cb9a7')
+    # Check-in bench: gloves, ear protection, foam gear, magazine-shaped training props.
+    box(d,(103,190,262,234),'#43564e',highlight='#a6a57e')
+    box(d,(107,194,258,224),'#817d5c',highlight='#c4b58a')
+    for x in (114,139):
+        d.polygon([(x,202),(x+8,200),(x+13,204),(x+11,216),(x+2,217),(x,212)],fill='#627d73',outline='#203d40')
+        d.line((x+3,205,x+8,207),fill='#a6b3a1')
+    d.arc((169,195,194,219),180,360,fill='#bcc0a7',width=3)
+    box(d,(169,205,176,217),'#263b40',highlight='#72897d');box(d,(188,205,195,217),'#263b40',highlight='#72897d')
+    for x in (215,226,237):box(d,(x,201,x+7,218),'#4c5d5a',highlight='#a0a58c')
+    solid('safety-bench',103,190,160,44)
+    # Equipment lockers with vents and individual labels; separated from the lane.
+    for i,x in enumerate((104,146,188)):
+        box(d,(x,318,x+36,395),'#3c595d',highlight='#87aaa3')
+        box(d,(x+4,323,x+32,390),'#45676a',highlight='#6c9691')
+        for yy in (329,334,339):d.line((x+9,yy,x+27,yy),fill='#1e4249')
+        d.rectangle((x+27,354,x+29,366),fill='#b9b59a')
+        lettering(d,'0'+str(i+1),x+11,378,'#b6c9b3')
+        solid('equipment-locker',x,318,37,78)
+    # Ribbed bullet catcher, independent of the living-room furniture family.
+    box(d,(651,228,678,350),'#263e48',highlight='#9eb6a9')
+    for yy in range(235,345,9):
+        d.polygon([(654,yy),(674,yy-2),(674,yy+3),(654,yy+6)],fill='#526d6d',outline='#1c343e')
+    solid('bullet-catcher',651,228,28,123)
+    # Low safety partitions leave 530,290 -> 604,290 entirely unobstructed.
+    for x,y,w,h in [(340,224,91,14),(340,342,91,14),(465,160,154,14)]:
+        box(d,(x,y,x+w-1,y+h-1),'#36585d',highlight='#83aaa0');solid('safety-baffle',x,y,w,h)
+        for xx in range(x+3,x+w-6,10):d.polygon([(xx,y+2),(xx+5,y+2),(xx+9,y+6),(xx+4,y+6)],fill='#bdab73')
+    # Painted lanes: arrows, distance hashes and a clear live-dummy floor pad.
+    for y in (251,330):
+        d.line((445,y,641,y),fill='#b7b681',width=2)
+        for xx in range(447,639,12):d.line((xx,y+3,xx+5,y+3),fill='#526962')
+    for x in (472,522,572,622):d.line((x,252,x,258),fill='#c3c397');d.line((x,322,x,329),fill='#c3c397')
+    d.polygon([(510,288),(500,280),(500,285),(480,285),(480,291),(500,291),(500,296)],fill='#9cab8b')
+    d.ellipse((583,269,625,311),outline='#a4c1a2',width=2);d.ellipse((589,275,619,305),outline='#6b9c91')
+    d.line((604,264,604,271),fill='#b6ceaf');d.line((604,310,604,317),fill='#b6ceaf')
+    lettering(d,'МАНЕКЕН',590,319,'#bdc9a3')
+    lettering(d,'СТРЕЛЬБА / БЛИЖНИЙ БОЙ',450,242,'#d1c58d')
+    lettering(d,'УЧЕБНЫЕ ПАТРОНЫ',468,355,'#b2c3a6')
+    # A drain, coiled cable, paper inspection card, casings and wear tell the room's story.
+    box(d,(246,362,278,395),'#243d45',highlight='#6d8c84')
+    for yy in range(366,392,4):d.line((250,yy,274,yy),fill='#708b80')
+    d.ellipse((112,266,153,293),outline='#182f39',width=3);d.ellipse((117,269,148,290),outline='#789184')
+    d.line((151,282,180,290,231,284,271,302),fill='#1c343d',width=2)
+    for x,y in [(313,381),(322,377),(552,307),(544,311),(562,313)]:d.line((x,y,x+4,y+1),fill='#baa775',width=2)
+    for x,y in [(277,255),(381,187),(625,378)]:
+        box(d,(x,y,x+14,y+11),'#bcc0a5',edge='#5c796e');d.line((x+3,y+4,x+11,y+4),fill='#7e9684')
+    for x,y in [(254,311),(450,292),(639,211)]:d.ellipse((x,y,x+13,y+6),fill='#33474a')
+    # Exit floor pad is scene-owned E return interaction, not a floating door sprite.
+    box(d,(468,371,536,409),'#284e53',highlight='#b4c9ab')
+    d.line((478,390,523,390),fill='#cbd0a3',width=2);d.line((483,384,477,390,483,396),fill='#cbd0a3',width=2)
+    lettering(d,'В КВАРТИРУ',480,401,'#c4d3b4')
+    lettering(d,'БЕЗОПАСНАЯ ЗОНА',104,244,'#a9bfa5')
+    # Restricted teal/amber light, readable target lane and restrained red warning accent.
+    px=im.load();lights=[(230,93,250,(40,183,166),.32),(554,286,240,(73,172,176),.25),(116,384,135,(198,155,72),.18),(682,190,110,(200,60,83),.22)]
+    for y in range(64,416):
+        for x in range(80,688):
+            col=px[x,y]
+            for lx,ly,r,c,power in lights:
+                distance=math.hypot(x-lx,y-ly)
+                if distance<r:
+                    alpha=(1-distance/r)*power;col=tuple(int(col[k]*(1-alpha)+c[k]*alpha) for k in range(3))+(255,)
+            px[x,y]=col
+    d=ImageDraw.Draw(im)
+    d.line((90,58,271,58),fill='#7cdfc3',width=2);d.line((333,58,653,58),fill='#b6e7c7',width=2);d.line((695,126,695,209),fill='#d76d75',width=2)
+    save(im,'training.png')
+    interactions=[{'id':'training','x':500,'y':390,'label':'ВЕРНУТЬСЯ В КВАРТИРУ','radius':65}]
+    data={'id':'training','name':'ТИР / УЧЕБНЫЕ ПАТРОНЫ','width':768,'height':480,'tileSize':16,'spawn':{'x':530,'y':290},'colliders':colliders,'interactions':interactions,'enemies':[{'id':'practice-dummy','type':'grunt','x':604,'y':290}],'placements':placements,'art':'training.png','coordinateSystem':'top-left pixel; absolute collider rectangles; center spawn/interaction points','design':'Separate original safe industrial firing range; one reusable live shooting/melee dummy; temporary ammunition only'}
+    (OUT/'training.json').write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n')
+    tiled={'type':'map','version':'1.10','tiledversion':'1.11.2','orientation':'orthogonal','renderorder':'right-down','width':48,'height':30,'tilewidth':16,'tileheight':16,'infinite':False,'nextlayerid':4,'nextobjectid':len(colliders)+2,'tilesets':[],'layers':[{'id':1,'name':'Training artwork','type':'imagelayer','image':'training.png','x':0,'y':0,'opacity':1,'visible':True},{'id':2,'name':'Collisions','type':'objectgroup','opacity':1,'visible':False,'objects':[{'id':i+1,'name':f'solid-{i}','type':'solid','rotation':0,'visible':True,**c} for i,c in enumerate(colliders)]},{'id':3,'name':'Interactions','type':'objectgroup','opacity':1,'visible':True,'objects':[{'id':len(colliders)+1,'name':'training','type':'interaction','x':500,'y':390,'width':0,'height':0,'point':True,'rotation':0,'visible':True,'properties':[{'name':'label','type':'string','value':interactions[0]['label']},{'name':'radius','type':'int','value':65}]}]}],'properties':[{'name':'spawnX','type':'int','value':530},{'name':'spawnY','type':'int','value':290}]}
+    (OUT/'training.tiled.json').write_text(json.dumps(tiled,indent=2,ensure_ascii=False)+'\n')
+    manifest_path=OUT/'art-manifest.json'
+    if manifest_path.exists():
+        manifest=json.loads(manifest_path.read_text());manifest['backgrounds']['training']={'file':'training.png','geometry':'training.json','tiled':'training.tiled.json','width':768,'height':480,'layout':'separate-industrial-range'}
+        manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
+    print('Generated separate training room and matching JSON/Tiled data.')
+
+
 def main():
-    make_apartment();props=make_sprites();make_portraits();make_skyline();make_environment();make_combat()
+    make_apartment();props=make_sprites();make_portraits();make_skyline();make_environment();make_combat();make_training()
     anim={}
     for row,action in enumerate(ACTIONS):
         anim[action]={'row':row,'frames':[row*8+i for i in range(8)],'fps':{'idle':5,'walk':10,'run':14,'aim':6,'shoot':18,'reload':10,'melee':18,'hit':18,'death':12,'wake':8}[action],'loop':action in ['idle','walk','run','aim']}
     manifest={'version':1,'provenance':'Original procedural raster artwork; scripts/generate-art.py; no third-party image inputs','world':{'width':768,'height':480,'tileSize':16,'displayZoom':2},
       'characters':{'files':['player.png','enemy.png','enemy-gunner.png'],'frameWidth':32,'frameHeight':32,'columns':8,'rows':10,'facing':'east; rotate runtime body around anchor','anchor':{'x':16,'y':16},'solidBounds':{'x':9,'y':9,'width':14,'height':14},'animations':anim,'aliases':{'patrol':'walk','chase':'run','attack':'shoot','wake-up':'wake'},'events':{'shoot':{'muzzleFrame':1,'muzzle':{'x':30,'y':15}},'melee':{'activeFrames':[2,3,4]},'reload':{'readyFrame':7}}},
       'props':{'file':'props.png','frames':props},'portraits':{'file':'portraits.png','frames':{'player':{'x':0,'y':0,'width':64,'height':64},'caller':{'x':64,'y':0,'width':64,'height':64}}},
-      'tiles':{'file':'tiles.png','tileWidth':16,'tileHeight':16,'columns':4,'rows':4,'rowNames':['wood','tile','carpet','wall']},'backgrounds':{'apartment':{'file':'apartment.png','geometry':'apartment.json','tiled':'apartment.tiled.json','width':768,'height':480},'combat':{'file':'combat.png','geometry':'combat.json','tiled':'combat.tiled.json','width':768,'height':480},'menu':{'file':'skyline.png','width':768,'height':480}},
+      'tiles':{'file':'tiles.png','tileWidth':16,'tileHeight':16,'columns':4,'rows':4,'rowNames':['wood','tile','carpet','wall']},'backgrounds':{'apartment':{'file':'apartment.png','geometry':'apartment.json','tiled':'apartment.tiled.json','width':768,'height':480,'layout':'open-studio','lighting':'emerald-amber-crimson'},'combat':{'file':'combat.png','geometry':'combat.json','tiled':'combat.tiled.json','width':768,'height':480},'menu':{'file':'skyline.png','width':768,'height':480}},
       'environment':{'phone-ring':{'file':'phone-ring.png','frameWidth':40,'frameHeight':44,'frames':4,'fps':8},'computer-screen':{'file':'computer-screen.png','frameWidth':32,'frameHeight':32,'frames':4,'fps':4},'tv-static':{'file':'tv-static.png','frameWidth':32,'frameHeight':32,'frames':4,'fps':10},'neon-flicker':{'file':'neon-flicker.png','frameWidth':32,'frameHeight':16,'frames':4,'fps':6},'doors':{'file':'doors.png','frameWidth':48,'frameHeight':48,'frames':4,'fps':10}},
       'effects':{'file':'effects.png','frameWidth':16,'frameHeight':16,'columns':8,'rows':['muzzle','impact','smoke','casing'],'fps':[24,18,8,12]}}
+    manifest['backgrounds']['training']={'file':'training.png','geometry':'training.json','tiled':'training.tiled.json','width':768,'height':480,'layout':'separate-industrial-range'}
     (OUT/'art-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     for name in ['apartment','player','enemy','props','portraits','tiles','skyline']:
         p=OUT/(name+'.png');im=Image.open(p);im.verify();print(f'{p.name}: PNG verified')
     print('Generated original art and manifests.')
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    if sys.argv[1:]==['--training-only']:make_training()
+    elif not sys.argv[1:]:main()
+    else:raise SystemExit('Usage: generate-art.py [--training-only]')

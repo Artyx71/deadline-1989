@@ -23,7 +23,7 @@ Hotline Miami and Hotline Miami 2 are references for pacing, silhouettes, and at
 
 The original apartment contains a bedroom/wake location, living area, kitchen, computer, telephone, television, weapon cabinet, exit, and training access. It has no combat enemies. Furniture and walls use physical collision; nearby objects show E interaction prompts.
 
-The computer opens the task terminal. The telephone offers eligible narrative calls and dispatch when the first mission is unlocked and no call is pending. The cabinet opens loadout/inventory. The television provides an ambient interaction. The exit opens mission dispatch. Training is available separately from persistent mission ammunition.
+The computer opens the task terminal. The telephone offers eligible narrative calls and dispatch when the first mission is unlocked and no call is pending. The cabinet opens loadout/inventory. The television opens a muted external promotional broadcast. Source-host restrictions show a truthful no-signal message; closing the overlay resumes play. No third-party recording is bundled. The exit opens mission dispatch. Training uses a separate industrial range, reached through the highlighted lower-right door or the tutorial action, and temporary ammunition. The apartment remains a safe studio with a desk-mounted computer, table-supported phone, and doors fitted to wall openings. A persistent paper task brief offers direct task creation; a night-contract card and exit beacon explain how to leave for combat.
 
 The world uses a 768×480 logical canvas, 16px base tiles, and 32px character frames with nearest-neighbor pixel rendering. Camera follow, environmental animation, restrained neon lighting, and original room detail establish the visual language. Quality findings and screenshot comparisons remain in the verification/art documents.
 
@@ -105,8 +105,8 @@ Settlement confirms the durable resource result before return. A failed settleme
 The physical sequence is:
 
 1. Wake in the apartment while the telephone rings.
-2. Learn movement and approach the telephone.
-3. Answer the first call; learn the contract system.
+2. The first call automatically opens as an original cinematic introduction, explicitly explaining the real To-Do List.
+3. Learn movement and optional telephone interactions; learn the contract system.
 4. Approach/open the computer.
 5. Create a real task without falsely completing it.
 6. Read the once-only reward explanation.
@@ -117,7 +117,7 @@ The physical sequence is:
 
 The persisted tutorial cursor is `wake → movement → first-call → computer → create-task → rewards → training → aim → shoot → reload → melee → second-call → complete`. Physical actions and narrative beats share cursors where appropriate. Out-of-order events do not advance the reducer.
 
-Training provides 36 temporary rounds with no resource API debit or credit. Skipping persists completion/skip and unlocks the first mission. START GAME resets gameplay/tutorial history for replay while preserving real tasks, earned resources, reward receipts, and settings. An active mission must be settled before this reset.
+Training provides 36 temporary rounds with no persistent resource debit or credit. Skipping persists completion/skip and unlocks the first mission. New Game defaults to a clean profile: after an explicit warning and consent checkbox, it deletes all tasks, receipts, ammunition, XP and progression while retaining settings. A separate Repeat Story choice preserves tasks and earned resources. An active mission must be settled before either reset.
 
 ## Caller and dialogue
 
@@ -137,6 +137,6 @@ Master/music/SFX volume, mute, Streamer Mode, reduced motion, and CRT scanlines 
 
 ## Current scope and evidence
 
-The implemented scope is one local profile, independent task management, one apartment, isolated training, one six-enemy mission, durable resources/progression, original caller/tutorial, menus/cinematics/audio, and coherent original pixel assets. Additional campaigns, weapons, XP unlock trees, authentication, and public multi-user hosting are future product work.
+The implemented scope is one local profile (native Fastify/SQLite or browser-local SQLite on free GitHub Pages, without device synchronization), independent task management, one apartment, isolated training, one six-enemy mission, durable resources/progression, original caller/tutorial, menus/cinematics/audio, and coherent original pixel assets. Additional campaigns, weapons, XP unlock trees, authentication, and public multi-user hosting are future product work.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for contracts and persistence, [TASKS.md](TASKS.md) for milestone status, [DECISIONS.md](DECISIONS.md) for decisions, and [VERIFICATION.md](VERIFICATION.md) for actual passes, failures, evidence, and remaining gates.

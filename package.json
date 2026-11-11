@@ -15,14 +15,19 @@
     "test": "node scripts/workspace.mjs test",
     "test:e2e": "node scripts/workspace.mjs e2e",
     "start": "node scripts/workspace.mjs start",
-    "validate:bootstrap": "python3 scripts/validate_bootstrap.py"
+    "format": "node scripts/workspace.mjs format",
+    "format:check": "node scripts/workspace.mjs format:check",
+    "validate:bootstrap": "python3 scripts/validate_bootstrap.py",
+    "build:pages": "node scripts/workspace.mjs build:pages",
+    "test:pages": "node scripts/workspace.mjs pages:e2e"
   },
   "devDependencies": {
-    "typescript": "6.0.3",
-    "vitest": "5.1.0",
     "@playwright/test": "1.65.0",
+    "@types/node": "26.6.6",
     "eslint": "10.14.0",
+    "prettier": "3.10.0",
+    "typescript": "6.0.3",
     "typescript-eslint": "8.72.2",
-    "@types/node": "26.6.6"
+    "vitest": "5.1.0"
   }
 }

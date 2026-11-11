@@ -2,6 +2,8 @@
 @import './terminal.css';
 @import './screens.css';
 @import './boot.css';
+@import './onboarding.css';
+@import './television.css';
 
 :root {
   font-family: 'Courier New', ui-monospace, monospace;

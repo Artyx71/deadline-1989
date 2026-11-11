@@ -27,9 +27,13 @@ async function bootMenu(page: Page) {
 async function startGame(page: Page, skip = true) {
   await bootMenu(page);
   await page.getByTestId('menu-start-game').click();
+  await page.getByTestId('newgame-story').click();
   await expect(page.locator('canvas[data-scene="apartment"]')).toBeVisible();
   await expect(page.locator('canvas')).toHaveAttribute('data-player-x', /\d/);
+  await expect(page.locator('canvas')).toHaveAttribute('data-layout-version', 'studio-v3');
   if (skip) {
+    // The first call opens automatically; complete it before using the hub.
+    await finishCall(page);
     await page.getByTestId('tutorial-skip').click();
     await expect.poll(async () => (await snapshot(page)).tutorial.skipped).toBe(true);
   }
@@ -45,13 +49,13 @@ async function hold(page: Page, key: string, milliseconds: number) {
   // Diagnostics refresh every twelve actual frames, independent of this test.
   await page.waitForTimeout(250);
 }
-async function walkTo(page: Page, x: number, y: number) {
+async function walkTo(page: Page, x: number, y: number, tolerance = 10) {
   for (const axis of ['x', 'y'] as const) {
     const target = axis === 'x' ? x : y;
     for (let tries = 0; tries < 35; tries++) {
       const current = await position(page);
       const distance = target - current[axis];
-      if (Math.abs(distance) <= 10) break;
+      if (Math.abs(distance) <= tolerance) break;
       const key = axis === 'x' ? distance > 0 ? 'd' : 'a' : distance > 0 ? 's' : 'w';
       await hold(page, key, Math.max(25, Math.min(150, Math.abs(distance) / 220 * 750)));
       if (tries === 34) throw new Error(`Walk blocked approaching ${axis}=${target}; player=${JSON.stringify(await position(page))}`);
@@ -59,12 +63,10 @@ async function walkTo(page: Page, x: number, y: number) {
   }
 }
 async function reachExit(page: Page) {
-  // Explicit walking route through the authored bedroom doorway and hall.
-  await walkTo(page, 176, 220);
-  await walkTo(page, 270, 220);
-  await walkTo(page, 270, 300);
-  await walkTo(page, 401, 300);
-  await walkTo(page, 401, 415);
+  // Walk around the coat stand and unpacked box in the studio entrance.
+  await walkTo(page, 248, 232);
+  await walkTo(page, 248, 390);
+  await walkTo(page, 216, 390);
   await expect(page.locator('.interaction-prompt')).toContainText('ПОКИНУТЬ КВАРТИРУ');
   await page.keyboard.press('e');
   await expect(page.getByRole('dialog', { name: 'ДИСПЕТЧЕРСКАЯ / НОЧНАЯ СМЕНА' })).toBeVisible();
@@ -77,11 +79,14 @@ async function screenshot(page: Page, info: TestInfo, name: string) {
 async function finishCall(page: Page) {
   const panel = page.getByRole('dialog', { name: 'ВХОДЯЩИЙ ВЫЗОВ' });
   await expect(panel).toBeVisible();
+  const lines = new Set<string>();
   for (let line = 0; line < 20 && await panel.isVisible(); line++) {
+    lines.add(await panel.locator('.dialogue-text .sr-only').innerText());
     await panel.getByTestId('dialogue-advance').click();
     await page.waitForTimeout(60);
   }
   await expect(panel).toBeHidden();
+  return [...lines].join('\n');
 }
 
 test.afterEach(async ({ page, request }, info) => {
@@ -110,6 +115,8 @@ test.afterEach(async ({ page, request }, info) => {
     });
   }
   for (const id of fixtures) {
+    // A confirmed clean-profile test may already have removed its fixtures.
+    if (!current.tasks.some(task => task.id === id)) continue;
     const deletion = await request.delete(`/api/tasks/${id}`, { headers: { 'Idempotency-Key': randomUUID() } });
     expect(deletion.ok(), 'Delete only this test’s explicitly tracked fixture').toBe(true);
   }
@@ -241,7 +248,8 @@ test('apartment movement, furniture collision, pause, and text focus suppress ga
   await hold(page, 'a', 900);
   const blocked = await position(page);
   expect(blocked.x).toBeLessThan(initial.x - 30);
-  expect(blocked.x).toBeGreaterThanOrEqual(98);
+  // The studio plant occupies x=90..132; the player's half-width is seven.
+  expect(blocked.x).toBeGreaterThanOrEqual(139);
   await hold(page, 'a', 500);
   expect(Math.abs((await position(page)).x - blocked.x)).toBeLessThan(3);
   await page.keyboard.press('Escape');
@@ -259,15 +267,29 @@ test('apartment movement, furniture collision, pause, and text focus suppress ga
 });
 
 test('FIRST CALL is playable through isolated training, persists after reload, and unlocks the mission', async ({ page }, info) => {
+  const fetchedAudio = new Set<string>();
+  page.on('response', response => {
+    const path = new URL(response.url()).pathname;
+    if (path.startsWith('/assets/audio/') && path.endsWith('.wav') && response.ok()) fetchedAudio.add(path);
+  });
+  const playedSfx = async () => JSON.parse(await page.locator('html').getAttribute('data-played-sfx') ?? '{}') as Record<string, number>;
   await startGame(page, false);
   const before = await snapshot(page);
-  await expect.poll(async () => (await snapshot(page)).tutorial.step).toBe('movement');
-  await hold(page, 'd', 250);
-  await expect(page.getByTestId('tutorial-answer')).toBeVisible();
-  await page.getByTestId('tutorial-answer').click();
+  // No phone button or movement triggers the initial call.
+  await expect(page.getByRole('dialog', { name: 'ВХОДЯЩИЙ ВЫЗОВ' })).toHaveClass(/dialogue-intro/);
   await screenshot(page, info, 'first-call-dialogue');
-  await finishCall(page);
-  await page.getByTestId('tutorial-terminal').click();
+  const explanation = await finishCall(page);
+  expect(explanation).toContain('список реальных дел');
+  expect(explanation).toContain('один раз');
+  expect(explanation).toContain('Бой не выполняет задачи');
+  expect(explanation).toContain('выполнять её ради обучения не нужно');
+  await expect.poll(async () => (await snapshot(page)).tutorial.step).toBe('computer');
+  await walkTo(page, 280, 220);
+  await walkTo(page, 458, 220);
+  await walkTo(page, 458, 160);
+  await expect(page.locator('.interaction-prompt')).toContainText('ОТКРЫТЬ КОМПЬЮТЕР');
+  await page.keyboard.press('e');
+  await expect(page.getByTestId('task-new')).toBeEnabled();
   await createTask(page, 'E2E / настоящий план на завтра');
   await page.getByRole('dialog', { name: 'КОНТРАКТНЫЙ ТЕРМИНАЛ v1.3' }).locator('.close-button').click();
   await expect.poll(async () => (await snapshot(page)).tutorial.step).toBe('rewards');
@@ -281,14 +303,32 @@ test('FIRST CALL is playable through isolated training, persists after reload, a
   if (!box) throw new Error('Training canvas has no bounds');
   await page.mouse.move(box.x + box.width * 604 / 768, box.y + box.height * 290 / 480);
   await expect.poll(async () => (await snapshot(page)).tutorial.step).toBe('shoot');
+  const beforeShot = await playedSfx();
   await page.mouse.click(box.x + box.width * 604 / 768, box.y + box.height * 290 / 480);
   await expect.poll(async () => (await snapshot(page)).tutorial.step).toBe('reload');
+  await expect.poll(async () => (await playedSfx()).gunshot ?? 0).toBeGreaterThan(beforeShot.gunshot ?? 0);
+  await expect.poll(async () => Number(await page.locator('html').getAttribute('data-effect-rms-peak'))).toBeGreaterThan(0);
   await page.keyboard.press('r');
   await expect.poll(async () => (await snapshot(page)).tutorial.step).toBe('melee');
+  await walkTo(page, 568, 290, 4);
+  const beforeMelee = await playedSfx();
   await screenshot(page, info, 'training-practice');
   await page.keyboard.press('f');
+  await expect.poll(async () => (await playedSfx()).melee ?? 0).toBeGreaterThan(beforeMelee.melee ?? 0);
+  expect(fetchedAudio.has('/assets/audio/sfx-gunshot.wav')).toBe(true);
+  expect(fetchedAudio.has('/assets/audio/sfx-melee.wav')).toBe(true);
+  await expect(page.locator('html')).toHaveAttribute('data-audio-error', '');
+  await info.attach('training-real-audio', {
+    body: Buffer.from(JSON.stringify({ fetchedAudio: [...fetchedAudio], playedSfx: await playedSfx(), effectRmsPeak: Number(await page.locator('html').getAttribute('data-effect-rms-peak')) }, null, 2)),
+    contentType: 'application/json',
+  });
   await expect(page.locator('canvas')).toHaveAttribute('data-scene', 'apartment');
-  await page.getByTestId('tutorial-answer').click();
+  await walkTo(page, 280, 220);
+  await walkTo(page, 440, 220);
+  await walkTo(page, 440, 265);
+  await walkTo(page, 479, 265);
+  await expect(page.locator('.interaction-prompt')).toContainText('ОТВЕТИТЬ НА ЗВОНОК');
+  await page.keyboard.press('e');
   await finishCall(page);
   const after = await snapshot(page);
   expect(after.tutorial).toEqual({ step: 'complete', completed: true, skipped: false });
@@ -296,6 +336,109 @@ test('FIRST CALL is playable through isolated training, persists after reload, a
   expect(after.player.ammo).toBe(before.player.ammo);
   expect(after.player.xp).toBe(before.player.xp);
   expect(after.tasks.find(task => task.title === 'E2E / настоящий план на завтра')?.status).toBe('active');
+});
+
+test('studio task brief creates a real task directly in a focused editor', async ({ page }, info) => {
+  await startGame(page);
+  const brief = page.getByTestId('task-brief');
+  await expect(brief.getByRole('heading', { name: 'МОИ ДЕЛА' })).toBeVisible();
+  await expect(brief).toContainText('Выполненное дело');
+  const before = await snapshot(page);
+  await page.getByTestId('task-brief-create').click();
+  await expect(page.getByTestId('task-title')).toBeFocused();
+  await expect(page.getByTestId('task-title')).toHaveValue('');
+  const title = `E2E / записать дело из студии ${randomUUID()}`;
+  await page.getByTestId('task-title').fill(title);
+  await page.getByTestId('task-save').click();
+  await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
+  const after = await snapshot(page);
+  const fixture = after.tasks.find(task => task.title === title);
+  if (!fixture) throw new Error('Task brief fixture was not persisted');
+  info.annotations.push({ type: 'fixture-task', description: fixture.id });
+  expect(fixture.status).toBe('active');
+  expect(after.player).toEqual(before.player);
+  await page.getByRole('dialog', { name: 'КОНТРАКТНЫЙ ТЕРМИНАЛ v1.3' }).locator('.close-button').click();
+  await expect(brief.getByRole('button', { name: title, exact: true })).toBeVisible();
+  await screenshot(page, info, 'studio-task-brief');
+  await page.getByTestId('task-brief-open').click();
+  await expect(page.getByTestId('task-new')).toBeEnabled();
+  await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
+  await expect(page.getByTestId('task-title')).toBeHidden();
+});
+
+test('studio television opens with E, requests a muted player, and restores gameplay on close', async ({ page }, info) => {
+  // Exercise the official iframe URL and player message protocol in isolation.
+  // This fixture verifies integration; it does not claim network video playback.
+  await page.route('https://www.youtube-nocookie.com/embed/**', route => route.fulfill({
+    status: 200,
+    contentType: 'text/html',
+    body: `<!doctype html><html lang="ru"><body data-commands="[]">Тест видеоплеера<script>
+      const commands = [];
+      window.addEventListener('message', event => {
+        let message;
+        try { message = JSON.parse(event.data); } catch { return; }
+        if (message.event !== 'command') return;
+        commands.push(message);
+        document.body.dataset.commands = JSON.stringify(commands);
+        if (message.func === 'playVideo') parent.postMessage(JSON.stringify({ event: 'infoDelivery', info: { playerState: 1, muted: true, volume: 0 } }), '*');
+      });
+    </script></body></html>`,
+  }));
+  await startGame(page);
+  await walkTo(page, 248, 232);
+  await walkTo(page, 248, 400);
+  await walkTo(page, 298, 400, 4);
+  await walkTo(page, 298, 384, 4);
+  await expect(page.locator('.interaction-prompt')).toContainText('СМОТРЕТЬ ТЕЛЕВИЗОР');
+  await page.keyboard.press('e');
+  const television = page.getByRole('dialog', { name: 'ТЕЛЕВИЗОР / КАНАЛ 03' });
+  await expect(television).toBeVisible();
+  const frame = page.getByTestId('television-frame');
+  const source = await frame.getAttribute('src');
+  if (!source) throw new Error('Television iframe has no source');
+  const url = new URL(source);
+  expect(url.origin).toBe('https://www.youtube-nocookie.com');
+  expect(url.pathname).toBe('/embed/UgXM7ivgYTo');
+  expect(url.searchParams.get('autoplay')).toBe('1');
+  expect(url.searchParams.get('mute')).toBe('1');
+  expect(url.searchParams.get('controls')).toBe('0');
+  expect(url.searchParams.get('disablekb')).toBe('1');
+  await expect(television.getByRole('status')).toHaveText('ЭФИР ПОДКЛЮЧЁН');
+  const fixturePlayer = page.frameLocator('#deadline-tv-player').locator('body');
+  await expect.poll(async () => {
+    const commands = JSON.parse(await fixturePlayer.getAttribute('data-commands') ?? '[]') as { func: string; args: number[] }[];
+    return commands.some(command => command.func === 'mute') && commands.some(command => command.func === 'setVolume' && command.args[0] === 0);
+  }).toBe(true);
+  await expect.poll(async () => page.locator('canvas').getAttribute('data-externally-paused')).toBe('true');
+  const paused = await position(page);
+  await hold(page, 'd', 350);
+  expect(await position(page)).toEqual(paused);
+  await screenshot(page, info, 'studio-television-muted-fixture');
+  await page.getByTestId('television-close').click();
+  await expect(frame).toHaveCount(0);
+  await expect(page.getByTestId('task-brief')).toBeVisible();
+  await hold(page, 'a', 200);
+  expect((await position(page)).x).toBeLessThan(paused.x - 5);
+
+  // The lower aisle is narrow: keep the body below the TV cabinet and above
+  // the exterior wall while approaching the equipment cabinet from the left.
+  await walkTo(page, 248, 407, 3);
+  await walkTo(page, 566, 407);
+  await walkTo(page, 566, 383);
+  await expect(page.locator('.interaction-prompt')).toContainText('ПРОВЕРИТЬ СНАРЯЖЕНИЕ');
+  await page.keyboard.press('e');
+  const loadout = page.getByRole('dialog', { name: 'ДИСПЕТЧЕРСКАЯ / НОЧНАЯ СМЕНА' });
+  await expect(loadout).toBeVisible();
+  await loadout.locator('.close-button').click();
+  await walkTo(page, 566, 330);
+  await walkTo(page, 661, 330);
+  await walkTo(page, 661, 382);
+  await expect(page.locator('.interaction-prompt')).toContainText('ТРЕНИРОВКА');
+  await page.keyboard.press('e');
+  await expect(page.locator('canvas')).toHaveAttribute('data-scene', 'training');
+  await page.locator('.training-return').click();
+  await expect(page.locator('canvas')).toHaveAttribute('data-scene', 'apartment');
+  await expect(page.locator('canvas')).toHaveAttribute('data-layout-version', 'studio-v3');
 });
 
 test('audio state transitions and persisted accessible settings follow the interface', async ({ page }, info) => {
@@ -377,4 +520,88 @@ test('refresh during a mission explicitly reconciles its durable reservation wit
   expect(recovered.player.ammo).toBe(before.player.ammo - active.attempt.spent);
   expect(recovered.tasks).toEqual(before.tasks);
   expect(recovered.player.xp).toBe(before.player.xp);
+});
+
+test('New Game preserves story resources or clears the isolated profile only after explicit consent', async ({ page }, info) => {
+  // The native suite owns a fresh temporary SQLite profile on 5174/3002.
+  // Only synthetic fixtures in that profile are subject to this reset.
+  await page.goto('/');
+  const fixtureIds: string[] = [];
+  for (const difficulty of ['normal', 'easy'] as const) {
+    const title = `E2E / новая игра ${difficulty} ${randomUUID()}`;
+    const created = await page.request.post('/api/tasks', {
+      headers: { 'Idempotency-Key': randomUUID() }, data: { title, difficulty },
+    });
+    expect(created.ok()).toBe(true);
+    const fixture = (await created.json() as MutationResult).state.tasks.find(task => task.title === title);
+    if (!fixture) throw new Error('New Game fixture was not persisted');
+    fixtureIds.push(fixture.id);
+    info.annotations.push({ type: 'fixture-task', description: fixture.id });
+    if (difficulty === 'normal') {
+      const completed = await page.request.post(`/api/tasks/${fixture.id}/complete`, {
+        headers: { 'Idempotency-Key': randomUUID() }, data: {},
+      });
+      expect(completed.ok()).toBe(true);
+    }
+  }
+  const before = await snapshot(page);
+  expect(before.tasks.some(task => fixtureIds.includes(task.id) && task.status === 'active')).toBe(true);
+  expect(before.tasks.some(task => fixtureIds.includes(task.id) && task.status === 'completed')).toBe(true);
+  expect(before.player.ammo).toBeGreaterThanOrEqual(6);
+  expect(before.player.xp).toBeGreaterThanOrEqual(100);
+
+  await bootMenu(page);
+  await page.getByTestId('menu-start-game').click();
+  await expect(page.getByRole('dialog', { name: 'НОВАЯ ИГРА', exact: true })).toBeVisible();
+  await expect(page.getByTestId('newgame-clean')).toHaveClass(/button-primary/);
+  await expect(page.getByTestId('newgame-story')).toHaveClass(/button-secondary/);
+  await page.getByTestId('newgame-story').click();
+  await expect(page.locator('canvas')).toHaveAttribute('data-scene', 'apartment');
+  const story = await snapshot(page);
+  expect(story.tasks).toEqual(before.tasks);
+  expect(story.rewards).toEqual(before.rewards);
+  expect(story.player.ammo).toBe(before.player.ammo);
+  expect(story.player.xp).toBe(before.player.xp);
+  expect(story.settings).toEqual(before.settings);
+
+  await bootMenu(page);
+  await page.getByTestId('menu-start-game').click();
+  await page.getByTestId('newgame-clean').click();
+  const warning = page.getByRole('dialog', { name: 'НОВАЯ ИГРА', exact: true });
+  await expect(warning.getByRole('heading', { name: 'Удалить все данные профиля?', exact: true })).toBeVisible();
+  await expect(warning).toContainText('Все настоящие задачи, в том числе выполненные.');
+  await expect(warning).toContainText('История наград, патроны и опыт.');
+  await expect(page.getByTestId('newgame-confirm')).not.toBeChecked();
+  await expect(page.getByTestId('newgame-confirm-clean')).toBeDisabled();
+  const unconfirmed = await snapshot(page);
+  expect(unconfirmed.tasks).toEqual(before.tasks);
+  expect(unconfirmed.player.ammo).toBe(before.player.ammo);
+  expect(unconfirmed.player.xp).toBe(before.player.xp);
+  await page.getByTestId('newgame-confirm').check();
+  await expect(page.getByTestId('newgame-confirm-clean')).toBeEnabled();
+  await warning.getByRole('button', { name: '← ВЕРНУТЬСЯ К ВЫБОРУ', exact: true }).click();
+  await page.getByTestId('newgame-clean').click();
+  await expect(page.getByTestId('newgame-confirm')).not.toBeChecked();
+  await expect(page.getByTestId('newgame-confirm-clean')).toBeDisabled();
+  await screenshot(page, info, 'newgame-clean-warning');
+  await page.getByTestId('newgame-confirm').check();
+  await page.getByTestId('newgame-confirm-clean').click();
+  await expect.poll(async () => (await snapshot(page)).tasks.length).toBe(0);
+  const cleared = await snapshot(page);
+  expect(cleared.rewards).toEqual([]);
+  expect(cleared.player).toEqual({ ammo: 0, xp: 0, deaths: 0, consecutiveDeaths: 0 });
+  expect(cleared.attempt).toBeNull();
+  expect(cleared.progress.completions).toBe(0);
+  expect(cleared.tutorial.completed).toBe(false);
+  expect(cleared.tutorial.skipped).toBe(false);
+  expect(cleared.settings).toEqual(before.settings);
+  await page.reload();
+  await terminal(page);
+  const persisted = await snapshot(page);
+  expect(persisted.tasks).toEqual([]);
+  expect(persisted.rewards).toEqual([]);
+  expect(persisted.player).toEqual(cleared.player);
+  expect(persisted.settings).toEqual(before.settings);
+  await expect(page.locator('.task-list [data-testid^="task-row-"]')).toHaveCount(0);
+  await screenshot(page, info, 'newgame-clean-profile-persisted');
 });
