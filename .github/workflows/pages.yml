@@ -3,6 +3,10 @@ name: Verify and publish DEADLINE 1989
 on:
   push:
     branches: [feat/deadline-1989]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/evidence/**'
+      - '.codex/**'
   workflow_dispatch:
 
 permissions:
