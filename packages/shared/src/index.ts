@@ -1,4 +1,5 @@
 import { z } from 'zod';
+z.config(z.locales.ru());
 
 export const difficultySchema = z.enum(['easy', 'normal', 'hard']);
 export type Difficulty = z.infer<typeof difficultySchema>;
@@ -123,6 +124,7 @@ export interface GameController {
   setPaused(paused: boolean): void;
   enter(scene: SceneId, ammunition?: number): void;
   setEffects(reducedMotion: boolean): void;
+  setPhoneRinging?(ringing: boolean): void;
   destroy(): void;
 }
 export interface WorldRect { x: number; y: number; width: number; height: number }
