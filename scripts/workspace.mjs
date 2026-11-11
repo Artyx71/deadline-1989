@@ -41,7 +41,7 @@ switch (mode) {
     break;
   case 'dev': {
     await shared();
-    const children = [launch('tsx', ['watch', 'src/index.ts'], resolve(root, 'apps/server')), launch('vite', ['--host', '127.0.0.1'], resolve(root, 'apps/web'))];
+    const children = [launch('tsx', [...(process.env.DEADLINE_NO_WATCH === '1' ? [] : ['watch']), 'src/index.ts'], resolve(root, 'apps/server')), launch('vite', ['--host', '127.0.0.1'], resolve(root, 'apps/web'))];
     const stop = () => children.forEach(child => child.kill('SIGTERM'));
     process.on('SIGINT', stop); process.on('SIGTERM', stop);
     for (const child of children) child.once('exit', code => { stop(); process.exit(code ?? 0); });

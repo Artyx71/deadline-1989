@@ -46,13 +46,13 @@ async function request(path: string, method = 'GET', body?: unknown): Promise<un
       const data: unknown = await response.json();
       if (!response.ok) {
         const error = data as ApiErrorBody;
-        throw new ApiError(error.error?.message ?? `Request failed (${response.status})`, response.status, error.error?.code ?? 'REQUEST_FAILED');
+        throw new ApiError(error.error?.message ?? `Ошибка запроса (${response.status})`, response.status, error.error?.code ?? 'REQUEST_FAILED');
       }
       if (key) clearOperation(fingerprint);
       return data;
     } catch (error) {
       if (error instanceof ApiError && error.status < 500) { if (key) clearOperation(fingerprint); throw error; }
-      if (attempt === 2) throw error instanceof ApiError ? error : new ApiError('Connection lost. Your request key is retained; reconnect and retry safely.', 0, 'NETWORK_ERROR');
+      if (attempt === 2) throw error instanceof ApiError ? error : new ApiError('Нет связи с сервером. Запрос сохранён для безопасного повтора. Подключитесь и попробуйте снова.', 0, 'NETWORK_ERROR');
       await new Promise(resolve => setTimeout(resolve, 200 * (attempt + 1)));
     }
   }

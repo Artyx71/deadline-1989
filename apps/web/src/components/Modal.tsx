@@ -39,7 +39,7 @@ export function Modal({ title, onClose, children, className = '' }: ModalProps) 
             event.preventDefault(); last?.focus();
           } else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
         }}>
-        <header className="modal-heading"><h2 id={titleId}>{title}</h2><button className="close-button" onClick={onClose} aria-label={`Close ${title}`}>ESC <span aria-hidden="true">×</span></button></header>
+        <header className="modal-heading"><h2 id={titleId}>{title}</h2><button className="close-button" onClick={onClose} aria-label={`Закрыть: ${title}`}>ESC <span aria-hidden="true">×</span></button></header>
         {children}
       </div>
     </div>

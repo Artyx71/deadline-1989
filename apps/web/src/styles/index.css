@@ -68,6 +68,8 @@ canvas { image-rendering: pixelated; max-width: 100%; }
 .loading-screen h1, .boot-screen h1 { font-family: Impact, 'Arial Black', sans-serif; font-style: italic; font-size: clamp(48px, 10vw, 120px); color: var(--pink); text-shadow: 3px 3px #3b1e4a, -2px -1px #68e9e2; }
 .loading-screen progress { width: min(360px, 80vw); height: 6px; accent-color: var(--pink); }
 .error-banner { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 80; max-width: 90%; padding: 15px; background: #331424; border: 1px solid #f25b90; color: #ffb4cc; font-size: 12px; }
+.scene-loading { position: fixed; inset: 0; z-index: 18; display: grid; align-content: center; justify-items: center; gap: 20px; background: #07060de6; color: var(--cyan); font-size: 12px; letter-spacing: .14em; }
+.scene-loading progress { width: min(320px, 70vw); height: 5px; accent-color: var(--pink); }
 .error-banner { display: flex; align-items: center; gap: 20px; }
 .error-banner button { background: transparent; color: #ffcfde; font-size: 10px; }
 .game-canvas { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; pointer-events: none; }

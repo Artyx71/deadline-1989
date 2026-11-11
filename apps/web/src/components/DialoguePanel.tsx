@@ -31,14 +31,14 @@ export function DialoguePanel({ speaker, lines, portrait = 0, onComplete, onClos
     else if (lineIndex < lines.length - 1) setLineIndex((index) => index + 1);
     else onComplete();
   };
-  return <Modal title="INCOMING TRANSMISSION" onClose={onClose} className="dialogue-panel">
+  return <Modal title="ВХОДЯЩИЙ ВЫЗОВ" onClose={onClose} className="dialogue-panel">
     <div className="dialogue-layout">
       <div className="dialogue-portrait" aria-hidden="true" style={{ backgroundPosition: `${portrait === 0 ? '0%' : '100%'} 0` }} />
       <div className="dialogue-copy"><h3>{speaker}</h3>
-        <button className="dialogue-text" onClick={advance} aria-label={revealed ? 'Continue dialogue' : 'Reveal dialogue text'} onKeyDown={(event) => { if (event.key === 'Enter') { event.preventDefault(); advance(); } }}>
+        <button className="dialogue-text" onClick={advance} aria-label={revealed ? 'Продолжить диалог' : 'Показать текст диалога'} onKeyDown={(event) => { if (event.key === 'Enter') { event.preventDefault(); advance(); } }}>
           <span aria-hidden="true">{revealed ? line : line.slice(0, characters)}<span className="text-cursor">▌</span></span><span className="sr-only">{line}</span>
         </button>
-        <div className="dialogue-actions"><span>{String(lineIndex + 1).padStart(2, '0')} / {String(lines.length).padStart(2, '0')}</span><button onClick={onClose}>IGNORE CALL</button><button onClick={advance} data-autofocus>{revealed ? '[ENTER] CONTINUE' : '[ENTER] REVEAL'}</button></div>
+        <div className="dialogue-actions"><span>{String(lineIndex + 1).padStart(2, '0')} / {String(lines.length).padStart(2, '0')}</span><button onClick={onClose}>НЕ ОТВЕЧАТЬ</button><button data-testid="dialogue-advance" onClick={advance} data-autofocus>{revealed ? '[ENTER] ДАЛЕЕ' : '[ENTER] ПОКАЗАТЬ'}</button></div>
       </div>
     </div>
   </Modal>;

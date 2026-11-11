@@ -13,14 +13,14 @@ export function MainMenu({ onStart, onContinue, onSettings, onCredits, canContin
   const [selected, setSelected] = useState(0);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const options = [
-    { label: 'START GAME', action: onStart, disabled: !canStart },
-    { label: 'CONTINUE', action: onContinue, disabled: !canContinue },
-    { label: 'SETTINGS', action: onSettings },
-    { label: 'CREDITS', action: onCredits },
+    { id: 'start-game', label: 'НАЧАТЬ ИГРУ', action: onStart, disabled: !canStart },
+    { id: 'continue', label: 'ПРОДОЛЖИТЬ', action: onContinue, disabled: !canContinue },
+    { id: 'settings', label: 'НАСТРОЙКИ', action: onSettings },
+    { id: 'credits', label: 'АВТОРЫ', action: onCredits },
   ];
   useEffect(() => { buttons.current[0]?.focus(); }, []);
 
-  return <section className="main-menu" aria-label="Main menu" onKeyDown={(event) => {
+  return <section className="main-menu" aria-label="Главное меню" onKeyDown={(event) => {
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
     event.preventDefault();
     const direction = event.key === 'ArrowDown' ? 1 : -1;
@@ -30,22 +30,22 @@ export function MainMenu({ onStart, onContinue, onSettings, onCredits, canContin
   }}>
     <div className="menu-sky" aria-hidden="true" />
     <div className="menu-horizon" aria-hidden="true" />
-    <div className="vcr-label"><span className="recording-dot" /> PLAY <span aria-hidden="true">▸</span><span className="vcr-channel">CH 03 / STEREO</span></div>
+    <div className="vcr-label"><span className="recording-dot" /> ВОСПР. <span aria-hidden="true">▸</span><span className="vcr-channel">КАНАЛ 03 / СТЕРЕО</span></div>
     <div className="menu-content">
-      <p className="menu-eyebrow">A PRODUCTIVITY CRIME THRILLER</p>
+      <p className="menu-eyebrow">КРИМИНАЛЬНЫЙ ТРИЛЛЕР О ВАШИХ ДЕЛАХ</p>
       <h1 className="game-logo"><span>DEADLINE</span><small>1989</small></h1>
-      <p className="menu-tagline">YOUR WORK. YOUR AMMUNITION.</p>
-      <nav className="menu-options" aria-label="Game options">
+      <p className="menu-tagline">ВАШИ ДЕЛА. ВАШИ ПАТРОНЫ.</p>
+      <nav className="menu-options" aria-label="Действия в меню">
         {options.map((option, index) => <button key={option.label} ref={(node) => { buttons.current[index] = node; }}
           disabled={option.disabled} className={selected === index ? 'selected' : ''}
-          data-testid={`menu-${option.label.toLowerCase().replaceAll(' ', '-')}`}
+          data-testid={`menu-${option.id}`}
           onFocus={() => setSelected(index)} onPointerEnter={() => { if (!option.disabled) setSelected(index); }} onClick={option.action}>
           <span className="menu-arrow" aria-hidden="true">›</span>{option.label}<span className="menu-option-index">0{index + 1}</span>
         </button>)}
       </nav>
-      <p className="menu-hint"><kbd>↑</kbd><kbd>↓</kbd> SELECT <span>·</span> <kbd>ENTER</kbd> CONFIRM</p>
+      <p className="menu-hint"><kbd>↑</kbd><kbd>↓</kbd> ВЫБОР <span>·</span> <kbd>ENTER</kbd> ПОДТВЕРДИТЬ</p>
     </div>
-    <footer className="menu-footer"><div>PM 11:47<br />OCT 26 1989</div><p>THE CITY NEVER FINISHES ITS WORK.<br /><span>NEITHER DO YOU.</span></p><span className="tape-counter">SP ▸ 00:00:01</span></footer>
+    <footer className="menu-footer"><div>23:47<br />26 ОКТЯБРЯ 1989</div><p>У ГОРОДА ВСЕГДА ЕСТЬ ДЕЛА.<br /><span>У ВАС ТОЖЕ.</span></p><span className="tape-counter">ВОСПР. ▸ 00:00:01</span></footer>
     <div className="vhs-grain" aria-hidden="true" />
   </section>;
 }
